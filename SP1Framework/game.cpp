@@ -21,7 +21,7 @@ void init()
     SetConsoleTitle(L"SP1 Framework");
 
     // Sets the console size, this is the biggest so far.
-    setConsoleSize(79, 28);
+    setConsoleSize(79, 55); // default ( 79, 28 )
 
     // Get console width and height
     CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */     
@@ -33,7 +33,7 @@ void init()
 
     // set the character to be in the center of the screen.
     charLocation.X = consoleSize.X / 2;
-    charLocation.Y = 25;
+    charLocation.Y = 52;
 	sackLocation.X = 20;
 	sackLocation.Y = 0;
     elapsedTime = 0.0;
@@ -61,17 +61,18 @@ void update(double dt)
     deltaTime = dt;
 
 	timeFall = elapsedTime + 1.0;
-	if ( elapsedTime > timeFall)
+	if ( elapsedTime < timeFall )
 	{
 		
-		if ( sackLocation.Y < 20 )
+		if ( sackLocation.Y < 48 )
 		{
 			sackLocation.Y++;
 
 		}
-		if ( sackLocation.Y == 20 )
+		if ( sackLocation.Y == 48 )
 		{
-			
+			sackLocation.X = 0;
+			sackLocation.Y = 0;
 		}
 	}
 
@@ -114,15 +115,16 @@ void render()
 	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
 	                        };
 	
-	
+	if ( sackLocation.X != 0 )
+	{
 	gotoXY(sackLocation); // sack going down
 	std::cout << "sack";
 	gotoXY(sackLocation); // sack going down
 	std::cout << "sack";
-		
+	}
 		
     // render time taken to calculate this frame
-    gotoXY(58,24);
+    gotoXY(70,0);
     colour(0x1A);
     std::cout << 1.0 / deltaTime << "fps" << std::endl;
   
