@@ -8,6 +8,7 @@
 
 double elapsedTime;
 double deltaTime;
+double timeFall;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
@@ -32,7 +33,7 @@ void init()
 
     // set the character to be in the center of the screen.
     charLocation.X = consoleSize.X / 2;
-    charLocation.Y = consoleSize.Y / 2;
+    charLocation.Y = 25;
 	sackLocation.X = 20;
 	sackLocation.Y = 0;
     elapsedTime = 0.0;
@@ -59,13 +60,24 @@ void update(double dt)
     elapsedTime += dt;
     deltaTime = dt;
 
-    // Updating the location of the character based on the key press
-    if (keyPressed[K_UP] && charLocation.Y > 0)
-    {
-        Beep(1440, 30);
-        charLocation.Y--; 
-    }
-    if (keyPressed[K_LEFT] && charLocation.X > 0)
+	timeFall = elapsedTime + 1.0;
+	if ( elapsedTime > timeFall)
+	{
+		
+		if ( sackLocation.Y < 20 )
+		{
+			sackLocation.Y++;
+
+		}
+		if ( sackLocation.Y == 20 )
+		{
+			
+		}
+	}
+
+	// Updating the location of the character based on the key press
+	
+	if (keyPressed[K_LEFT] && charLocation.X > 3)
     {
         Beep(1440, 30);
 		for ( int a = 0; a < 19; a++ )
@@ -73,12 +85,8 @@ void update(double dt)
 			charLocation.X--;
 		}
     }
-    if (keyPressed[K_DOWN] && charLocation.Y < consoleSize.Y - 1)
-    {
-        Beep(1440, 30);
-        charLocation.Y++; 
-    }
-    if (keyPressed[K_RIGHT] && charLocation.X < consoleSize.X - 1)
+    
+    if (keyPressed[K_RIGHT] && charLocation.X < 59)
     {
         Beep(1440, 30);
 		for ( int a = 0; a < 19; a++ )
@@ -86,15 +94,7 @@ void update(double dt)
 			charLocation.X++;
 		}
     }
-	if ( sackLocation.Y < 20 )
-	{
-		sackLocation.Y++;
-		
-	}
-	if ( sackLocation.Y == 20 )
-	{
-		sackLocation.Y = 0;
-	}
+	
     // quits the game if player hits the escape key
     if (keyPressed[K_ESCAPE])
         g_quitGame = true;    
@@ -114,20 +114,15 @@ void render()
 	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
 	                        };
 	
-	for (int i = 0; i < 20; ++i)
-	{
-		
-		
-	}
+	
 	gotoXY(sackLocation); // sack going down
-		std::cout << "sack";
-		gotoXY(30, sackLocation.Y); // sack going down
-		std::cout << "sack";
-		gotoXY(rand() % 79 + 0 , rand() % 20 + 0 );
-		std::cout << "raveparty";
+	std::cout << "sack";
+	gotoXY(sackLocation); // sack going down
+	std::cout << "sack";
+		
 		
     // render time taken to calculate this frame
-    gotoXY(70, 0);
+    gotoXY(58,24);
     colour(0x1A);
     std::cout << 1.0 / deltaTime << "fps" << std::endl;
   
