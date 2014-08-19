@@ -11,7 +11,7 @@ double deltaTime;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
-
+COORD sackLocation;
 void init()
 {
     // Set precision for floating point output
@@ -28,7 +28,8 @@ void init()
     // set the character to be in the center of the screen.
     charLocation.X = consoleSize.X / 2;
     charLocation.Y = consoleSize.Y / 2;
-
+	sackLocation.X = 20;
+	sackLocation.Y = 0;
     elapsedTime = 0.0;
 }
 
@@ -62,7 +63,10 @@ void update(double dt)
     if (keyPressed[K_LEFT] && charLocation.X > 0)
     {
         Beep(1440, 30);
-        charLocation.X--; 
+		for ( int a = 0; a < 19; a++ )
+		{
+			charLocation.X--;
+		}
     }
     if (keyPressed[K_DOWN] && charLocation.Y < consoleSize.Y - 1)
     {
@@ -72,9 +76,20 @@ void update(double dt)
     if (keyPressed[K_RIGHT] && charLocation.X < consoleSize.X - 1)
     {
         Beep(1440, 30);
-        charLocation.X++; 
+		for ( int a = 0; a < 19; a++ )
+		{
+			charLocation.X++;
+		}
     }
-
+	if ( sackLocation.Y < 20 )
+	{
+		sackLocation.Y++;
+		
+	}
+	if ( sackLocation.Y == 20 )
+	{
+		sackLocation.Y = 0;
+	}
     // quits the game if player hits the escape key
     if (keyPressed[K_ESCAPE])
         g_quitGame = true;    
@@ -94,13 +109,18 @@ void render()
 	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
 	                        };
 	
-	for (int i = 0; i < 12; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
-		gotoXY(3*i,i+1);
-		colour(colors[i]);
-		std::cout << "WOW";
+		
+		
 	}
-
+	gotoXY(sackLocation); // sack going down
+		std::cout << "sack";
+		gotoXY(30, sackLocation.Y); // sack going down
+		std::cout << "sack";
+		gotoXY(rand() % 79 + 0 , rand() % 20 + 0 );
+		std::cout << "raveparty";
+		
     // render time taken to calculate this frame
     gotoXY(70, 0);
     colour(0x1A);
@@ -113,7 +133,7 @@ void render()
     // render character
     gotoXY(charLocation);
     colour(0x0C);
-    std::cout << (char)1;
+    std::cout <<"___________________";
 
     
 }
