@@ -90,15 +90,15 @@ void update(double dt)
 		}
 		if ( sack2Location.Y < 52  && sack2Location.X != 0 && sack2Location.X != 1)
 		{
-			sack2Location.Y++;
+			sack2Location.Y++,sack2Location.Y++,sack2Location.Y++,sack2Location.Y++;
 		}
-		if ( sack3Location.Y < 52 && sack3Location.X != 0 && sack3Location.X != 1)
+		if ( sack3Location.Y < 52 && sack3Location.X != 0 && sack3Location.X != 1)  
 		{
-			sack3Location.Y++;
+			sack3Location.Y++, sack3Location.Y++, sack3Location.Y++, sack3Location.Y++;
 		}
-		if ( sack4Location.Y < 52 && sack4Location.X != 0 && sack4Location.X != 1)
+		if ( sack4Location.Y < 52  && sack4Location.X != 0 && sack4Location.X != 1)
 		{
-			sack4Location.Y++;
+			sack4Location.Y++,sack4Location.Y++,sack4Location.Y++,sack4Location.Y++;
 		}
 		
 		if ( sack1Location.Y == 48 && charLocation.X == 2 )           // sack disappear after collected X=0 reset, X=1 game over
@@ -188,7 +188,11 @@ void render()
 		gotoXY(sack4Location);
 		std::cout << "sack";
 	}
-	
+	if ( sack1Location.X == 1 || sack2Location.X == 1 || sack3Location.X == 1 || sack4Location.X == 1)
+	{
+		
+		std::cout << "gameover";
+	}
     // render time taken to calculate this frame
     gotoXY(70,0);
     colour(0x1A);
@@ -199,12 +203,9 @@ void render()
     std::cout << elapsedTime << "secs" << std::endl;
 
     // render character
+	colour(0x0F);
     gotoXY(charLocation);
     std::cout <<"___________________";
 
-    if ( sack1Location.X == 1 || sack2Location.X == 1 || sack3Location.X == 1 || sack4Location.X == 1)
-	{
-		gotoXY(charLocation);
-		std::cout << "gameover";
-	}
+    
 }
