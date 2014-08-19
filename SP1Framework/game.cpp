@@ -8,7 +8,7 @@
 
 double elapsedTime;
 double deltaTime;
-double timeFall;
+double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
@@ -67,8 +67,7 @@ void update(double dt)
     elapsedTime += dt;
     deltaTime = dt;
 
-	timeFall = elapsedTime + 1.0;
-	if ( elapsedTime < timeFall )    //magic numbers are 3, 59, 21, 40
+	if ( elapsedTime > timeFall )    //magic numbers are 3, 59, 21, 40
 	{
 		sackDecider = rand() % 4 + 1; // decide where sacks will spawn
 		switch ( sackDecider )
@@ -127,6 +126,7 @@ void update(double dt)
 		{
 			sack1Location.X = 1, sack2Location.X = 1, sack3Location.X = 1, sack4Location.X = 1;
 		}
+		timeFall += 1.0;
 	}
 
 	// Updating the location of the character based on the key press
