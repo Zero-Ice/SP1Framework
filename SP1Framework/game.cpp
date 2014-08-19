@@ -180,11 +180,28 @@ void render()
 	                        0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
 	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
 	                        };
-	
+	//cout sack
 	if ( sack1Location.X != 0 && sack1Location.X != 1)
 	{
-		gotoXY(sack1Location); // sack going down
-		std::cout << "sack";
+		gotoXY(sack1Location.X, sack1Location.Y-6);
+		std::cout << " ___________ " << std::endl;
+		gotoXY(sack1Location.X, sack1Location.Y-5);
+		std::cout << " \_________/ " << std::endl;
+		gotoXY(sack1Location.X, sack1Location.Y-4);
+		std::cout << " /   	     \ " << std::endl;
+		gotoXY(sack1Location.X, sack1Location.Y-3);
+		std::cout << "|           |" << std::endl;
+		gotoXY(sack1Location.X, sack1Location.Y-2);
+		std::cout << "|   RICE    |" << std::endl;
+		gotoXY(sack1Location.X, sack1Location.Y-1);
+		std::cout << "|           |" << std::endl;
+		gotoXY(sack1Location); 
+		std::cout << " \_________/ " << std::endl;
+		
+		
+		
+		
+		
 	}
 	if ( sack2Location.X != 0 && sack2Location.X != 1 )
 	{
