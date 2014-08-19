@@ -18,6 +18,7 @@ COORD sack3Location;
 COORD sack4Location;
 COORD sack5Location;
 int sackDecider;
+COORD message;
 void init()
 {
     // Set precision for floating point output
@@ -38,7 +39,7 @@ void init()
 
     // set the character to be in the center of the screen.
     charLocation.X = consoleSize.X / 2;
-    charLocation.Y = 52;
+    charLocation.Y = 34;
 	sack1Location.X = 0;
 	sack2Location.X = 0;
 	sack3Location.X = 0;
@@ -72,57 +73,69 @@ void update(double dt)
 		sackDecider = rand() % 4 + 1; // decide where sacks will spawn
 		switch ( sackDecider )
 		{
-			case 1: sack1Location.X = 2;
+			case 1: sack1Location.X = 7;
 				break;
-			case 2: sack2Location.X = 21;
+			case 2: sack2Location.X = 28;
 				break;
-			case 3: sack3Location.X = 40;
+			case 3: sack3Location.X = 47;
 				break;
-			case 4: sack4Location.X = 59;
+			case 4: sack4Location.X = 66;
 				break;
 		}
 		
 		// sack drop
-		if ( sack1Location.Y < 52 && sack1Location.X != 0 && sack1Location.X != 1)  
+		if ( sack1Location.Y < 48 && sack1Location.X != 0 && sack1Location.X != 1)  
 		{
-			sack1Location.Y++, sack1Location.Y++, sack1Location.Y++, sack1Location.Y++;
+			for ( int a = 0; a < 8; a++ )
+			{
+				sack1Location.Y++;
+			}
 		}
-		if ( sack2Location.Y < 52  && sack2Location.X != 0 && sack2Location.X != 1)
+		if ( sack2Location.Y < 48  && sack2Location.X != 0 && sack2Location.X != 1)
 		{
-			sack2Location.Y++,sack2Location.Y++,sack2Location.Y++,sack2Location.Y++;
+			for ( int a = 0; a < 8; a++ )
+			{
+				sack2Location.Y++;
+			}
 		}
-		if ( sack3Location.Y < 52 && sack3Location.X != 0 && sack3Location.X != 1)  
+		if ( sack3Location.Y < 48 && sack3Location.X != 0 && sack3Location.X != 1)  
 		{
-			sack3Location.Y++, sack3Location.Y++, sack3Location.Y++, sack3Location.Y++;
+			for ( int a = 0; a < 8; a++ )
+			{
+				sack3Location.Y++;
+			}
 		}
-		if ( sack4Location.Y < 52  && sack4Location.X != 0 && sack4Location.X != 1)
+		if ( sack4Location.Y < 48  && sack4Location.X != 0 && sack4Location.X != 1)
 		{
-			sack4Location.Y++,sack4Location.Y++,sack4Location.Y++,sack4Location.Y++;
+			for ( int a = 0; a < 8; a++ )
+			{
+				sack4Location.Y++;
+			}
 		}
 		
-		if ( sack1Location.Y == 48 && charLocation.X == 2 )           // sack disappear after collected X=0 reset, X=1 game over
+		if ( sack1Location.Y == 40 && charLocation.X == 2 )           // sack disappear after collected X=0 reset, X=1 game over
 		{
 			sack1Location.X = 0;
 			sack1Location.Y = 0;
 		}
-		if ( sack2Location.Y == 48 && charLocation.X == 21)
+		if ( sack2Location.Y == 40 && charLocation.X == 21)
 		{
 			sack2Location.X = 0;
 			sack2Location.Y = 0;
 		}
-		if ( sack3Location.Y == 48 && charLocation.X == 40 )
+		if ( sack3Location.Y == 40 && charLocation.X == 40 )
 		{
 			sack3Location.X = 0;
 			sack3Location.Y = 0;
 		}
-		if ( sack4Location.Y == 48 && charLocation.X == 59 )
+		if ( sack4Location.Y == 40 && charLocation.X == 59 )
 		{
 			sack4Location.X = 0;
 			sack4Location.Y = 0;
 		}
 
 		//game over
-		if ( sack1Location.Y == 52 || sack2Location.Y == 52 || sack3Location.Y == 52 || sack4Location.Y == 52 )
+		if ( sack1Location.Y == 48 || sack2Location.Y == 48 || sack3Location.Y == 48 || sack4Location.Y == 48 )
 		{
 			sack1Location.X = 1, sack2Location.X = 1, sack3Location.X = 1, sack4Location.X = 1;
 		}
@@ -190,7 +203,9 @@ void render()
 	}
 	if ( sack1Location.X == 1 || sack2Location.X == 1 || sack3Location.X == 1 || sack4Location.X == 1)
 	{
-		
+		message.X = consoleSize.X / 2;
+		message.Y = consoleSize.Y / 2;
+		gotoXY(message);
 		std::cout << "gameover";
 	}
     // render time taken to calculate this frame
