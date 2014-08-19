@@ -44,7 +44,23 @@ Renders the current state of game onto screen. Go to a specific coordinate on th
 ##### shutdown()
 Code for cleaning up of game, writing of files, close files, free up memory, etc.
 
+###Other functions in the framework
+
+#### setConsoleSize()
+Sets the size of the console. The largest size depends on your screen  
+
+#### SetConsoleTitle()
+Sets the title of the console. 
+
+
+
 FAQ
 ---
 
-None yet
+**How do I set the size of the console?**  
+There is a function setConsoleSize() that does this. See above
+
+**The screen flickers!**  
+Everyone else is facing the same problem, don't worry too much about it. I'm working on a solution.
+
+
