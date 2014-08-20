@@ -12,10 +12,12 @@ double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
-COORD sackLocation[4];
+COORD sack[4];
+int sackLocation[] = {9,28,47,66};
 int sackDecider;
 COORD message;
 int scores=0;
+int locationDecider;
 
 void init()
 {
@@ -41,7 +43,7 @@ void init()
 
 	for(int sackNo=0;sackNo<4;++sackNo)
 	{
-		sackLocation[sackNo].X = 0;
+		sack[sackNo].X = 0;
 	}
 
 	elapsedTime = 0.0;
@@ -71,85 +73,37 @@ void update(double dt)
 	if ( elapsedTime > timeFall )    //magic numbers are 3, 59, 21, 40
 	{
 		
-		if(sackLocation[0].Y == 0 && sackLocation[3].X != 1  && sackLocation[2].X != 1  && sackLocation[1].X != 1 && sackLocation[0].X != 1)
-		{
-			sackDecider = rand() % 4 ; // decide where sacks will spawn
-			switch ( sackDecider )
-			{
-			case 0: sackLocation[0].X = 9;
-				break;
-			case 1: sackLocation[0].X = 28;
-				break;
-			case 2: sackLocation[0].X = 47;
-				break;
-			case 3: sackLocation[0].X = 66;
-				break;
-			}
-		}
-		if(sackLocation[1].Y == 0 && sackLocation[0].Y != 0 && sackLocation[3].X != 1  && sackLocation[2].X != 1 && sackLocation[1].X != 1 && sackLocation[0].X != 1 && elapsedTime>10)
-		{
-			sackDecider = rand() % 4 ; // decide where sacks will spawn
-			switch ( sackDecider )
-			{
-			case 0: sackLocation[1].X = 9;
-				break;
-			case 1: sackLocation[1].X = 28;
-				break;
-			case 2: sackLocation[1].X = 47;
-				break;
-			case 3: sackLocation[1].X = 66;
-				break;
-			}
-		}if(sackLocation[2].Y == 0 && sackLocation[1].Y != 0 && sackLocation[0].Y != 0 && sackLocation[3].X != 1 && sackLocation[2].X != 1 && sackLocation[1].X != 1 && sackLocation[0].X != 1 && elapsedTime>20)
-		{
-			sackDecider = rand() % 4 ; // decide where sacks will spawn
-			switch ( sackDecider )
-			{
-			case 0: sackLocation[2].X = 9;
-				break;
-			case 1: sackLocation[2].X = 28;
-				break;
-			case 2: sackLocation[2].X = 47;
-				break;
-			case 3: sackLocation[2].X = 66;
-				break;
-			}
-		}if(sackLocation[3].Y == 0 && sackLocation[2].Y != 0  && sackLocation[1].Y != 0  && sackLocation[0].Y != 0 && sackLocation[3].X != 1 && sackLocation[2].X != 1 && sackLocation[1].X != 1 && sackLocation[0].X != 1 && elapsedTime>30)
-		{
-			sackDecider = rand() % 4 ; // decide where sacks will spawn
-			switch ( sackDecider )
-			{
-			case 0: sackLocation[3].X = 9;
-				break;
-			case 1: sackLocation[3].X = 28;
-				break;
-			case 2: sackLocation[3].X = 47;
-				break;
-			case 3: sackLocation[3].X = 66;
-				break;
-			}
-		}
+			
+				locationDecider = rand() % 4 ; // decide where sacks will spawn
+				sackDecider = rand() % 4; // decide which sack to spawn
+
+				if ( sack[sackDecider].X == 0 )
+				{
+					sack[sackDecider].X = sackLocation[locationDecider];
+				}
+			
+		
 		
 		// sack drop
-		for(int sackNo=0;sackNo<4;++sackNo)
+		for( int sackNo = 0; sackNo < 4; ++sackNo )
 		{
-			if ( sackLocation[sackNo].Y > 34 )
+			if ( sack[sackNo].Y > 34 )
 			{
-				sackLocation[sackNo].X = 1;  // gameover cos x = 1
+				sack[sackNo].X = 1;  // gameover cos x = 1
 			}
 			// check if player catched the sacks
-			if ( sackLocation[sackNo].Y == 32 && charLocation.X == sackLocation[sackNo].X && sackLocation[3].X != 1 && sackLocation[2].X != 1 && sackLocation[1].X != 1 && sackLocation[0].X != 1)           // sack disappear after collected X=0 reset, X=1 game over
+			if ( sack[sackNo].Y == 32 && charLocation.X == sack[sackNo].X && sack[3].X != 1 && sack[2].X != 1 && sack[1].X != 1 && sack[0].X != 1)           // sack disappear after collected X=0 reset, X=1 game over
 			{
-				sackLocation[sackNo].X = 0;
-				sackLocation[sackNo].Y = 0;
+				sack[sackNo].X = 0;
+				sack[sackNo].Y = 0;
 				++scores;
 			}
 			// drop
-			if(sackLocation[sackNo].Y < 34 && sackLocation[sackNo].X != 0 && sackLocation[3].X != 1 && sackLocation[2].X != 1 && sackLocation[1].X != 1 && sackLocation[0].X != 1)
+			if(sack[sackNo].Y < 34 && sack[sackNo].X != 0 && sack[3].X != 1 && sack[2].X != 1 && sack[1].X != 1 && sack[0].X != 1)
 			{
 				for ( int a = 0; a < 8; ++a )
 				{
-					++sackLocation[sackNo].Y;
+					++sack[sackNo].Y;
 				}
 			}
 		}
@@ -200,46 +154,48 @@ void render()
 	//cout sack
 	for(int sackNo=0;sackNo<4;++sackNo)
 	{
-		if ( sackLocation[sackNo].X == 1)
+		if ( sack[sackNo].X == 1)
 		{
+			cls();
 			message.X = consoleSize.X / 2;
 			message.Y = consoleSize.Y / 2;
 			gotoXY(message);
 			std::cout << "gameover";
+			g_quitGame = true;   
 		}
-		else if ( sackLocation[sackNo].Y > 0 && sackLocation[sackNo].Y < 34 && sackLocation[sackNo].X != 1)
+		else if ( sack[sackNo].Y > 0 && sack[sackNo].Y < 34 && sack[sackNo].X != 1)
 		{
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-6);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-6);
 			std::cout << "  ___________ " << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-5);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-5);
 			std::cout << " /\__________/" << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-4);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-4);
 			std::cout << " /   	     \ " << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-3);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-3);
 			std::cout << "|          |" << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-2);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-2);
 			std::cout << "|   RICE   |" << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-1);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-1);
 			std::cout << "|          |" << std::endl;
-			gotoXY(sackLocation[sackNo]); 
+			gotoXY(sack[sackNo]); 
 			std::cout << " \\________/ " << std::endl;
 		}
-		else if (sackLocation[sackNo].Y == 40)
+		else if (sack[sackNo].Y == 40)
 		{
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-6);
-			std::cout << "              " << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-5);
-			std::cout << " /\__________/" << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-4);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-6);
+			std::cout << " ____________" << std::endl;
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-5);
+			std::cout << "/\__________/" << std::endl;
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-4);
 			std::cout << " /   	     \ " << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-3);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-3);
 			std::cout << "|          |" << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-2);
+			gotoXY(sack[sackNo].X, sack[sackNo].Y-2);
 			std::cout << "|   RICE   |" << std::endl;
-			gotoXY(sackLocation[sackNo].X, sackLocation[sackNo].Y-1);
-			std::cout << "|          |" << std::endl;
-			gotoXY(sackLocation[sackNo]); 
-			std::cout << " \\________/ " << std::endl;
+			gotoXY(sack[sackNo].X-4, sack[sackNo].Y-1);
+			std::cout << ".../          \..." << std::endl;
+			gotoXY(sack[sackNo].X-4, sack[sackNo].Y); 
+			std::cout << "::''.'.'.'.'.'.'':: " << std::endl;
 		}
 	}
 
