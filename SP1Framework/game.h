@@ -23,5 +23,4 @@ void render();              // renders the current state of the game to the cons
 void shutdown();            // do clean up, free memory
 int mainmenu();
 int playgame();
-int instruction();
 #endif // _GAME_H

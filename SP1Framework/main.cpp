@@ -3,14 +3,16 @@
 #include "Framework\timer.h"
 #include "game.h"
 #include <iostream>
-
+#include <fstream>
+#include <string>
 StopWatch g_timer;            // Timer function to keep track of time and the frame rate
 bool g_quitGame = false;      // Set to true if you want to quit the game
 const unsigned char FPS = 5; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 int input;
+int instruction();
 void mainLoop();
-
+void highscore();
 // TODO:
 // Bug in waitUnitil. it waits for the time from getElapsedTime to waitUntil, but should be insignificant.
 
@@ -50,25 +52,26 @@ int main()
 	switch ( input )
 	{
 	case START : playgame();
-		system("clear");
+		system("cls");
 		break;
 	case INSTRUCTIONS : instruction();
-		system("clear");
+		system("cls");
 		break;
-	//case HIGHSCORE : highscore();
+	case HIGHSCORE : highscore();
+		break;
 	case EXIT : shutdown();
-		system("clear");
+		system("cls");
 		break;
-
 	}
 	
-	
+	system("cls");
 	return 0;
 
 } 
 
 int instruction()
 {
+	system("cls");
 	std::cout<<"INSTRUCTIONS"<<std::endl;
     std::cout<<"Use left and right arrow keys to move character to catch the rice sacks."<<std::endl;;
     std::cout<<"Catch as many rice sacks as you can, if the rice sack hits the floor it is game over!"<<std::endl;;
@@ -88,6 +91,7 @@ int playgame()
 {
 	init();      // initialize your variables
     mainLoop();  // main loop
+	system("cls");
     main();  // do clean up, if any. free memory.
 	
 	return 0;
@@ -104,5 +108,23 @@ void mainLoop()
         update(g_timer.getElapsedTime());   // update the game
         render();                           // render the graphics output to screen
         g_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.      
-	}    
+	}   
+}
+void highscore()
+{
+	std::ifstream Highscore;
+	
+	std::string data;
+
+	Highscore.open ("highscores.txt");
+	
+	while (!Highscore.eof())
+	{
+		getline(Highscore, data);
+		std::cout << data << std::endl;
+	}
+	system("Pause");
+	
+
+	
 }
