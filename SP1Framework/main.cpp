@@ -2,13 +2,13 @@
 
 #include "Framework\timer.h"
 #include "game.h"
-
+#include <iostream>
 
 StopWatch g_timer;            // Timer function to keep track of time and the frame rate
 bool g_quitGame = false;      // Set to true if you want to quit the game
 const unsigned char FPS = 5; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
-
+int input;
 void mainLoop();
 
 // TODO:
@@ -16,9 +16,78 @@ void mainLoop();
 
 int main()
 {
+	
+	enum state
+	{
+		START=1,
+		INSTRUCTIONS,
+		HIGHSCORE,
+		EXIT,
+		BACKTOMAINMENU,
+		MAX_STATES
+		
+	};
+	//1 - play calling playgame
+	//2 - tutorial
+	//3 - scoreboard
+	//4 - exit
+	//5 - link back to main menu
+    std::cout<<"          ***********      ***     *******    ***********  ___________"<<std::endl;
+	std::cout<<"          ***      ***     ***    *********   ***********  \\_________/"<<std::endl;
+	std::cout<<"          ***      ***     ***    ***         ***          /         \\"<<std::endl;
+	std::cout<<"          ***********      ***    ***         *******     |           |"<<std::endl;
+	std::cout<<"          ***    ***       ***    ***         *******     |           |"<<std::endl;
+	std::cout<<"          ***     ***      ***    ***         ***         |    RICE   |"<<std::endl;
+	std::cout<<"          ***       ***    ***    *********   *********** |           |"<<std::endl;
+	std::cout<<"          ***        ***   ***     *******    ***********  \\_________/"<<std::endl;
+	std::cout<<std::endl;
+	std::cout<<"                           Press[1] to start "<<std::endl;
+	std::cout<<"                           Press[2] for instructions"<<std::endl;
+	std::cout<<"                           Press[3] for scoreboard"<<std::endl; 
+	std::cout<<"                           Press[4] to exit"<<std::endl;
+	std::cin>>input;
+
+	switch ( input )
+	{
+	case START : playgame();
+		system("clear");
+		break;
+	case INSTRUCTIONS : instruction();
+		system("clear");
+		break;
+	//case HIGHSCORE : highscore();
+	case EXIT : shutdown();
+		system("clear");
+		break;
+	}
+	
+
+	return 0;
+
+} 
+
+int instruction()
+{
+	std::cout<<"INSTRUCTIONS"<<std::endl;
+    std::cout<<"Use left and right arrow keys to move character to catch the rice sacks."<<std::endl;;
+    std::cout<<"Catch as many rice sacks as you can, if the rice sack hits the floor it is game over!"<<std::endl;;
+	std::cout<<"Press 1 to return to main menu"<<std::endl;
+	std::cin>>input;
+	if(input==1)
+	{
+		system("cls");
+		main();
+
+	}
+
+	return 0;
+}
+
+int playgame()
+{
 	init();      // initialize your variables
     mainLoop();  // main loop
-    shutdown();  // do clean up, if any. free memory.
+    main();  // do clean up, if any. free memory.
 	
 	return 0;
 }
