@@ -6,19 +6,21 @@
 #include <iostream>
 #include <iomanip>
 
+const size_t maxsack = 10;
 double elapsedTime;
 double deltaTime;
 double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
-COORD sack[4];
+COORD sack[maxsack];
 int sackLocation[] = {9,28,47,66};
 int sackDecider;
 COORD message;
 int scores=0;
 int locationDecider;
-
+int x = 10;
+double difficulty = 0.0;
 void init()
 {
     // Set precision for floating point output
@@ -41,7 +43,7 @@ void init()
     charLocation.X = 47;
     charLocation.Y = 34;
 
-	for(int sackNo=0;sackNo<4;++sackNo)
+	for( int sackNo = 0; sackNo < 4; ++sackNo)
 	{
 		sack[sackNo].X = 0;
 	}
@@ -70,36 +72,44 @@ void update(double dt)
     elapsedTime += dt;
     deltaTime = dt;
 
-	if ( elapsedTime > timeFall )    //magic numbers are 3, 59, 21, 40
+	if ( elapsedTime > timeFall )    
 	{
-		
-			
-				locationDecider = rand() % 4 ; // decide where sacks will spawn
-				sackDecider = rand() % 4; // decide which sack to spawn
+		srand(time(NULL));
+		locationDecider = rand() % 4 ; // decide where sacks will spawn
+		sackDecider = rand() % maxsack; // decide which sack to spawn
 
-				if ( sack[sackDecider].X == 0 )
-				{
-					sack[sackDecider].X = sackLocation[locationDecider];
-				}
-			
+		if ( sack[sackDecider].X == 0 ) // only spawn if the sack is not present
+		{
+			Beep(1440, 100);
+			sack[sackDecider].X = sackLocation[locationDecider];
+		}
+
 		
 		
 		// sack drop
-		for( int sackNo = 0; sackNo < 4; ++sackNo )
+		int counter = 0;
+		for ( int a = 0; a < maxsack; a++ ) // checks that every sack != 1 which means gameover
+		{
+			if ( sack[a].X != 1 )
+			{
+				++counter;
+			}
+		}
+		for( int sackNo = 0; sackNo < maxsack; ++sackNo )
 		{
 			if ( sack[sackNo].Y > 34 )
 			{
 				sack[sackNo].X = 1;  // gameover cos x = 1
 			}
 			// check if player catched the sacks
-			if ( sack[sackNo].Y == 32 && charLocation.X == sack[sackNo].X && sack[3].X != 1 && sack[2].X != 1 && sack[1].X != 1 && sack[0].X != 1)           // sack disappear after collected X=0 reset, X=1 game over
+			if ( sack[sackNo].Y == 32 && charLocation.X == sack[sackNo].X && counter == maxsack)          
 			{
 				sack[sackNo].X = 0;
 				sack[sackNo].Y = 0;
 				++scores;
 			}
 			// drop
-			if(sack[sackNo].Y < 34 && sack[sackNo].X != 0 && sack[3].X != 1 && sack[2].X != 1 && sack[1].X != 1 && sack[0].X != 1)
+			if(sack[sackNo].Y < 34 && sack[sackNo].X != 0 && counter == maxsack)
 			{
 				for ( int a = 0; a < 8; ++a )
 				{
@@ -109,8 +119,13 @@ void update(double dt)
 		}
 
 		//game over
-		
-		timeFall += 1.0;
+
+		if ( scores > x && difficulty < 0.8)
+		{
+			x += 10;
+			difficulty += 0.1;
+		}
+		timeFall += (1.2-difficulty);
 	}
 
 	// Updating the location of the character based on the key press
@@ -152,7 +167,7 @@ void render()
 	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
 	                        };
 	//cout sack
-	for(int sackNo=0;sackNo<4;++sackNo)
+	for ( int sackNo = 0; sackNo < maxsack; ++sackNo)
 	{
 		if ( sack[sackNo].X == 1)
 		{
@@ -163,14 +178,14 @@ void render()
 			std::cout << "gameover";
 			g_quitGame = true;   
 		}
-		else if ( sack[sackNo].Y > 0 && sack[sackNo].Y < 34 && sack[sackNo].X != 1)
+		else if ( sack[sackNo].Y > 0 && sack[sackNo].Y < 34 && sack[sackNo].X != 1) // print sack
 		{
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-6);
-			std::cout << "  ___________ " << std::endl;
+			std::cout << " ___________" << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-5);
-			std::cout << " /\__________/" << std::endl;
+			std::cout << " \\_________/" << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-4);
-			std::cout << " /   	     \ " << std::endl;
+			std::cout << " /         \\ " << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-3);
 			std::cout << "|          |" << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-2);
@@ -180,42 +195,42 @@ void render()
 			gotoXY(sack[sackNo]); 
 			std::cout << " \\________/ " << std::endl;
 		}
-		else if (sack[sackNo].Y == 40)
+		else if (sack[sackNo].Y == 40) // print broken sack
 		{
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-6);
-			std::cout << " ____________" << std::endl;
+			std::cout << " ___________" << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-5);
-			std::cout << "/\__________/" << std::endl;
+			std::cout << " \\_________/" << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-4);
-			std::cout << " /   	     \ " << std::endl;
+			std::cout << " /         \\ " << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-3);
 			std::cout << "|          |" << std::endl;
 			gotoXY(sack[sackNo].X, sack[sackNo].Y-2);
 			std::cout << "|   RICE   |" << std::endl;
 			gotoXY(sack[sackNo].X-4, sack[sackNo].Y-1);
-			std::cout << ".../          \..." << std::endl;
+			std::cout << " ../          \..." << std::endl;
 			gotoXY(sack[sackNo].X-4, sack[sackNo].Y); 
-			std::cout << "::''.'.'.'.'.'.'':: " << std::endl;
+			std::cout << ".:''.'.'.'.'.'.'':: " << std::endl;
 		}
 	}
 
 	
     // render time taken to calculate this frame
     gotoXY(70,0);
-    colour(0x1A);
+    colour(0x0F);
     std::cout << 1.0 / deltaTime << "fps" << std::endl;
   
     gotoXY(0, 0);
-    colour(0x59);
+    colour(0x0F);
     std::cout << elapsedTime << "secs" << std::endl;
 
 	//render current scores
 	gotoXY(15, 0);
-    colour(0x2A);
+    colour(0x0F);
     std::cout << "SCORES:" << scores << std::endl;
 
     // render character
 	colour(0x0F);
     gotoXY(charLocation);
-    std::cout <<"____________";
+    std::cout <<"\\___________/" << std::endl;
 }
