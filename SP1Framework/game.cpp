@@ -184,19 +184,19 @@ void render()
 	if ( sack1Location.X != 0 && sack1Location.X != 1)
 	{
 		gotoXY(sack1Location.X, sack1Location.Y-6);
-		std::cout << " ___________ " << std::endl;
+		std::cout << "  ___________ " << std::endl;
 		gotoXY(sack1Location.X, sack1Location.Y-5);
-		std::cout << " \_________/ " << std::endl;
+		std::cout << " /\__________/" << std::endl;
 		gotoXY(sack1Location.X, sack1Location.Y-4);
 		std::cout << " /   	     \ " << std::endl;
 		gotoXY(sack1Location.X, sack1Location.Y-3);
-		std::cout << "|           |" << std::endl;
+		std::cout << "|          |" << std::endl;
 		gotoXY(sack1Location.X, sack1Location.Y-2);
-		std::cout << "|   RICE    |" << std::endl;
+		std::cout << "|   RICE   |" << std::endl;
 		gotoXY(sack1Location.X, sack1Location.Y-1);
-		std::cout << "|           |" << std::endl;
+		std::cout << "|          |" << std::endl;
 		gotoXY(sack1Location); 
-		std::cout << " \_________/ " << std::endl;
+		std::cout << " \\________/ " << std::endl;
 		
 		
 		
