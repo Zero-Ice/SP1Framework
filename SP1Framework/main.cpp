@@ -59,9 +59,10 @@ int main()
 	case EXIT : shutdown();
 		system("clear");
 		break;
+
 	}
 	
-
+	
 	return 0;
 
 } 
