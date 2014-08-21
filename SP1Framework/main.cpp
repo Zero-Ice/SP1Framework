@@ -18,7 +18,9 @@ void highscore();
 
 int main()
 {
-	
+	system("cls");
+	int input = 0;
+
 	
 	//1 - play calling playgame
 	//2 - tutorial
@@ -134,11 +136,12 @@ void highscore()
 {
 	system("cls");
 	std::ifstream Highscore;
-	
+
 	std::string data;
 
 	Highscore.open ("highscores.txt");
 	
+	std::cout << "Rank " << " Player    " << "Score" << std::endl;
 	while (!Highscore.eof())
 	{
 		getline(Highscore, data);

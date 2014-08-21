@@ -4,7 +4,10 @@
 #include "game.h"
 #include "Framework\console.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <iomanip>
+#include <sstream>
 
 const size_t maxsack = 10; // number of sacks
 double elapsedTime;
@@ -22,6 +25,14 @@ int* highscore = &scores;
 int locationDecider; // decides where the sacks will be spawned
 int x = 10; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 10 score. 
 double difficulty = 0.0;
+
+struct Highscorers
+{
+	int position;
+	std::string name;
+	int highscore;
+};
+
 void init()
 {
     // Set precision for floating point output
@@ -177,6 +188,64 @@ void render()
 			message.Y = consoleSize.Y / 2;
 			gotoXY(message);
 			std::cout << "gameover" << std::endl;
+
+			Highscorers player[10];
+
+			
+			
+			Highscorers player1;
+			player1.highscore = *highscore;
+			std::cout << "Enter your name:" << std::endl;
+			std::cin >> player1.name;
+			
+			std::ifstream Highscore("highscores.txt");
+			std::string data;
+
+			for(int f=0; getline(Highscore,data) ; ++f)
+			{
+				std::istringstream ss(data);
+
+				ss >> player[f].position >> player[f].name >> player[f].highscore;
+				
+			}
+			Highscore.close();
+
+			for(int f=0; f < 9; ++f)
+			{
+				if(player1.highscore > player[f].highscore)
+				{
+					for(int k=9; k > f; --k)
+					{
+						player[k].highscore = player[k-1].highscore;
+						player[k].name = player[k-1].name;
+					}
+					player[f].highscore = player1.highscore;
+					player[f].name = player1.name;
+					break;
+				}
+				else if(player[f].highscore == 0)
+				{
+					for(int k=9; k > f; --k)
+					{
+						player[k].highscore = player[k-1].highscore;
+						player[k].name = player[k-1].name;
+					}
+					player[f].highscore = player1.highscore;
+					player[f].name = player1.name;
+					break;
+				}
+			}
+
+			std::ofstream Highscorestore("highscores.txt");
+
+			for(int f=0; f < 10; ++f)
+			{
+				
+				Highscorestore << player[f].position << " " << player[f].name << " " << player[f].highscore << std::endl;
+			}
+
+			Highscorestore.close();
+
 			system("pause");
 			g_quitGame = true;   
 		}
