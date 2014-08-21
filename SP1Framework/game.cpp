@@ -214,7 +214,6 @@ void render()
 				std::istringstream ss(data);
 
 				ss >> player[f].position >> player[f].name >> player[f].highscore;
-				
 			}
 			Highscore.close();
 
@@ -231,17 +230,7 @@ void render()
 					player[f].name = player1.name;
 					break;
 				}
-				else if(player[f].highscore == 0)
-				{
-					for(int k=9; k > f; --k)
-					{
-						player[k].highscore = player[k-1].highscore;
-						player[k].name = player[k-1].name;
-					}
-					player[f].highscore = player1.highscore;
-					player[f].name = player1.name;
-					break;
-				}
+				
 			}
 
 			std::ofstream Highscorestore("highscores.txt");
