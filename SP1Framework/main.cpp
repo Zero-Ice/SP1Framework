@@ -147,13 +147,11 @@ void highscore()
 		getline(Highscore, data);
 		std::cout << data << std::endl;
 	}
-	system("Pause");
 	
-	std::cout << "Press 5 to return to the main menu" << std::endl;
+	
 	
 	while ( input != BACKTOMAINMENU )
 	{
-		std::cin >> input ;
 		
 		if ( input == BACKTOMAINMENU )
 		{
@@ -166,8 +164,8 @@ void highscore()
 		}
 		else
 		{
-			input = 0;
-			std::cout << "Please press 5 to return" << std::endl;
+			std::cout << "Press 5 to return to the main menu" << std::endl;
+			std::cin >> input ;
 		}
 	}
 }
