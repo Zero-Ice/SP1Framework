@@ -47,14 +47,18 @@ int main()
 		{
 			switch ( input )
 			{
-			case START : playgame();
+			case START : Beep(500,100);
+				playgame();
 				system("cls");
 				break;
-			case INSTRUCTIONS : instruction();
+			case INSTRUCTIONS : Beep(500,100);
+				instruction();
 				break;
-			case HIGHSCORE : highscore();
+			case HIGHSCORE : Beep(500,100);
+				highscore();
 				break;
-			case EXIT : shutdown();
+			case EXIT : Beep(500,100);
+				shutdown();
 				break;
 			
 
@@ -89,6 +93,7 @@ int instruction()
 		if(input == BACKTOMAINMENU)
 		{
 			system("cls");
+			Beep(500,100);
 			main();
 			break;
 		}
@@ -152,6 +157,7 @@ void highscore()
 			input = 0;
 			Highscore.close();
 			system("cls");
+			Beep(500,100);
 			main();
 			break;
 		}
