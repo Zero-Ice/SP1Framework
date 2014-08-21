@@ -18,7 +18,7 @@ void highscore();
 
 int main()
 {
-	int input = 0;
+	
 	
 	//1 - play calling playgame
 	//2 - tutorial
@@ -39,7 +39,7 @@ int main()
 	std::cout<<"                           Press[3] for scoreboard"<<std::endl; 
 	std::cout<<"                           Press[4] to exit"<<std::endl;
 	
-	
+	input = 0;
 	while ( input == 0 )
 	{
 		std::cin >> input;
@@ -75,6 +75,7 @@ int main()
 
 int instruction()
 {
+	int input = 0;
 	system("cls");
 	std::cout<<"INSTRUCTIONS"<<std::endl;
     std::cout<<"Use left and right arrow keys to move character to catch the rice sacks."<<std::endl;;
@@ -89,7 +90,7 @@ int instruction()
 		{
 			system("cls");
 			main();
-
+			break;
 		}
 		else
 		{
@@ -152,6 +153,7 @@ void highscore()
 			Highscore.close();
 			system("cls");
 			main();
+			break;
 		}
 		else
 		{
