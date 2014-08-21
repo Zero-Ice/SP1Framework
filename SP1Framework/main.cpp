@@ -18,7 +18,6 @@ void highscore();
 
 int main()
 {
-	system("cls");
 	int input = 0;
 	
 	//1 - play calling playgame
@@ -41,31 +40,35 @@ int main()
 	std::cout<<"                           Press[4] to exit"<<std::endl;
 	
 	
-	if ( input > 5 || input <=0 )
+	while ( input == 0 )
 	{
-		input = 0;
 		std::cin >> input;
-	}
-	
+		if ( input > 0 && input < 5 )
+		{
 			switch ( input )
 			{
 			case START : playgame();
 				system("cls");
 				break;
-	
 			case INSTRUCTIONS : instruction();
 				break;
 			case HIGHSCORE : highscore();
 				break;
 			case EXIT : shutdown();
 				break;
-			default: main();
-				break;
-				
+			
 
 			}
-		
-	system("cls");
+		}
+		else
+		{
+			input = 0;
+			std::cout << "Please enter a valid number" << std::endl;
+		}
+	}
+
+
+	
 	return 0;
 
 } 
@@ -145,12 +148,14 @@ void highscore()
 		
 		if ( input == BACKTOMAINMENU )
 		{
+			input = 0;
 			Highscore.close();
 			system("cls");
 			main();
 		}
 		else
 		{
+			input = 0;
 			std::cout << "Please press 5 to return" << std::endl;
 		}
 	}
