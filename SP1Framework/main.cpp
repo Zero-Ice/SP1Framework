@@ -93,7 +93,7 @@ int instruction()
 			break;
 		}
 		else
-		{
+		{ 
 			std::cout << "Please press 5 to return" << std::endl;
 		}
 	}
