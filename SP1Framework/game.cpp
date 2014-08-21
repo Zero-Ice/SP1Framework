@@ -6,20 +6,21 @@
 #include <iostream>
 #include <iomanip>
 
-const size_t maxsack = 10;
+const size_t maxsack = 10; // number of sacks
 double elapsedTime;
 double deltaTime;
 double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
-COORD sack[maxsack];
+COORD sack[maxsack]; // coordinate of sacks 
+COORD message; // shows gameover
 int sackLocation[] = {9,28,47,66};
-int sackDecider;
-COORD message;
+int sackDecider; // decides which sack to spawn, from 1 to 10
 int scores=0;
-int locationDecider;
-int x = 10;
+int* highscore = &scores;
+int locationDecider; // decides where the sacks will be spawned
+int x = 10; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 10 score. 
 double difficulty = 0.0;
 void init()
 {
@@ -175,7 +176,8 @@ void render()
 			message.X = consoleSize.X / 2;
 			message.Y = consoleSize.Y / 2;
 			gotoXY(message);
-			std::cout << "gameover";
+			std::cout << "gameover" << std::endl;
+			system("pause");
 			g_quitGame = true;   
 		}
 		else if ( sack[sackNo].Y > 0 && sack[sackNo].Y < 34 && sack[sackNo].X != 1) // print sack
@@ -227,10 +229,12 @@ void render()
 	//render current scores
 	gotoXY(15, 0);
     colour(0x0F);
-    std::cout << "SCORES:" << scores << std::endl;
+    std::cout << "SCORES:" << *highscore << std::endl;
 
     // render character
 	colour(0x0F);
     gotoXY(charLocation);
     std::cout <<"\\___________/" << std::endl;
+
+
 }

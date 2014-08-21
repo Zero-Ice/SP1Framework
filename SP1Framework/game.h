@@ -15,6 +15,16 @@ enum Keys
     K_ESCAPE,
     K_COUNT
 };
+enum state
+{
+	START=1,
+	INSTRUCTIONS,
+	HIGHSCORE,
+	EXIT,
+	BACKTOMAINMENU,
+	MAX_STATES
+
+};
 
 void init();                // initialize your variables, allocate memory, etc
 void getInput();            // get input from player

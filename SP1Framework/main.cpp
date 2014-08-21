@@ -9,7 +9,7 @@ StopWatch g_timer;            // Timer function to keep track of time and the fr
 bool g_quitGame = false;      // Set to true if you want to quit the game
 const unsigned char FPS = 5; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
-int input;
+int input = 0;
 int instruction();
 void mainLoop();
 void highscore();
@@ -18,17 +18,9 @@ void highscore();
 
 int main()
 {
+	system("cls");
+	int input = 0;
 	
-	enum state
-	{
-		START=1,
-		INSTRUCTIONS,
-		HIGHSCORE,
-		EXIT,
-		BACKTOMAINMENU,
-		MAX_STATES
-		
-	};
 	//1 - play calling playgame
 	//2 - tutorial
 	//3 - scoreboard
@@ -38,8 +30,8 @@ int main()
 	std::cout<<"          ***      ***     ***    *********   ***********  \\_________/"<<std::endl;
 	std::cout<<"          ***      ***     ***    ***         ***          /         \\"<<std::endl;
 	std::cout<<"          ***********      ***    ***         *******     |           |"<<std::endl;
-	std::cout<<"          ***    ***       ***    ***         *******     |           |"<<std::endl;
-	std::cout<<"          ***     ***      ***    ***         ***         |    RICE   |"<<std::endl;
+	std::cout<<"          ***    ***       ***    ***         *******     |   RICE    |"<<std::endl;
+	std::cout<<"          ***     ***      ***    ***         ***         |           |"<<std::endl;
 	std::cout<<"          ***       ***    ***    *********   *********** |           |"<<std::endl;
 	std::cout<<"          ***        ***   ***     *******    ***********  \\_________/"<<std::endl;
 	std::cout<<std::endl;
@@ -47,23 +39,32 @@ int main()
 	std::cout<<"                           Press[2] for instructions"<<std::endl;
 	std::cout<<"                           Press[3] for scoreboard"<<std::endl; 
 	std::cout<<"                           Press[4] to exit"<<std::endl;
-	std::cin>>input;
-
-	switch ( input )
+	
+	
+	if ( input > 5 || input <=0 )
 	{
-	case START : playgame();
-		system("cls");
-		break;
-	case INSTRUCTIONS : instruction();
-		system("cls");
-		break;
-	case HIGHSCORE : highscore();
-		break;
-	case EXIT : shutdown();
-		system("cls");
-		break;
+		input = 0;
+		std::cin >> input;
 	}
 	
+			switch ( input )
+			{
+			case START : playgame();
+				system("cls");
+				break;
+	
+			case INSTRUCTIONS : instruction();
+				break;
+			case HIGHSCORE : highscore();
+				break;
+			case EXIT : shutdown();
+				break;
+			default: main();
+				break;
+				
+
+			}
+		
 	system("cls");
 	return 0;
 
@@ -75,13 +76,22 @@ int instruction()
 	std::cout<<"INSTRUCTIONS"<<std::endl;
     std::cout<<"Use left and right arrow keys to move character to catch the rice sacks."<<std::endl;;
     std::cout<<"Catch as many rice sacks as you can, if the rice sack hits the floor it is game over!"<<std::endl;;
-	std::cout<<"Press 1 to return to main menu"<<std::endl;
-	std::cin>>input;
-	if(input==1)
+	std::cout<<"Press 5 to return to main menu"<<std::endl;
+	
+	while ( input != BACKTOMAINMENU )
 	{
-		system("cls");
-		main();
+		int input = 0;
+		std::cin>>input;
+		if(input == BACKTOMAINMENU)
+		{
+			system("cls");
+			main();
 
+		}
+		else
+		{
+			std::cout << "Please press 5 to return" << std::endl;
+		}
 	}
 
 	return 0;
@@ -92,7 +102,7 @@ int playgame()
 	init();      // initialize your variables
     mainLoop();  // main loop
 	system("cls");
-    main();  // do clean up, if any. free memory.
+    main(); 
 	
 	return 0;
 }
@@ -109,9 +119,11 @@ void mainLoop()
         render();                           // render the graphics output to screen
         g_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.      
 	}   
+	
 }
 void highscore()
 {
+	system("cls");
 	std::ifstream Highscore;
 	
 	std::string data;
@@ -125,6 +137,21 @@ void highscore()
 	}
 	system("Pause");
 	
-
+	std::cout << "Press 5 to return to the main menu" << std::endl;
 	
+	while ( input != BACKTOMAINMENU )
+	{
+		std::cin >> input ;
+		
+		if ( input == BACKTOMAINMENU )
+		{
+			Highscore.close();
+			system("cls");
+			main();
+		}
+		else
+		{
+			std::cout << "Please press 5 to return" << std::endl;
+		}
+	}
 }
