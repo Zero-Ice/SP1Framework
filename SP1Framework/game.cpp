@@ -196,8 +196,16 @@ void render()
 			Highscorers player1;
 			player1.highscore = *highscore;
 			std::cout << "Enter your name:" << std::endl;
-			std::cin >> player1.name;
-			
+			while ( player1.name == "\0" )
+			{
+				std::cin >> player1.name;
+				if ( (player1.name).size() > 10 )
+				{
+					std::cout << "Please enter a name with 10 characters or less" << std::endl;
+					player1.name = "\0";
+					
+				}
+			}
 			std::ifstream Highscore("highscores.txt");
 			std::string data;
 
@@ -241,7 +249,7 @@ void render()
 			for(int f=0; f < 10; ++f)
 			{
 				
-				Highscorestore << player[f].position << " " << player[f].name << " " << player[f].highscore << std::endl;
+				Highscorestore << player[f].position << "    " << player[f].name << "      " << player[f].highscore << std::endl;
 			}
 
 			Highscorestore.close();
