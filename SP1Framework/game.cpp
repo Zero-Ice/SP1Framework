@@ -10,7 +10,7 @@
 #include <sstream>
 
 const size_t maxsack = 10; // number of sacks
-const size_t maxvase = 2;
+const size_t maxvase = 10;
 double elapsedTime;
 double deltaTime;
 double timeFall = 0.0;
@@ -26,7 +26,8 @@ int vaseDecider;
 int sackDecider; // decides which sack to spawn, from 1 to 10
 int scores=0;
 int* highscore = &scores;
-int locationDecider; // decides where the sacks will be spawned
+int sackLocationDecider; // decides where the sacks will be spawned
+int vaseLocationDecider;
 int x = 10; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 10 score. 
 double difficulty = 0.0;
 
@@ -91,13 +92,18 @@ void update(double dt)
 	if ( elapsedTime > timeFall )    
 	{
 		srand(time(NULL));
-		locationDecider = rand() % 4 ; // decide where sacks will spawn
+		sackLocationDecider = rand() % 4 ; // decide where sacks will spawn
 		sackDecider = rand() % maxsack; // decide which sack to spawn
-
+		vaseDecider = rand() % maxvase;
+		vaseLocationDecider = rand() % 4;
 		if ( sack[sackDecider].X == 0 ) // only spawn if the sack is not present
 		{
 			Beep(1440, 100);
-			sack[sackDecider].X = sackLocation[locationDecider];
+			sack[sackDecider].X = sackLocation[sackLocationDecider];
+			if (sackLocation[sackLocationDecider] != vaseLocation[vaseLocationDecider])
+			{
+				vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
+			}
 		}
 
 		
@@ -201,9 +207,9 @@ void render()
 	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
 	                        };
 	//cout sack
-	for ( int sackNo = 0; sackNo < maxsack; ++sackNo)
+	for ( int a = 0; a < maxsack; ++a)
 	{
-		if ( sack[sackNo].X == 1)
+		if ( sack[a].X == 1 || vase[a].X == 1)
 		{
 			cls();
 			message.X = consoleSize.X / 2;
@@ -296,40 +302,76 @@ void render()
 			system("pause");
 			g_quitGame = true;   
 		}
-		else if ( sack[sackNo].Y > 0 && sack[sackNo].Y < 34 && sack[sackNo].X != 1) // print sack
+		else if ( sack[a].Y > 0 && sack[a].Y < 34 && sack[a].X != 1) // print sack
 		{
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-6);
+			gotoXY(sack[a].X, sack[a].Y-6);
 			std::cout << " ___________" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-5);
+			gotoXY(sack[a].X, sack[a].Y-5);
 			std::cout << " \\_________/" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-4);
+			gotoXY(sack[a].X, sack[a].Y-4);
 			std::cout << " /         \\ " << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-3);
+			gotoXY(sack[a].X, sack[a].Y-3);
 			std::cout << "|          |" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-2);
+			gotoXY(sack[a].X, sack[a].Y-2);
 			std::cout << "|   RICE   |" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-1);
+			gotoXY(sack[a].X, sack[a].Y-1);
 			std::cout << "|          |" << std::endl;
-			gotoXY(sack[sackNo]); 
+			gotoXY(sack[a]); 
 			std::cout << " \\________/ " << std::endl;
 		}
-		else if (sack[sackNo].Y == 40) // print broken sack
+		else if (sack[a].Y == 40) // print broken sack
 		{
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-6);
+			gotoXY(sack[a].X, sack[a].Y-6);
 			std::cout << " ___________" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-5);
+			gotoXY(sack[a].X, sack[a].Y-5);
 			std::cout << " \\_________/" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-4);
+			gotoXY(sack[a].X, sack[a].Y-4);
 			std::cout << " /         \\ " << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-3);
+			gotoXY(sack[a].X, sack[a].Y-3);
 			std::cout << "|          |" << std::endl;
-			gotoXY(sack[sackNo].X, sack[sackNo].Y-2);
+			gotoXY(sack[a].X, sack[a].Y-2);
 			std::cout << "|   RICE   |" << std::endl;
-			gotoXY(sack[sackNo].X-4, sack[sackNo].Y-1);
+			gotoXY(sack[a].X-4, sack[a].Y-1);
 			std::cout << " ../          \..." << std::endl;
-			gotoXY(sack[sackNo].X-4, sack[sackNo].Y); 
+			gotoXY(sack[a].X-4, sack[a].Y); 
 			std::cout << ".:''.'.'.'.'.'.'':: " << std::endl;
 		}
+		// sackNo is used because its in sackNo loop
+		else if (vase[a].Y > 0 && vase[a].Y < 34 && vase[a].X != 1)
+		{
+			gotoXY(vase[a].X, vase[a].Y-6);
+			std::cout<<"   _...._   "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-5);
+			std::cout<<"  ';-.-';'  "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-4);
+			std::cout<<"    }=={    "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-3);
+			std::cout<<"  .'    '.  "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-2);
+			std::cout<<" /        \\ "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-1);
+			std::cout<<"|          |"<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y);
+			std::cout<<"\\__________/"<<std::endl;	
+		}
+		else if (vase[a].Y == 40)
+		{
+			gotoXY(vase[a].X, vase[a].Y-6);
+			std::cout<<"   _...._   "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-5);
+			std::cout<<"  ';-.-';'  "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-4);
+			std::cout<<"    }=={    "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-3);
+			std::cout<<"  .'    '.  "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-2);
+			std::cout<<" /        \ "<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y-1);
+			std::cout<<"|   /\     |"<<std::endl;
+			gotoXY(vase[a].X, vase[a].Y);
+			std::cout<<"\__/  \/''''"<<std::endl;
+		}
+
 	}
 
 	
