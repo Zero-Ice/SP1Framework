@@ -9,7 +9,8 @@ StopWatch g_timer;            // Timer function to keep track of time and the fr
 bool g_quitGame = false;      // Set to true if you want to quit the game
 const unsigned char FPS = 5; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
-int input = 0;
+char choice;
+int	input = 0;
 int instruction();
 void mainLoop();
 void highscore();
@@ -44,7 +45,8 @@ int main()
 	input = 0;
 	while ( input == 0 )
 	{
-		std::cin >> input;
+		std::cin >> choice;
+		input = choice - 48;
 		if ( input > 0 && input < 5 )
 		{
 			switch ( input )
@@ -85,7 +87,8 @@ int instruction()
 	while ( input != BACKTOMAINMENU )
 	{
 		int input = 0;
-		std::cin>>input;
+		std::cin >> choice;
+		input = choice - 48;
 		if(input == BACKTOMAINMENU)
 		{
 			system("cls");
@@ -140,24 +143,22 @@ void highscore()
 		std::cout << data << std::endl;
 	}
 	
-	
-	
+	std::cout<<"Press 5 to return to main menu"<<std::endl;
 	while ( input != BACKTOMAINMENU )
 	{
-		
-		if ( input == BACKTOMAINMENU )
+		int input = 0;
+		std::cin >> choice;
+		input = choice - 48;
+		if(input == BACKTOMAINMENU)
 		{
-			input = 0;
-			Highscore.close();
 			system("cls");
 			Beep(500,100);
 			main();
 			break;
 		}
 		else
-		{
-			std::cout << "Press 5 to return to the main menu" << std::endl;
-			std::cin >> input ;
+		{ 
+			std::cout << "Please press 5 to return" << std::endl;
 		}
 	}
 }
