@@ -62,8 +62,6 @@ int main()
 			case EXIT : Beep(500,100);
 				shutdown();
 				break;
-			
-
 			}
 		}
 		else
@@ -72,11 +70,7 @@ int main()
 			std::cout << "Please enter a valid number" << std::endl;
 		}
 	}
-
-
-	
 	return 0;
-
 } 
 
 int instruction()
@@ -104,7 +98,6 @@ int instruction()
 			std::cout << "Please press 5 to return" << std::endl;
 		}
 	}
-
 	return 0;
 }
 
@@ -130,7 +123,6 @@ void mainLoop()
         render();                           // render the graphics output to screen
         g_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.      
 	}   
-	
 }
 void highscore()
 {
@@ -141,7 +133,7 @@ void highscore()
 
 	Highscore.open ("highscores.txt");
 	
-	std::cout << "Rank " << " Player    " << "Score" << std::endl;
+	std::cout << "Rank " << " Player    " << " Score" << std::endl;
 	while (!Highscore.eof())
 	{
 		getline(Highscore, data);

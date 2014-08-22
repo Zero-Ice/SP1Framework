@@ -237,8 +237,22 @@ void render()
 
 			for(int f=0; f < 10; ++f)
 			{
+				if(player[f].position == 10)
+				{
+					Highscorestore << player[f].position << "    ";
+				}
+				else
+				{
+				Highscorestore << player[f].position << "     ";
+				}
 				
-				Highscorestore << player[f].position << "    " << player[f].name << "      " << player[f].highscore << std::endl;
+				Highscorestore << player[f].name;
+				for (int m = player[f].name.size(); m < 11; ++m)
+				{
+					Highscorestore << " ";
+				}
+				
+				Highscorestore << player[f].highscore << std::endl;
 			}
 
 			Highscorestore.close();
