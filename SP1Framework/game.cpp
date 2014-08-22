@@ -185,27 +185,13 @@ void render()
 		{
 			cls();
 			message.X = consoleSize.X / 2;
-			message.Y = consoleSize.Y / 2;
 			gotoXY(message);
-			std::cout << "gameover" << std::endl;
+			std::cout << "GAMEOVER" << std::endl;
+			std::cout << "YOUR SCORE:" << scores << std::endl;//show player's score
 
+			//make an array of struct to store the positions, name and score of the top ten rankers
 			Highscorers player[10];
-
-			
-			
-			Highscorers player1;
-			player1.highscore = *highscore;
-			std::cout << "Enter your name:" << std::endl;
-			while ( player1.name == "\0" )
-			{
-				std::cin >> player1.name;
-				if ( (player1.name).size() > 10 )
-				{
-					std::cout << "Please enter a name with 10 characters or less" << std::endl;
-					player1.name = "\0";
-					
-				}
-			}
+			//read highscores from text file and put them into variables
 			std::ifstream Highscore("highscores.txt");
 			std::string data;
 
@@ -213,14 +199,30 @@ void render()
 			{
 				std::istringstream ss(data);
 
-				ss >> player[f].position >> player[f].name >> player[f].highscore;
+				ss >> player[f].position >> player[f].name >> player[f].highscore;//store the positions, name and score of the top ten rankers
 			}
 			Highscore.close();
 
-			for(int f=0; f < 9; ++f)
+			//make an struct to store current player infomations
+			Highscorers player1;
+			player1.highscore = *highscore;
+			int f;
+			for(f=0; f < 9; ++f)//
 			{
 				if(player1.highscore > player[f].highscore)
 				{
+					std::cout << "Congratulations, you had made it into the top ten. Pleaes enter your name:" << std::endl;
+					while ( player1.name == "\0" )
+					{
+						std::cin >> player1.name;
+						if ( (player1.name).size() > 10 )
+						{
+							std::cout << "Please enter a name with 10 characters or less:" << std::endl;
+							player1.name = "\0";
+
+						}
+					}
+
 					for(int k=9; k > f; --k)
 					{
 						player[k].highscore = player[k-1].highscore;
@@ -230,11 +232,14 @@ void render()
 					player[f].name = player1.name;
 					break;
 				}
-				
+			}
+			if( f == 9 )
+			{
+				std::cout << "Sorry, you did not make it into the top ten." << std::endl;
 			}
 
+			//storing back highscores in text file
 			std::ofstream Highscorestore("highscores.txt");
-
 			for(int f=0; f < 10; ++f)
 			{
 				if(player[f].position == 10)
@@ -254,8 +259,17 @@ void render()
 				
 				Highscorestore << player[f].highscore << std::endl;
 			}
-
 			Highscorestore.close();
+
+			//print out updated highscores from text file
+			std::ifstream UpdatedHighscore("highscores.txt");
+			std::cout << std::endl << "Rank " << " Player    " << " Score" << std::endl;
+			while (!UpdatedHighscore.eof())
+			{
+				getline(UpdatedHighscore, data);
+				std::cout << data << std::endl;
+			}
+			UpdatedHighscore.close();
 
 			system("pause");
 			g_quitGame = true;   
