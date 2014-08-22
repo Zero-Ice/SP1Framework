@@ -10,15 +10,19 @@
 #include <sstream>
 
 const size_t maxsack = 10; // number of sacks
+const size_t maxvase = 2;
 double elapsedTime;
 double deltaTime;
 double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 COORD charLocation;
 COORD consoleSize;
-COORD sack[maxsack]; // coordinate of sacks 
+COORD sack[maxsack]; // coordinate of sacks
+COORD vase[maxvase];
 COORD message; // shows gameover
 int sackLocation[] = {9,28,47,66};
+int vaseLocation[] = {9,28,47,66};
+int vaseDecider;
 int sackDecider; // decides which sack to spawn, from 1 to 10
 int scores=0;
 int* highscore = &scores;
@@ -129,9 +133,27 @@ void update(double dt)
 				}
 			}
 		}
+		for (int vaseNo=0; vaseNo<maxvase; vaseNo++)
+		{
+			if (vase[vaseNo].Y == 32 && charLocation.X == vase[vaseNo].X)          
+			{
+				vase[vaseNo].X = 1;	// player catches vase and gameover
+			}
+			if ( vase[vaseNo].Y > 34 )
+			{
+				vase[vaseNo].X = 0;  // vase resets to the top
+			}
+			// drop
+			if(vase[vaseNo].Y < 34 && vase[vaseNo].X != 0)
+			{
+				for ( int a = 0; a < 8; ++a )
+				{
+					++vase[vaseNo].Y;
+				}
+			}
+		}
 
-		//game over
-
+		//difficulty
 		if ( scores > x && difficulty < 0.8)
 		{
 			x += 10;
