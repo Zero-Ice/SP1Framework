@@ -1,7 +1,7 @@
 #include "mainmenu.h"
 #include <iostream>
 #include <string>
-
+#include "conio.h"
 int mainmenu()
 {
 	
@@ -30,7 +30,7 @@ int mainmenu()
 	input = 0;
 	while ( input == 0 )
 	{
-		std::cin >> choice;
+		choice=getche();
 		if(choice.size() != 1)
 		{
 			input = 0;

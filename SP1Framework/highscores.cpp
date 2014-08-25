@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include "conio.h"
 void highscore()
 {
 	system("cls");
@@ -24,7 +24,7 @@ void highscore()
 	while ( input != BACKTOMAINMENU )
 	{
 		input = 0;
-		std::cin >> choice;
+		choice = getche();
 		if(choice.size() != 1)
 		{
 			input = 0;

@@ -1,7 +1,7 @@
 #include "instructions.h"
 #include <iostream>
 #include <string>
-
+#include "conio.h"
 int instruction()
 {
 	int input = 0;
@@ -15,7 +15,7 @@ int instruction()
 	{
 		int input = 0;
 		std::string choice;
-		std::cin >> choice;
+		choice = getche();
 		if(choice.size() != 1)
 		{
 			input = 0;
