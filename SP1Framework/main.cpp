@@ -3,6 +3,15 @@
 #include "Framework\timer.h"
 #include "game.h"
 #include <iostream>
+// bool  - b
+// int - i
+// float - f
+// double - d
+// global - g
+// static - s
+// constant - c
+// char - ch
+// unsigned - u
 StopWatch g_timer;            // Timer function to keep track of time and the frame rate
 bool g_quitGame = false;      // Set to true if you want to quit the game
 const unsigned char FPS = 5; // FPS of this game
