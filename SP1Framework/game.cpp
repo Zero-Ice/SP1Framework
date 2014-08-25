@@ -25,6 +25,7 @@ int* highscore = &scores;
 int locationDecider; // decides where the sacks will be spawned
 int x = 10; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 10 score. 
 double difficulty = 0.0;
+int lives = 3;
 
 struct Highscorers
 {
@@ -109,10 +110,17 @@ void update(double dt)
 		}
 		for( int sackNo = 0; sackNo < maxsack; ++sackNo )
 		{
-			if ( sack[sackNo].Y > 34 )
+			if (sack[sackNo].Y > 34)
 			{
-				sack[sackNo].X = 1;  // gameover cos x = 1
+				sack[sackNo].X = 0;
+				sack[sackNo].Y = 0;
+				lives--; //losing lives
 			}
+			if (lives == 0)
+			{
+				sack[sackNo].X = 1;  // game over
+			}
+			
 			// check if player catched the sacks
 			if ( sack[sackNo].Y == 32 && charLocation.X == sack[sackNo].X && counter == maxsack)          
 			{
@@ -130,8 +138,7 @@ void update(double dt)
 			}
 		}
 
-		//game over
-
+		//difficulty increase
 		if ( scores > x && difficulty < 0.8)
 		{
 			x += 10;
@@ -330,5 +337,7 @@ void render()
     gotoXY(charLocation);
     std::cout <<"\\___________/" << std::endl;
 
-
+	//cout lives
+	gotoXY(0,1);
+	std::cout << "LIVES:" << lives << std::endl;
 }
