@@ -30,6 +30,7 @@ int sackLocationDecider; // decides where the sacks will be spawned
 int vaseLocationDecider;
 int x = 10; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 10 score. 
 double difficulty = 0.0;
+int lives = 3;
 
 struct Highscorers
 {
@@ -100,7 +101,7 @@ void update(double dt)
 		{
 			Beep(1440, 100);
 			sack[sackDecider].X = sackLocation[sackLocationDecider];
-			if (sackLocation[sackLocationDecider] != vaseLocation[vaseLocationDecider])
+			if (sackLocationDecider != vaseLocationDecider)
 			{
 				vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
 			}
@@ -119,10 +120,17 @@ void update(double dt)
 		}
 		for( int sackNo = 0; sackNo < maxsack; ++sackNo )
 		{
-			if ( sack[sackNo].Y > 34 )
+			if (sack[sackNo].Y > 34)
 			{
-				sack[sackNo].X = 1;  // gameover cos x = 1
+				sack[sackNo].X = 0;
+				sack[sackNo].Y = 0;
+				lives--; //losing lives
 			}
+			if (lives == 0)
+			{
+				sack[sackNo].X = 1;  // game over
+			}
+			
 			// check if player catched the sacks
 			if ( sack[sackNo].Y == 32 && charLocation.X == sack[sackNo].X && counter == maxsack)          
 			{
@@ -139,27 +147,36 @@ void update(double dt)
 				}
 			}
 		}
-		for (int vaseNo=0; vaseNo<maxvase; vaseNo++)
+		for (int vaseNo=0; vaseNo<maxvase; ++vaseNo)
 		{
 			if (vase[vaseNo].Y == 32 && charLocation.X == vase[vaseNo].X)          
 			{
-				vase[vaseNo].X = 1;	// player catches vase and gameover
+				vase[vaseNo].X = 0;
+				vase[vaseNo].Y = 0;
+				lives--; //lose 1 life when vase is catched 
 			}
 			if ( vase[vaseNo].Y > 34 )
 			{
 				vase[vaseNo].X = 0;  // vase resets to the top
+				vase[vaseNo].Y = 0;
 			}
 			// drop
-			if(vase[vaseNo].Y < 34 && vase[vaseNo].X != 0)
+			if(vase[vaseNo].Y < 34 && vase[vaseNo].X != 0 && counter == maxvase)
 			{
 				for ( int a = 0; a < 8; ++a )
 				{
 					++vase[vaseNo].Y;
 				}
 			}
+			if (lives == 0)
+			{
+				vase[vaseNo].X = 1;  // game over
+			}
 		}
 
+
 		//difficulty
+
 		if ( scores > x && difficulty < 0.8)
 		{
 			x += 10;
@@ -365,11 +382,11 @@ void render()
 			gotoXY(vase[a].X, vase[a].Y-3);
 			std::cout<<"  .'    '.  "<<std::endl;
 			gotoXY(vase[a].X, vase[a].Y-2);
-			std::cout<<" /        \ "<<std::endl;
+			std::cout<<" /        \\ "<<std::endl;
 			gotoXY(vase[a].X, vase[a].Y-1);
-			std::cout<<"|   /\     |"<<std::endl;
+			std::cout<<"|  /\\     |"<<std::endl;
 			gotoXY(vase[a].X, vase[a].Y);
-			std::cout<<"\__/  \/''''"<<std::endl;
+			std::cout<<"\__/  \\/''''"<<std::endl;
 		}
 
 	}
@@ -394,5 +411,7 @@ void render()
     gotoXY(charLocation);
     std::cout <<"\\___________/" << std::endl;
 
-
+	//cout lives
+	gotoXY(0,1);
+	std::cout << "LIVES:" << lives << std::endl;
 }
