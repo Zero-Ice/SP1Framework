@@ -90,7 +90,7 @@ void update(double dt)
     elapsedTime += dt;
     deltaTime = dt;
 
-	if ( elapsedTime > timeFall )    
+	if ( elapsedTime > timeFall && lives > 0)    
 	{
 		srand(time(NULL));
 		sackLocationDecider = rand() % 4 ; // decide where sacks will spawn
@@ -101,7 +101,7 @@ void update(double dt)
 		{
 			Beep(1440, 100);
 			sack[sackDecider].X = sackLocation[sackLocationDecider];
-			if (sackLocationDecider != vaseLocationDecider)
+			if (sackLocationDecider != vaseLocationDecider && vase[vaseDecider].X == 0)
 			{
 				vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
 			}
@@ -126,11 +126,11 @@ void update(double dt)
 				sack[sackNo].Y = 0;
 				lives--; //losing lives
 			}
-			if (lives == 0)
+			if (lives <= 0)
 			{
 				sack[sackNo].X = 1;  // game over
+				break;
 			}
-			
 			// check if player catched the sacks
 			if ( sack[sackNo].Y == 32 && charLocation.X == sack[sackNo].X && counter == maxsack)          
 			{
@@ -161,16 +161,17 @@ void update(double dt)
 				vase[vaseNo].Y = 0;
 			}
 			// drop
-			if(vase[vaseNo].Y < 34 && vase[vaseNo].X != 0 && counter == maxvase)
+			if(vase[vaseNo].Y < 34 && vase[vaseNo].X != 0 )
 			{
 				for ( int a = 0; a < 8; ++a )
 				{
 					++vase[vaseNo].Y;
 				}
 			}
-			if (lives == 0)
+			if (lives <= 0)
 			{
 				vase[vaseNo].X = 1;  // game over
+				break;
 			}
 		}
 
@@ -226,7 +227,7 @@ void render()
 	//cout sack
 	for ( int a = 0; a < maxsack; ++a)
 	{
-		if ( sack[a].X == 1 || vase[a].X == 1)
+		if ( sack[a].X == 1)
 		{
 			cls();
 			message.X = consoleSize.X / 2;
@@ -319,7 +320,7 @@ void render()
 			system("pause");
 			g_quitGame = true;   
 		}
-		else if ( sack[a].Y > 0 && sack[a].Y < 34 && sack[a].X != 1) // print sack
+		if ( sack[a].Y > 0 && sack[a].Y < 34 && sack[a].X != 1) // print sack
 		{
 			gotoXY(sack[a].X, sack[a].Y-6);
 			std::cout << " ___________" << std::endl;
@@ -354,7 +355,7 @@ void render()
 			std::cout << ".:''.'.'.'.'.'.'':: " << std::endl;
 		}
 		// sackNo is used because its in sackNo loop
-		else if (vase[a].Y > 0 && vase[a].Y < 34 && vase[a].X != 1)
+		if (vase[a].Y > 0 && vase[a].Y < 34 && vase[a].X != 1)
 		{
 			gotoXY(vase[a].X, vase[a].Y-6);
 			std::cout<<"   _...._   "<<std::endl;
@@ -415,3 +416,4 @@ void render()
 	gotoXY(0,1);
 	std::cout << "LIVES:" << lives << std::endl;
 }
+
