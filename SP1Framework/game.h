@@ -2,9 +2,16 @@
 #define _GAME_H
 
 #include "Framework\timer.h"
-
+#include <string>
 extern StopWatch g_timer;
 extern bool g_quitGame;
+
+struct Highscorers
+{
+	int position;
+	std::string name;
+	int highscore;
+};
 
 enum Keys
 {
@@ -17,6 +24,7 @@ enum Keys
 };
 enum state
 {
+	MAINMENU=0,
 	START=1,
 	INSTRUCTIONS,
 	HIGHSCORE,
@@ -25,15 +33,17 @@ enum state
 	MAX_STATES
 
 };
-
-
-
-void init();                // initialize your variables, allocate memory, etc
+void initMainMenu();                // initialize your variables, allocate memory, etc
+void initGame();
 void getInput();            // get input from player
 void update(double dt);     // update the game and the state of the game
 void render();              // renders the current state of the game to the console
-void shutdown();          // do clean up, free memory
+void shutdown();            // do clean up, free memory
 int mainmenu();
-int playgame();
-void mainLoop();
+void printSack(int a);
+void printVase(int a);
+void printBrokenSack(int a);
+void printBrokenVase(int a);
+int instruction();
+void highscorepage();
 #endif // _GAME_H

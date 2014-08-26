@@ -78,8 +78,8 @@
     <ClCompile Include="Framework\console.cpp" />
     <ClCompile Include="Framework\timer.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="highscores.cpp" />
-    <ClCompile Include="instructions.cpp" />
+    <ClCompile Include="highscore.cpp" />
+    <ClCompile Include="instruction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainmenu.cpp" />
   </ItemGroup>
@@ -87,7 +87,7 @@
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="highscores.h" />
+    <ClInclude Include="highscore.h" />
     <ClInclude Include="instructions.h" />
     <ClInclude Include="mainmenu.h" />
   </ItemGroup>

@@ -2,22 +2,9 @@
 #define _INSTRUCTIONS_H_
 
 #include "Framework\timer.h"
-
+#include "game.h"
 extern StopWatch g_timer;
 extern bool g_quitGame;
-
-
-enum state
-{
-	START=1,
-	INSTRUCTIONS,
-	HIGHSCORE,
-	EXIT,
-	BACKTOMAINMENU,
-	MAX_STATES
-
-};
-
 
 
 void init();                // initialize your variables, allocate memory, etc
@@ -27,5 +14,5 @@ void render();              // renders the current state of the game to the cons
 void shutdown();            // do clean up, free memory
 int mainmenu();
 int playgame();
-void highscore();
+void highscorepage();
 #endif // _GAME_H

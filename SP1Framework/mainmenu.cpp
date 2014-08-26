@@ -2,9 +2,12 @@
 #include <iostream>
 #include <string>
 #include "conio.h"
+#include "Framework\console.h"
+#include "highscore.h"
 int mainmenu()
 {
-	
+	void mainLoop();
+	clearBuffer(0x0F);
 	int input = 0;
 	std::string choice;
 
@@ -13,28 +16,42 @@ int mainmenu()
 	//3 - scoreboard
 	//4 - exit
 	//5 - link back to main menu
-    std::cout<<"          ***********      ***     *******    ***********  ___________"<<std::endl;
-	std::cout<<"          ***      ***     ***    *********   ***********  \\_________/"<<std::endl;
-	std::cout<<"          ***      ***     ***    ***         ***          /         \\"<<std::endl;
-	std::cout<<"          ***********      ***    ***         *******     |           |"<<std::endl;
-	std::cout<<"          ***    ***       ***    ***         *******     |   RICE    |"<<std::endl;
-	std::cout<<"          ***     ***      ***    ***         ***         |           |"<<std::endl;
-	std::cout<<"          ***       ***    ***    *********   *********** |           |"<<std::endl;
-	std::cout<<"          ***        ***   ***     *******    ***********  \\_________/"<<std::endl;
-	std::cout<<std::endl;
-	std::cout<<"                           Press[1] to start "<<std::endl;
-	std::cout<<"                           Press[2] for instructions"<<std::endl;
-	std::cout<<"                           Press[3] for scoreboard"<<std::endl; 
-	std::cout<<"                           Press[4] to exit"<<std::endl;
-	
+	COORD c;
+	c.X = 0;
+	c.Y = 0;
+    writeToBuffer(c,"          ***********      ***     *******    ***********  ___________",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***      ***     ***    *********   ***********  \\_________/",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***      ***     ***    ***         ***          /         \\",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***********      ***    ***         *******     |           |",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***    ***       ***    ***         *******     |   RICE    |",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***     ***      ***    ***         ***         |           |",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***       ***    ***    *********   *********** |           |",0x0F);
+	c.Y++;
+	writeToBuffer(c,"          ***        ***   ***     *******    ***********  \\_________/",0x0F);
+
+	c.Y += 2;
+	writeToBuffer(c,"                           Press[1] to start ",0x0F);
+	c.Y++;
+	writeToBuffer(c,"                           Press[2] for instructions",0x0F);
+	c.Y++;
+	writeToBuffer(c,"                           Press[3] for scoreboard",0x0F);
+	c.Y++;
+	writeToBuffer(c,"                           Press[4] to exit",0x0F);
+	flushBufferToConsole();
 	input = 0;
 	while ( input == 0 )
 	{
 		choice=getche();
 		if(choice.size() != 1)
 		{
-			input = 0;
-			std::cout << "Please enter a valid number" << std::endl;
+			c.Y++;
+			writeToBuffer(c,"Please enter a valid number",0x0F);
 			continue;
 		}
 		input = choice[0] - 48;
@@ -42,17 +59,20 @@ int mainmenu()
 		{
 			switch ( input )
 			{
-			case START : Beep(500,100);
-				playgame();
-				system("cls");
+			case 1 : Beep(500,100);
+
+				mainLoop();
+				
 				break;
-			case INSTRUCTIONS : Beep(500,100);
+			case 2 : Beep(500,100);
+				clearBuffer(0x0F);
 				instruction();
 				break;
-			case HIGHSCORE : Beep(500,100);
-				highscore();
+			case 3 : Beep(500,100);
+				clearBuffer(0x0F);
+				highscorepage();
 				break;
-			case EXIT : Beep(500,100);
+			case 4 : Beep(500,100);
 				shutdown();
 				break;
 			}
@@ -60,8 +80,11 @@ int mainmenu()
 		else
 		{
 			input = 0;
-			std::cout << "Please enter a valid number" << std::endl;
+			c.Y++;
+			writeToBuffer(c,"Please enter a valid number",0x0F);
 		}
 	}
+	flushBufferToConsole();
 	return 0;
+
 }

@@ -7,19 +7,6 @@ extern StopWatch g_timer;
 extern bool g_quitGame;
 
 
-enum state
-{
-	START=1,
-	INSTRUCTIONS,
-	HIGHSCORE,
-	EXIT,
-	BACKTOMAINMENU,
-	MAX_STATES
-
-};
-
-
-
 void init();                // initialize your variables, allocate memory, etc
 void getInput();            // get input from player
 void update(double dt);     // update the game and the state of the game

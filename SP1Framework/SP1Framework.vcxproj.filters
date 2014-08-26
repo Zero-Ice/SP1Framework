@@ -36,10 +36,10 @@
     <ClCompile Include="mainmenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="highscores.cpp">
+    <ClCompile Include="instruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="instructions.cpp">
+    <ClCompile Include="highscore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,13 +53,13 @@
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mainmenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="instructions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="highscores.h">
+    <ClInclude Include="mainmenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="highscore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
