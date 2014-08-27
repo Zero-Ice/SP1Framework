@@ -1,18 +1,22 @@
-#ifndef _INSTRUCTIONS_H_
-#define _INSTRUCTIONS_H_
+#ifndef _INSTRUCTION_H
+#define _INSTRUCTION_H
 
+#include "Framework\console.h"
+#include <string>
+#include "conio.h"
 
-#include "Framework\timer.h"
+enum state
+{
+	MAINMENU=0,
+	START,
+	INSTRUCTIONS,
+	HIGHSCORE,
+	EXIT,
+	BACKTOMAINMENU,
+	MAX_STATES
 
-extern StopWatch g_timer;
-extern bool g_quitGame;
+};
 
-void init();                // initialize your variables, allocate memory, etc
-void getInput();            // get input from player
-void update(double dt);     // update the game and the state of the game
-void render();              // renders the current state of the game to the console
-void shutdown();            // do clean up, free memory
-int mainmenu();
-int playgame();
-int instruction();
-#endif // _GAME_H
+int mainmenu();             // Main menu
+
+#endif // _INSTRUCTION_H

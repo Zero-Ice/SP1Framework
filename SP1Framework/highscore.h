@@ -1,18 +1,33 @@
-#ifndef _INSTRUCTIONS_H_
-#define _INSTRUCTIONS_H_
+#ifndef _HIGHSCORE_H
+#define _HIGHSCORE_H
 
-#include "Framework\timer.h"
-#include "game.h"
-extern StopWatch g_timer;
-extern bool g_quitGame;
+#include "Framework\console.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include "conio.h"
 
+struct Highscorers
+{
+	int position;
+	std::string name;
+	int highscore;
+};
 
-void init();                // initialize your variables, allocate memory, etc
-void getInput();            // get input from player
-void update(double dt);     // update the game and the state of the game
-void render();              // renders the current state of the game to the console
-void shutdown();            // do clean up, free memory
-int mainmenu();
-int playgame();
-void highscorepage();
-#endif // _GAME_H
+enum state
+{
+	MAINMENU=0,
+	START,
+	INSTRUCTIONS,
+	HIGHSCORE,
+	EXIT,
+	BACKTOMAINMENU,
+	MAX_STATES
+
+};
+
+int mainmenu();             // Main menu
+
+#endif // _HIGHSCORE_H

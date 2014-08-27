@@ -1,12 +1,7 @@
 #include "mainmenu.h"
-#include <iostream>
-#include <string>
-#include "conio.h"
-#include "Framework\console.h"
-#include "highscore.h"
+
 int mainmenu()
 {
-	void mainLoop();
 	clearBuffer(0x0F);
 	int input = 0;
 	std::string choice;
@@ -45,13 +40,14 @@ int mainmenu()
 	writeToBuffer(c,"                           Press[4] to exit",0x0F);
 	flushBufferToConsole();
 	input = 0;
-	while ( input == 0 )
+	while ( input == 0 )//ask the player to press 1-4
 	{
 		choice=getche();
-		if(choice.size() != 1)
+		if(choice.size() != 1)//ask the player to press 5 to return
 		{
 			c.Y++;
 			writeToBuffer(c,"Please enter a valid number",0x0F);
+			flushBufferToConsole();
 			continue;
 		}
 		input = choice[0] - 48;
@@ -59,32 +55,30 @@ int mainmenu()
 		{
 			switch ( input )
 			{
-			case 1 : Beep(500,100);
-
+			case START : Beep(500,100);//Start the game
 				mainLoop();
-				
 				break;
-			case 2 : Beep(500,100);
+			case INSTRUCTIONS : Beep(500,100);//Go and read instructions
 				clearBuffer(0x0F);
 				instruction();
 				break;
-			case 3 : Beep(500,100);
+			case HIGHSCORE : Beep(500,100);//Go and see highscores
 				clearBuffer(0x0F);
 				highscorepage();
 				break;
-			case 4 : Beep(500,100);
+			case EXIT : Beep(500,100);//Exit the main menu
 				shutdown();
 				break;
 			}
 		}
-		else
+		else//ask the player to press 5 to return
 		{
 			input = 0;
 			c.Y++;
 			writeToBuffer(c,"Please enter a valid number",0x0F);
+			flushBufferToConsole();
 		}
 	}
-	flushBufferToConsole();
 	return 0;
 
 }

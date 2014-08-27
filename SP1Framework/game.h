@@ -2,9 +2,21 @@
 #define _GAME_H
 
 #include "Framework\timer.h"
+#include "Framework\console.h"
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include "conio.h"
+
 extern StopWatch g_timer;
 extern bool g_quitGame;
+
+extern COORD sack[];
+extern int sackLocation[];
+extern int sackDecider;
+extern int sackLocationDecider;
 
 struct Highscorers
 {
@@ -22,10 +34,11 @@ enum Keys
     K_ESCAPE,
     K_COUNT
 };
+
 enum state
 {
 	MAINMENU=0,
-	START=1,
+	START,
 	INSTRUCTIONS,
 	HIGHSCORE,
 	EXIT,
@@ -33,17 +46,27 @@ enum state
 	MAX_STATES
 
 };
-void initMainMenu();                // initialize your variables, allocate memory, etc
-void initGame();
+
+void initMainMenu();        // initialize variables, allocate memory, etc for the main menu
+void initGame();            // initialize variables, allocate memory, etc for the game
+void mainLoop();            // calls functions to get input, update and render the game at a specific frame rate
 void getInput();            // get input from player
 void update(double dt);     // update the game and the state of the game
 void render();              // renders the current state of the game to the console
 void shutdown();            // do clean up, free memory
-int mainmenu();
-void printSack(int a);
-void printVase(int a);
-void printBrokenSack(int a);
-void printBrokenVase(int a);
-int instruction();
-void highscorepage();
+
+int mainmenu();             // Main menu
+int instruction();          // Instruction
+void highscorepage();       // print out highscore
+
+void spawning();            // spawn sacks and vase
+void sackaction();          // sacks action
+void vaseaction();          // vases action
+
+void gameover();            // print out gameover screen
+void printSack(int a);      // print out sack
+void printVase(int a);      // print out vase
+void printBrokenSack(int a);// print out broken sack
+void printBrokenVase(int a);// print out broken vase
+
 #endif // _GAME_H

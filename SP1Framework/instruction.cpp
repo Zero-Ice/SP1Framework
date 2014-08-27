@@ -1,11 +1,8 @@
-//#include "instructions.h"
-#include <iostream>
-#include <string>
-#include "conio.h"
-#include "Framework\console.h"
-#include "game.h"
+#include "instructions.h"
+
 int instruction()
 {
+	std::string choice;
 	int input = 0;
 	COORD c;
 	c.X = 0;
@@ -18,33 +15,32 @@ int instruction()
 	c.Y++;
 	writeToBuffer(c,"Press 5 to return to main menu");
 	flushBufferToConsole();
-	while ( input != BACKTOMAINMENU )
+	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu
 	{
 		input = 0;
-		std::string choice;
 		choice = getche();
-		if(choice.size() != 1)
+		if(choice.size() != 1)//ask the player to press 5 to return
 		{
 			input = 0;
 			c.Y++;
 			writeToBuffer(c,"Please press 5 to return");
+			flushBufferToConsole();
 			continue;
 		}
 		input = choice[0] - 48;
-		if(input == BACKTOMAINMENU)
+		if(input == BACKTOMAINMENU)//Go back to main menu when the player press 5
 		{
-			input = MAINMENU;
 			clearBuffer(0x0F);
-			mainmenu();
 			Beep(500,100);
+			mainmenu();
 			break;
 		}
-		else
+		else//ask the player to press 5 to return
 		{ 
 			c.Y++;
 			writeToBuffer(c,"Please press 5 to return");
+			flushBufferToConsole();
 		}
 	}
-	flushBufferToConsole();
 	return 0;
 }

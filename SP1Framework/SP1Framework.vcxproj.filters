@@ -53,13 +53,13 @@
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="instructions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mainmenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="highscore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="instructions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
