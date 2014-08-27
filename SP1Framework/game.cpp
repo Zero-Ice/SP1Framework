@@ -23,6 +23,12 @@ int sackLocation[] = {9,28,47,66}; // store the X coordinate of location of wher
 int sackDecider; // decides which sack to spawn, from 1 to 10
 int sackLocationDecider; // decides where the sacks will be spawned
 
+//bonus sacks
+COORD sackb; // coordinate of sacks
+int sackbLocation[] = {9,28,47,66}; // store the X coordinate of location of where the sacks will be spawned  
+int sackbDecider; // decides which sack to spawn, from 1 to 10
+int sackbLocationDecider; // decides where the sacks will be spawned
+
 //vases
 const size_t maxvase = 10; // number of vases
 COORD vase[maxvase]; // coordinate of vases
@@ -32,9 +38,10 @@ int vaseLocationDecider; // decides where the vase will be spawned
 
 int scores=0; // score of player
 int* highscore = &scores; // pointer to point at score of the player
-int x = 10; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 10 score. 
+int x = 100; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 100 score. 
 double difficulty = 0.0; // this variable increase the speed of the objects fall by reducing the time to update
 int lives = 3; // Amount of lives the player has
+int level = 1; //Current game level
 
 void initMainMenu()
 {
@@ -49,9 +56,10 @@ void initGame()
     elapsedTime = 0.0;  
 	scores=0;
 	timeFall = 0.0;
-	x = 10;
+	x = 100;
 	difficulty = 0.0;
 	lives = 3;
+	level = 1;
 	// Set precision for floating point output
 	charLocation.X = 47;
     charLocation.Y = 42;
@@ -62,6 +70,8 @@ void initGame()
 		sack[a].X = 0;
 		sack[a].Y = 0;
 	}
+	sackb.X = 0;
+	sackb.Y = 0;
 }
 
 void shutdown()
@@ -96,13 +106,14 @@ void update(double dt)
 		
 		vaseaction(); //vase action
 
+		sackbaction();
 		// increase difficulty
-		if ( scores > x && difficulty < 0.8)
+		if ( scores > x && difficulty < 0.5 && scores > 100)
 		{
-			x += 10;
+			x += 30;
 			difficulty += 0.1;// reduce time to update
 		}
-		timeFall += (1.2-difficulty); //control time to update
+		timeFall += (1.5-difficulty); //control time to update
 	}
 
 	// Updating the location of the character based on the key press
@@ -123,6 +134,16 @@ void update(double dt)
 		}
     }
 	
+	//Update Level
+	if (scores >= 50)
+		level = 2;
+	if (scores >= 100)
+		level = 3;
+	if (scores >= 300)
+		level = 4;
+	if (scores >= 350)
+		level = 5;
+
     // quits the game if player hits the escape key
     if (keyPressed[K_ESCAPE])
         g_quitGame = true;       
@@ -154,6 +175,13 @@ void render()
 			{
 				printBrokenSack(a);
 			}
+			
+			//print bonus sack
+			if (sackb.Y > 0 && sackb.Y < charLocation.Y)
+			{
+				printSackB();
+			}
+
 			//print vase
 			if (vase[a].Y > 0 && vase[a].Y < charLocation.Y)
 			{
@@ -186,7 +214,7 @@ void render()
 
 		//Draw the location of the lives
 		ss.str("");
-		ss << (char)3 << "x" << lives ;
+		ss << (char)3 << "x" << lives;
 		c.X = (ConsoleSize.X/2)/2;
 		c.Y = 0;
 		writeToBuffer(c,ss.str(), 0xCA); 
@@ -197,6 +225,14 @@ void render()
 		c.X = ConsoleSize.X/2;
 		c.Y = 0;
 		writeToBuffer(c, ss.str(),0xDE);
+
+		//Level display
+		ss.str("");
+		ss << "LEVEL " << level;
+		c.X = (ConsoleSize.X/2)/2 + 4;
+		c.Y = 0;
+		writeToBuffer(c,ss.str(),0x5B);
+
 	}
     // Writes the buffer to the console, hence you will see what you have written
     flushBufferToConsole();
@@ -205,18 +241,29 @@ void render()
 void spawning()
 {
 	srand(time(NULL));
+	
 	vaseLocationDecider = rand() % 4; // decide where vase will spawn
 	sackDecider = rand() % maxsack; // decide which sack to spawn
-	vaseDecider = rand() % maxvase; // decide where vase will spawn
+	vaseDecider = rand() % maxvase; // decide which vase to spawn
 	sackLocationDecider = rand() % 4 ; // decide where sacks will spawn
+	
+	sackbLocationDecider = rand() %4;
+
 	if ( sack[sackDecider].X == 0 ) // only spawn if the sack is not present
 	{
 		Beep(1440, 100);
 		sack[sackDecider].X = sackLocation[sackLocationDecider];
-		if ( vaseLocationDecider != sackLocationDecider && vase[vaseDecider].X == 0)
-		{
-			vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
-		}
+	}
+	
+	if ( vaseLocationDecider != sackLocationDecider && vase[vaseDecider].X == 0 && scores >= 50)
+	{
+		Beep(1500, 100);
+		vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
+	}
+	if (sackbLocationDecider != sackLocationDecider && sackbLocationDecider != vaseLocationDecider && sackb.X == 0 && scores >= 100)
+	{
+		Beep(1600,200);
+		sackb.X = sackbLocation[sackbLocationDecider];
 	}
 }
 
@@ -252,6 +299,35 @@ void sackaction()
 			}
 		}
 	}
+}
+
+void sackbaction()
+{
+		// check if player missed the sacks
+		if (sackb.Y > charLocation.Y)
+		{
+			// sack resets to the top
+			sackb.X = 0;
+			sackb.Y = 0;
+		}
+
+		// check if player catched the sacks
+		if ( sackb.Y == charLocation.Y-2 && charLocation.X == sackb.X)          
+		{
+			// sack resets to the top
+			sackb.X = 0;
+			sackb.Y = 0;
+			// earn score for catching the sack
+			scores += 100;
+		}
+		// sacks dropping
+		if(sackb.Y < charLocation.Y && sackb.X != 0 )
+		{
+			for ( int a = 0; a < 10; ++a )
+			{
+				++sackb.Y;
+			}
+		}
 }
 
 void vaseaction()
@@ -321,19 +397,19 @@ void gameover()
 		if(player1.highscore > player[f].highscore)
 		{
 			message.Y = 2;
-			writeToBuffer(message,"Congratulations, you had made it into the top ten. Pleaes enter your name:",0x0F);
+			writeToBuffer(message,"Congratulations, you had made it into the top ten.",0x0F);
+			message.Y++;
+			writeToBuffer(message, "Please enter your name:",0x0F);
 			flushBufferToConsole();
-			while ( player1.name == "\0" )
+			while (player1.name == "\0")
 			{
-
 				gotoXY(message);
 				std::cin >> player1.name;
-				if ( (player1.name).size() > 10 )
+				if ((player1.name).size() > 10)
 				{
 					message.Y++;
 					writeToBuffer(message,"Please enter a name with 10 characters or less:",0x0F);
 					player1.name = "\0";
-
 				}
 			}
 
@@ -399,24 +475,43 @@ void gameover()
 	return;
 }
 
+void printSackB()
+{
+	int y = sackb.Y;
+	sackb.Y = y-6;
+	writeToBuffer(sackb," ___________",0x0E);
+	sackb.Y = y-5;
+	writeToBuffer(sackb," \\_________/",0x0E);
+	sackb.Y = y-4;
+	writeToBuffer(sackb," /         \\ ",0x0E);
+	sackb.Y = y-3;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y-2;
+	writeToBuffer(sackb,"|   RICE   |",0x0E);
+	sackb.Y = y-1;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y;
+	writeToBuffer(sackb," \\________/ ",0x0E);
+}
+
 void printSack(int a)
 {
 
 	int y = sack[a].Y;
 	sack[a].Y = y-6;
-	writeToBuffer(sack[a]," ___________",0xA);
+	writeToBuffer(sack[a]," ___________",0x0F);
 	sack[a].Y = y-5;
-	writeToBuffer(sack[a]," \\_________/",0xA);
+	writeToBuffer(sack[a]," \\_________/",0x0F);
 	sack[a].Y = y-4;
-	writeToBuffer(sack[a]," /         \\ ",0xA);
+	writeToBuffer(sack[a]," /         \\ ",0x0F);
 	sack[a].Y = y-3;
-	writeToBuffer(sack[a],"|          |",0xA);
+	writeToBuffer(sack[a],"|          |",0x0F);
 	sack[a].Y = y-2;
-	writeToBuffer(sack[a],"|   RICE   |",0xA);
+	writeToBuffer(sack[a],"|   RICE   |",0x0F);
 	sack[a].Y = y-1;
-	writeToBuffer(sack[a],"|          |",0xA);
+	writeToBuffer(sack[a],"|          |",0x0F);
 	sack[a].Y = y;
-	writeToBuffer(sack[a]," \\________/ ",0xA);
+	writeToBuffer(sack[a]," \\________/ ",0x0F);
 }
 
 void printBrokenSack(int a)
@@ -467,17 +562,17 @@ void printBrokenVase(int a)
 	vase[a].X;
 			int y = vase[a].Y;
 			vase[a].Y = y-6;
-			writeToBuffer(vase[a],"   _...._   ",0xFB);
+			writeToBuffer(vase[a],"   _...._   ",0x0C);
 			vase[a].Y = y-5;
-			writeToBuffer(vase[a],"  ';-.-';'  ",0xFB);
+			writeToBuffer(vase[a],"  ';-.-';'  ",0x0C);
 			vase[a].Y = y-4;
-			writeToBuffer(vase[a],"    }=={    ",0xFB);
+			writeToBuffer(vase[a],"    }=={    ",0x0C);
 			vase[a].Y = y-3;
-			writeToBuffer(vase[a],"  .'    '.  ",0xFB);
+			writeToBuffer(vase[a],"  .'    '.  ",0x0C);
 			vase[a].Y = y-2;
-			writeToBuffer(vase[a]," /        \\ ",0xFB);
+			writeToBuffer(vase[a]," /        \\ ",0x0C);
 			vase[a].Y = y-1;
-			writeToBuffer(vase[a],"|  /\\     |",0xFB);
+			writeToBuffer(vase[a],"|  /\\     |",0x0C);
 			vase[a].Y = y;
-			writeToBuffer(vase[a],"\__/  \\/''''",0xFB);
+			writeToBuffer(vase[a],"\__/  \\/''''",0x0C);
 }
