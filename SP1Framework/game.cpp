@@ -11,6 +11,7 @@ double elapsedTime;
 double deltaTime;
 double timeFall = 0.0;
 bool keyPressed[K_COUNT];
+bool pause = false;
 
 const WORD colors[] =   {
 	                        0xA, 0xB, 0xC, 0xD, 0xE, 0xF,
@@ -108,96 +109,106 @@ void getInput()
     keyPressed[K_DOWN] = isKeyPressed(VK_DOWN);
     keyPressed[K_LEFT] = isKeyPressed(VK_LEFT);
     keyPressed[K_RIGHT] = isKeyPressed(VK_RIGHT);
+	keyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
     keyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 }
 
 void update(double dt)
 {
-      // get the delta time
-    elapsedTime += dt;
-    deltaTime = dt;
-	
-	// update only when elapsedTime is more than timeFall and the player has not lose
-	if ( elapsedTime > timeFall && lives > 0)    
+	if (keyPressed[K_SPACE])//pausing
 	{
-		if(printpauselevel == false)
+		if(pause == false)
+			pause=true;
+		else if(pause == true)
+			pause=false;
+	}
+	if(pause == false)
+	{
+		// get the delta time
+		elapsedTime += dt;
+		deltaTime = dt;
+
+		// update only when elapsedTime is more than timeFall and the player has not lose
+		if ( elapsedTime > timeFall && lives > 0)    
 		{
-			spawning();   // spawn sacks and vase
-
-			sackaction(); // sacks action
-
-			vaseaction(); //vase action
-
-			sackbaction(); //bonus sack action
-
-			healthaction(); //health pack action
-
-
-			// increase difficulty
-			if ( scores > x && difficulty < 0.5)
+			if(printpauselevel == false)
 			{
-				x += 50;
-				difficulty += 0.1;// reduce time to update
+				spawning();   // spawn sacks and vase
+
+				sackaction(); // sacks action
+
+				vaseaction(); //vase action
+
+				sackbaction(); //bonus sack action
+
+				healthaction(); //health pack action
+
+
+				// increase difficulty
+				if ( scores > x && difficulty < 0.5)
+				{
+					x += 50;
+					difficulty += 0.1;// reduce time to update
+				}
+			}
+			else if (printpauselevel == true)
+			{
+				charLocation.X = 47;
+				charLocation.Y = 42;
+				for ( int a = 0; a < maxsack ; a++ )
+				{
+					vase[a].X = 0;
+					vase[a].Y = 0;
+					sack[a].X = 0;
+					sack[a].Y = 0;
+				}
+				sackb.X = 0;
+				sackb.Y = 0;
+				health.X = 0;
+				health.Y = 0;
+			}
+			timeFall += (1.5-difficulty); //control time to update
+
+		}
+
+		// Updating the location of the character based on the key press
+		if (keyPressed[K_LEFT] && charLocation.X > 9)
+		{
+			Beep(1440, 30);
+			for ( int a = 0; a < 19; a++ )
+			{
+				charLocation.X--; // move the character to the left
 			}
 		}
-		else if (printpauselevel == true)
+		if (keyPressed[K_RIGHT] && charLocation.X < 59 && printpauselevel == false)
 		{
-			charLocation.X = 47;
-			charLocation.Y = 42;
-			for ( int a = 0; a < maxsack ; a++ )
+			Beep(1440, 30);
+			for ( int a = 0; a < 19; a++ )
 			{
-				vase[a].X = 0;
-				vase[a].Y = 0;
-				sack[a].X = 0;
-				sack[a].Y = 0;
+				charLocation.X++; // move the character to the right
 			}
-			sackb.X = 0;
-			sackb.Y = 0;
-			health.X = 0;
-			health.Y = 0;
 		}
-		timeFall += (1.5-difficulty); //control time to update
-		
-	}
 
-	// Updating the location of the character based on the key press
-	if (keyPressed[K_LEFT] && charLocation.X > 9)
-    {
-        Beep(1440, 30);
-		for ( int a = 0; a < 19; a++ )
+		//Update Level
+		if (scores >= 50 && scores < 100)
+			level = 2;
+		if (scores >= 100 && scores < 300)
+			level = 3;
+		if (scores >= 300 && scores < 350)
+			level = 4;
+		if (scores >= 350)
+			level = 5;
+
+		//check whether to print out the level screen
+		if(levelchecker != level)
 		{
-			charLocation.X--; // move the character to the left
+			++levelchecker;
+			printpauselevel = true;//print if true
 		}
-    }
-    if (keyPressed[K_RIGHT] && charLocation.X < 59 && printpauselevel == false)
-    {
-        Beep(1440, 30);
-		for ( int a = 0; a < 19; a++ )
-		{
-			charLocation.X++; // move the character to the right
-		}
-    }
-	
-	//Update Level
-	if (scores >= 50 && scores < 100)
-		level = 2;
-	if (scores >= 100 && scores < 300)
-		level = 3;
-	if (scores >= 300 && scores < 350)
-		level = 4;
-	if (scores >= 350)
-		level = 5;
+		else
+			printpauselevel = false;
 
-	//check whether to print out the level screen
-	if(levelchecker != level)
-	{
-		++levelchecker;
-		printpauselevel = true;//print if true
 	}
-	else
-		printpauselevel = false;
-		
-
     // quits the game if player hits the escape key
     if (keyPressed[K_ESCAPE])
         g_quitGame = true;       
@@ -205,101 +216,114 @@ void update(double dt)
 
 void render()
 {    
-    // Clears the buffer with this colour attribute
-    clearBuffer(0x0F);
-
-	levelpausescreen();
+	// Clears the buffer with this colour attribute
+	clearBuffer(0x0F);
 
 	COORD c;
-	//cout sack
-	if ( lives <= 0)
+
+	if(pause == true)
 	{
-		gameover();
+		c.X = ConsoleSize.X/2;
+		c.Y = ConsoleSize.Y/2;
+		writeToBuffer(c, "Paused", 0x0F);
+		flushBufferToConsole();
+
 	}
-	else if (lives > 0)
+	else if(pause == false)
 	{
-		
-		
-		for ( int a = 0; a < maxsack; ++a)
+		levelpausescreen();
+
+
+		//cout sack
+		if ( lives <= 0)
 		{
-			
-			// print sack
-			if ( sack[a].Y > 0 && sack[a].Y < charLocation.Y)
-			{
-				printSack(a);		
-
-			}
-			// print broken sack
-			else if (sack[a].Y > charLocation.Y)
-			{
-				printBrokenSack(a);
-			}
-			
-			//print bonus sack
-			if (sackb.Y > 0 && sackb.Y < charLocation.Y)
-			{
-				printSackB();
-			}
-
-			//print health pack
-			if (health.Y > 0 && health.Y < charLocation.Y)
-			{
-				printHealth();
-			}
-
-			//print vase
-			if (vase[a].Y > 0 && vase[a].Y < charLocation.Y)
-			{
-				printVase(a);	
-			}
-			// print vase breaking
-			else if (vase[a].Y > charLocation.Y)
-			{
-				printBrokenVase(a);
-			}
-			
-			
+			gameover();
 		}
+		else if (lives > 0)
+		{
 
-		// displays the framerate
-		ss.str("");
-		ss << std::fixed << std::setprecision(3);
-		ss << 1.0 / deltaTime << "fps";
-		c.X = ConsoleSize.X-9;
-		c.Y = 0;
-		writeToBuffer(c, ss.str());
 
-		// displays the elapsed time
-		ss.str("");
-		ss << elapsedTime << "secs";
-		c.X = 0;
-		c.Y = 0;
-		writeToBuffer(c, ss.str(), 0x0F);
+			for ( int a = 0; a < maxsack; ++a)
+			{
 
-		// Draw the location of the character
-		writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
+				// print sack
+				if ( sack[a].Y > 0 && sack[a].Y < charLocation.Y)
+				{
+					printSack(a);		
 
-		//Draw the location of the lives
-		ss.str("");
-		ss << (char)3 << "x" << lives;
-		c.X = ConsoleSize.X - 15;
-		c.Y = 0;
-		writeToBuffer(c,ss.str(), 0xCA); 
+				}
+				// print broken sack
+				else if (sack[a].Y > charLocation.Y)
+				{
+					printBrokenSack(a);
+				}
 
-		//Displays score
-		ss.str("");
-		ss << "SCORE:"<< *highscore;
-		c.X = ConsoleSize.X/2 - 5;
-		c.Y = 0;
-		writeToBuffer(c, ss.str(),0xDE);
+				//print bonus sack
+				if (sackb.Y > 0 && sackb.Y < charLocation.Y)
+				{
+					printSackB();
+				}
 
-		//Level display
-		ss.str("");
-		ss << "LEVEL " << level;
-		c.X = 12;
-		c.Y = 0;
-		writeToBuffer(c,ss.str(),0x5B);
+				//print health pack
+				if (health.Y > 0 && health.Y < charLocation.Y)
+				{
+					printHealth();
+				}
 
+				//print vase
+				if (vase[a].Y > 0 && vase[a].Y < charLocation.Y)
+				{
+					printVase(a);	
+				}
+				// print vase breaking
+				else if (vase[a].Y > charLocation.Y)
+				{
+					printBrokenVase(a);
+				}
+
+
+			}
+
+			// displays the framerate
+			ss.str("");
+			ss << std::fixed << std::setprecision(3);
+			ss << 1.0 / deltaTime << "fps";
+			c.X = ConsoleSize.X-9;
+			c.Y = 0;
+			writeToBuffer(c, ss.str());
+
+			// displays the elapsed time
+			ss.str("");
+			ss << elapsedTime << "secs";
+			c.X = 0;
+			c.Y = 0;
+			writeToBuffer(c, ss.str(), 0x0F);
+
+			// Draw the location of the character
+			writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
+
+			//Draw the location of the lives
+			ss.str("");
+			ss << (char)3 << "x" << lives;
+			c.X = ConsoleSize.X - 15;
+			c.Y = 0;
+			writeToBuffer(c,ss.str(), 0xCA); 
+
+			//Displays score
+			ss.str("");
+			ss << "SCORE:"<< *highscore;
+			c.X = ConsoleSize.X/2 - 5;
+			c.Y = 0;
+			writeToBuffer(c, ss.str(),0xDE);
+
+			//Level display
+			ss.str("");
+			ss << "LEVEL " << level;
+			c.X = 12;
+			c.Y = 0;
+			writeToBuffer(c,ss.str(),0x5B);
+
+		}
 	}
     // Writes the buffer to the console, hence you will see what you have written
     flushBufferToConsole();
