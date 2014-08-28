@@ -18,7 +18,7 @@ int instruction()
 	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu
 	{
 		input = 0;
-		choice = getche();
+		choice = getch();
 		if(choice.size() != 1)//ask the player to press 5 to return
 		{
 			input = 0;

@@ -42,7 +42,7 @@ int mainmenu()
 
 	while ( input == 0 )//ask the player to press 1-4
 	{
-		choice=getche();
+		choice=getch();
 		
 		input = choice[0] - 48;
 		if ( input > 0 && input < 5 )
