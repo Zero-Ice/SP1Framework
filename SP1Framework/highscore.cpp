@@ -11,17 +11,43 @@ void highscorepage()
 	Highscore.open ("highscores.txt");
 	
 	COORD c;
-	c.X = 0;
-	c.Y = 0;
-	writeToBuffer(c,"Rank  Player     Score");
+	c.X = 15;
+
+
+	c.Y = 8;//43
+	writeToBuffer(c, "= = = = = = = = = = = = = = = = = = = = = = = =" );
+	c.Y++;
+	writeToBuffer(c, "=: = = = = = = = = = = = = = = = = = = = = = :=" );
+	c.Y++;
+	writeToBuffer(c,"::  _  _ ___ ___ _  _ ___  ___ ___  ___ ___  ::");
+	c.Y++;
+	writeToBuffer(c,":: | || |_ _/ __| || / __|/ __/ _ \\| _ \\ __| ::");
+	c.Y++;
+	writeToBuffer(c,":: | __ || | (_ | __ \\__ \\ (_| (_) |   / _|  ::");
+	c.Y++;
+	writeToBuffer(c,":: |_||_|___\\___|_||_|___/\\___\\___/|_|_\\___| ::");
+	c.Y ++;
+	writeToBuffer(c,"::                                           ::" );
+	c.Y++;
+	writeToBuffer(c,"::                                           ::" );
+	c.Y++;
+	writeToBuffer(c,":: Rank  Player     Score                    ::");
+	c.Y++;
 	while (!Highscore.eof())//print out position, player's name and highscore one by one starting from first
 	{
-		c.Y++;
 		getline(Highscore, data);
 		ss.str("");
-		ss << data;
+		ss << ":: "<< data << "                      ::" ;
 		writeToBuffer(c, ss.str());
+		c.Y++;
 	}
+	writeToBuffer(c,"::                                           ::" );
+	c.Y++;
+	writeToBuffer(c,"::                                           ::" );
+	c.Y++;
+	writeToBuffer(c, "=: = = = = = = = = = = = = = = = = = = = = = :=" );
+	c.Y++;
+	writeToBuffer(c, "= = = = = = = = = = = = = = = = = = = = = = = =" );
 	flushBufferToConsole();
 	int input = 0;
 	std::string choice;

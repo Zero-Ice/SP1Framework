@@ -12,6 +12,12 @@ double deltaTime;
 double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 
+const WORD colors[] =   {
+	                        0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
+	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
+	                        };
+	
+int colourIndicator;
 // Game specific variables here
 COORD charLocation;  // coordinate of tray,which is the character
 COORD message; // shows gameover
@@ -63,6 +69,7 @@ void initGame()
 	// Set precision for floating point output
 	charLocation.X = 47;
     charLocation.Y = 42;
+	
 	for ( int a = 0; a < maxsack ; a++ )
 	{
 		vase[a].X = 0;
@@ -96,7 +103,7 @@ void update(double dt)
       // get the delta time
     elapsedTime += dt;
     deltaTime = dt;
-
+	
 	// update only when elapsedTime is more than timeFall and the player has not lose
 	if ( elapsedTime > timeFall && lives > 0)    
 	{
@@ -162,8 +169,11 @@ void render()
 	}
 	else if (lives > 0)
 	{
+		
+		
 		for ( int a = 0; a < maxsack; ++a)
 		{
+			
 			// print sack
 			if ( sack[a].Y > 0 && sack[a].Y < charLocation.Y)
 			{
@@ -192,6 +202,8 @@ void render()
 			{
 				printBrokenVase(a);
 			}
+			
+			
 		}
 
 		// displays the framerate
@@ -210,7 +222,7 @@ void render()
 		writeToBuffer(c, ss.str(), 0x0F);
 
 		// Draw the location of the character
-		writeToBuffer(charLocation, "\\___________/", 0x08);
+		writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
 
 		//Draw the location of the lives
 		ss.str("");
@@ -269,6 +281,7 @@ void spawning()
 
 void sackaction()
 {
+	
 	for( int sackNo = 0; sackNo < maxsack; ++sackNo )
 	{
 		// check if player missed the sacks
@@ -289,6 +302,7 @@ void sackaction()
 			sack[sackNo].Y = 0;
 			// earn score for catching the sack
 			++scores;
+			colourIndicator = rand() % 12;
 		}
 		// sacks dropping
 		if(sack[sackNo].Y < charLocation.Y && sack[sackNo].X != 0 )
@@ -364,13 +378,22 @@ void vaseaction()
 
 void gameover()
 {
-	message.X = 0;
-	message.Y = 0;
-	writeToBuffer(message,"GAMEOVER" ,0x1F);
-	message.Y = 1;
+	message.X = 18;
+	message.Y = 5;
+	writeToBuffer(message,"   ___   _   __  __ ___ _____   _____ ___ ");
+	message.Y++;
+	writeToBuffer(message,"  / __| /_\\ |  \\/  | __/ _ \\ \\ / / __| _ \\ ");
+	message.Y++;
+	writeToBuffer(message," | (_ |/ _ \\| |\\/| | _| (_) \\ V /| _||   / ");
+	message.Y++;
+	writeToBuffer(message,"  \\___/_/ \\_\\_|  |_|___\\___/ \\_/ |___|_|_\\ ");
+
+	
+	message.Y += 2;
 	ss.str("");
 	ss << "YOUR SCORE:" << *highscore;
 	writeToBuffer(message,ss.str());//show player's score
+	message.Y++;
 
 	//make an array of struct to store the positions, name and score of the top ten rankers
 	Highscorers player[10];
@@ -396,7 +419,7 @@ void gameover()
 	{
 		if(player1.highscore > player[f].highscore)
 		{
-			message.Y = 2;
+			message.Y ++;
 			writeToBuffer(message,"Congratulations, you had made it into the top ten.",0x0F);
 			message.Y++;
 			writeToBuffer(message, "Please enter your name:",0x0F);
@@ -426,9 +449,10 @@ void gameover()
 	}
 	if( f == 9 )
 	{
-		message.Y = 2;
+		message.Y ++;
 		writeToBuffer(message,"Sorry, you did not make it into the top ten.",0x0F);
 		flushBufferToConsole();
+		message.Y++;
 	}
 
 	//storing back highscores in text file
@@ -456,9 +480,9 @@ void gameover()
 
 	//print out updated highscores from text file
 	std::ifstream UpdatedHighscore("highscores.txt");
-	message.Y = 4;
+	message.Y++;
 	writeToBuffer(message,"Rank  Player     Score",0x0F);
-	message.Y = 5;
+	message.Y++;
 	while (!UpdatedHighscore.eof())//print out position, player's name and highscore one by one starting from first
 	{
 		message.Y++;
