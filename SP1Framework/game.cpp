@@ -5,7 +5,7 @@
 
 std::ostringstream ss;
 // Console size, width by height
-COORD ConsoleSize = {79, 55};
+COORD ConsoleSize = {85, 55};
 
 double elapsedTime;
 double deltaTime;
@@ -13,8 +13,8 @@ double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 
 const WORD colors[] =   {
-	                        0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-	                        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
+	                        0xA, 0xB, 0xC, 0xD, 0xE, 0xF,
+	                        0x1, 0x2, 0x3, 0x4, 0x5, 0x6
 	                        };
 	
 int colourIndicator;
@@ -50,7 +50,7 @@ int vaseLocationDecider; // decides where the vase will be spawned
 
 int scores=0; // score of player
 int* highscore = &scores; // pointer to point at score of the player
-int x = 100; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 100 score. 
+int x = 50; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 100 score. 
 double difficulty = 0.0; // this variable increase the speed of the objects fall by reducing the time to update
 int lives = 3; // Amount of lives the player has
 int level = 1; //Current game level
@@ -70,7 +70,7 @@ void initGame()
     elapsedTime = 0.0;  //records the time elapsed after starting the program
 	scores=0; //the score of the player. Default value = 0
 	timeFall = 0.0;
-	x = 100; //This variable sets the score where the difficulty increases.
+	x = 50; //This variable sets the score where the difficulty increases.
 	difficulty = 0.0;
 	lives = 3; //Sets the amount of lives at the start. Default = 3
 	level = 1;
@@ -136,7 +136,7 @@ void update(double dt)
 			// increase difficulty
 			if ( scores > x && difficulty < 0.5)
 			{
-				x += 30;
+				x += 50;
 				difficulty += 0.1;// reduce time to update
 			}
 		}
@@ -392,7 +392,7 @@ void sackbaction()
 			sackb.X = 0;
 			sackb.Y = 0;
 			// earn score for catching the sack
-			scores += 100;
+			scores += 20;
 		}
 		// sacks dropping
 		if(sackb.Y < charLocation.Y && sackb.X != 0 )
@@ -745,21 +745,21 @@ void printBrokenSack(int a)
 	int x = sack[a].X;
 	int y = sack[a].Y;
 	sack[a].Y = y-6;
-	writeToBuffer(sack[a]," ___________",0xCE);
+	writeToBuffer(sack[a]," ___________",0xC);
 	sack[a].Y = y-5;
-	writeToBuffer(sack[a]," \\_________/",0xCE);
+	writeToBuffer(sack[a]," \\_________/",0xC);
 	sack[a].Y = y-4;
-	writeToBuffer(sack[a]," /         \\ ",0xCE);
+	writeToBuffer(sack[a]," /         \\ ",0xC);
 	sack[a].Y = y-3;
-	writeToBuffer(sack[a],"|          |",0xCE);
+	writeToBuffer(sack[a],"|          |",0xC);
 	sack[a].Y = y-2;
-	writeToBuffer(sack[a],"|   RICE   |",0xCE);
+	writeToBuffer(sack[a],"|   RICE   |",0xC);
 	sack[a].Y = y-1;
 	sack[a].X = x-4;
-	writeToBuffer(sack[a]," ../          \...",0xCE);
+	writeToBuffer(sack[a]," ../          \...",0xC);
 	sack[a].Y = y;
 
-	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xCE);
+	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xC);
 	sack[a].X = x;
 }
 

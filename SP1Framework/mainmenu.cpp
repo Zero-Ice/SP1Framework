@@ -39,7 +39,7 @@ int mainmenu()
 	c.Y++;
 	writeToBuffer(c,"                           Press[4] to exit",0x0F);
 	flushBufferToConsole();
-	input = 0;
+
 	while ( input == 0 )//ask the player to press 1-4
 	{
 		choice=getche();
