@@ -57,7 +57,7 @@ void highscorepage()
 	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu
 	{
 		input = 0;
-		choice = getche();
+		choice = getch();
 	
 		input = choice[0] - 48;
 		if(input == BACKTOMAINMENU)//Go back to main menu when the player press 5
