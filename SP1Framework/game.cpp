@@ -55,8 +55,8 @@ int x = 50; // this variable sets the amount of score that increases difficulty,
 double difficulty = 0.0; // this variable increase the speed of the objects fall by reducing the time to update
 int lives = 3; // Amount of lives the player has
 int level = 1; //Current game level
-int levelchecker = 0;//check current level
-bool printpauselevel = false;//check whether to print out the level screen 
+int levelchecker = 1;//check current level
+bool printpauselevel = true;//check whether to print out the level screen 
 
 void initMainMenu()
 {
@@ -76,7 +76,7 @@ void initGame()
 	lives = 3; //Sets the amount of lives at the start. Default = 3
 	level = 1;
 	levelchecker = 0;
-	printpauselevel = false;
+	printpauselevel = true;
 
 	// Set precision for floating point output
 	charLocation.X = 47;
@@ -110,19 +110,54 @@ void getInput()
     keyPressed[K_LEFT] = isKeyPressed(VK_LEFT);
     keyPressed[K_RIGHT] = isKeyPressed(VK_RIGHT);
 	keyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
+    keyPressed[K_P] = isKeyPressed('P');
     keyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 }
 
 void update(double dt)
 {
-	if (keyPressed[K_SPACE])//pausing
+	if (keyPressed[K_P])//pausing
 	{
 		if(pause == false)
 			pause=true;
 		else if(pause == true)
 			pause=false;
 	}
-	if(pause == false)
+
+	//Update Level
+	if (scores >= 50 && scores < 100)
+		level = 2;
+	if (scores >= 100 && scores < 300)
+		level = 3;
+	if (scores >= 300 && scores < 350)
+		level = 4;
+	if (scores >= 350)
+		level = 5;
+
+	//check whether to print out the level screen
+	if(levelchecker != level)
+	{
+		++levelchecker;
+		printpauselevel = true;//print if true
+		charLocation.X = 47;
+		charLocation.Y = 42;
+		for ( int a = 0; a < maxsack ; a++ )
+		{
+			vase[a].X = 0;
+			vase[a].Y = 0;
+			sack[a].X = 0;
+			sack[a].Y = 0;
+		}
+		sackb.X = 0;
+		sackb.Y = 0;
+		health.X = 0;
+		health.Y = 0;
+	}
+
+	if(keyPressed[K_SPACE])//press space to continue
+		printpauselevel = false;
+	
+	if(pause == false && printpauselevel == false)
 	{
 		// get the delta time
 		elapsedTime += dt;
@@ -131,42 +166,24 @@ void update(double dt)
 		// update only when elapsedTime is more than timeFall and the player has not lose
 		if ( elapsedTime > timeFall && lives > 0)    
 		{
-			if(printpauselevel == false)
+			spawning();   // spawn sacks and vase
+
+			sackaction(); // sacks action
+
+			vaseaction(); //vase action
+
+			sackbaction(); //bonus sack action
+
+			healthaction(); //health pack action
+
+
+			// increase difficulty
+			if ( scores > x && difficulty < 0.5)
 			{
-				spawning();   // spawn sacks and vase
-
-				sackaction(); // sacks action
-
-				vaseaction(); //vase action
-
-				sackbaction(); //bonus sack action
-
-				healthaction(); //health pack action
-
-
-				// increase difficulty
-				if ( scores > x && difficulty < 0.5)
-				{
-					x += 50;
-					difficulty += 0.1;// reduce time to update
-				}
+				x += 50;
+				difficulty += 0.1;// reduce time to update
 			}
-			else if (printpauselevel == true)
-			{
-				charLocation.X = 47;
-				charLocation.Y = 42;
-				for ( int a = 0; a < maxsack ; a++ )
-				{
-					vase[a].X = 0;
-					vase[a].Y = 0;
-					sack[a].X = 0;
-					sack[a].Y = 0;
-				}
-				sackb.X = 0;
-				sackb.Y = 0;
-				health.X = 0;
-				health.Y = 0;
-			}
+
 			timeFall += (1.5-difficulty); //control time to update
 
 		}
@@ -189,26 +206,9 @@ void update(double dt)
 			}
 		}
 
-		//Update Level
-		if (scores >= 50 && scores < 100)
-			level = 2;
-		if (scores >= 100 && scores < 300)
-			level = 3;
-		if (scores >= 300 && scores < 350)
-			level = 4;
-		if (scores >= 350)
-			level = 5;
-
-		//check whether to print out the level screen
-		if(levelchecker != level)
-		{
-			++levelchecker;
-			printpauselevel = true;//print if true
-		}
-		else
-			printpauselevel = false;
-
+		
 	}
+	
     // quits the game if player hits the escape key
     if (keyPressed[K_ESCAPE])
         g_quitGame = true;       
@@ -231,102 +231,104 @@ void render()
 	}
 	else if(pause == false)
 	{
-		levelpausescreen();
+		if(printpauselevel == true)
+			levelpausescreen();
 
-
-		//cout sack
-		if ( lives <= 0)
+		else if(printpauselevel == false)
 		{
-			gameover();
-		}
-		else if (lives > 0)
-		{
-
-
-			for ( int a = 0; a < maxsack; ++a)
+			//cout sack
+			if ( lives <= 0)
+			{
+				gameover();
+			}
+			else if (lives > 0)
 			{
 
-				// print sack
-				if ( sack[a].Y > 0 && sack[a].Y < charLocation.Y)
+
+				for ( int a = 0; a < maxsack; ++a)
 				{
-					printSack(a);		
+
+					// print sack
+					if ( sack[a].Y > 0 && sack[a].Y < charLocation.Y)
+					{
+						printSack(a);		
+
+					}
+					// print broken sack
+					else if (sack[a].Y > charLocation.Y)
+					{
+						printBrokenSack(a);
+					}
+
+					//print bonus sack
+					if (sackb.Y > 0 && sackb.Y < charLocation.Y)
+					{
+						printSackB();
+					}
+
+					//print health pack
+					if (health.Y > 0 && health.Y < charLocation.Y)
+					{
+						printHealth();
+					}
+
+					//print vase
+					if (vase[a].Y > 0 && vase[a].Y < charLocation.Y)
+					{
+						printVase(a);	
+					}
+					// print vase breaking
+					else if (vase[a].Y > charLocation.Y)
+					{
+						printBrokenVase(a);
+					}
+
 
 				}
-				// print broken sack
-				else if (sack[a].Y > charLocation.Y)
-				{
-					printBrokenSack(a);
-				}
 
-				//print bonus sack
-				if (sackb.Y > 0 && sackb.Y < charLocation.Y)
-				{
-					printSackB();
-				}
+				// displays the framerate
+				ss.str("");
+				ss << std::fixed << std::setprecision(3);
+				ss << 1.0 / deltaTime << "fps";
+				c.X = ConsoleSize.X-9;
+				c.Y = 0;
+				writeToBuffer(c, ss.str());
 
-				//print health pack
-				if (health.Y > 0 && health.Y < charLocation.Y)
-				{
-					printHealth();
-				}
+				// displays the elapsed time
+				ss.str("");
+				ss << elapsedTime << "secs";
+				c.X = 0;
+				c.Y = 0;
+				writeToBuffer(c, ss.str(), 0x0F);
 
-				//print vase
-				if (vase[a].Y > 0 && vase[a].Y < charLocation.Y)
-				{
-					printVase(a);	
-				}
-				// print vase breaking
-				else if (vase[a].Y > charLocation.Y)
-				{
-					printBrokenVase(a);
-				}
+				// Draw the location of the character
+				writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
 
+				//Draw the location of the lives
+				ss.str("");
+				ss << (char)3 << "x" << lives;
+				c.X = ConsoleSize.X - 15;
+				c.Y = 0;
+				writeToBuffer(c,ss.str(), 0xCA); 
 
+				//Displays score
+				ss.str("");
+				ss << "SCORE:"<< *highscore;
+				c.X = ConsoleSize.X/2 - 5;
+				c.Y = 0;
+				writeToBuffer(c, ss.str(),0xDE);
+
+				//Level display
+				ss.str("");
+				ss << "LEVEL " << level;
+				c.X = 12;
+				c.Y = 0;
+				writeToBuffer(c,ss.str(),0x5B);
 			}
-
-			// displays the framerate
-			ss.str("");
-			ss << std::fixed << std::setprecision(3);
-			ss << 1.0 / deltaTime << "fps";
-			c.X = ConsoleSize.X-9;
-			c.Y = 0;
-			writeToBuffer(c, ss.str());
-
-			// displays the elapsed time
-			ss.str("");
-			ss << elapsedTime << "secs";
-			c.X = 0;
-			c.Y = 0;
-			writeToBuffer(c, ss.str(), 0x0F);
-
-			// Draw the location of the character
-			writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
-
-			//Draw the location of the lives
-			ss.str("");
-			ss << (char)3 << "x" << lives;
-			c.X = ConsoleSize.X - 15;
-			c.Y = 0;
-			writeToBuffer(c,ss.str(), 0xCA); 
-
-			//Displays score
-			ss.str("");
-			ss << "SCORE:"<< *highscore;
-			c.X = ConsoleSize.X/2 - 5;
-			c.Y = 0;
-			writeToBuffer(c, ss.str(),0xDE);
-
-			//Level display
-			ss.str("");
-			ss << "LEVEL " << level;
-			c.X = 12;
-			c.Y = 0;
-			writeToBuffer(c,ss.str(),0x5B);
-
 		}
 	}
-    // Writes the buffer to the console, hence you will see what you have written
-    flushBufferToConsole();
+	// Writes the buffer to the console, hence you will see what you have written
+	flushBufferToConsole();
 }
 
 void spawning()
@@ -498,127 +500,128 @@ void levelpausescreen()
 		COORD c;
 		c.X = 0;
 		c.Y = 11;
-		writeToBuffer(c,"     **        ********   **             **   ********   **         ***",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **         ***",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        ********    **           **    ********   **        ****",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **        ****",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **           **         **     **         **          **",0x0F);
+		writeToBuffer(c,"     **        **          **     **    **         **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******       **       **      *******    **          **",0x0F);
+		writeToBuffer(c,"     **        *******     **     **    *******    **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******        **     **       *******    **          **",0x0F);
+		writeToBuffer(c,"     **        *******      **   **     *******    **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **              **   **        **         **          **",0x0F);
+		writeToBuffer(c,"     **        **           **   **     **         **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********         ** **         ********   *******   ******",0x0F);
+		writeToBuffer(c,"     *******   ********      ** **      ********   *******   ******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********          ***          ********   *******   ******",0x0F);
+		writeToBuffer(c,"     *******   ********       ***       ********   *******   ******",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Catch the rice sacks!",0x0F);
-		flushBufferToConsole();
-		system("pause");
-		printpauselevel = true;
+		c.Y += 2;
+		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
 	else if(printpauselevel == true && level == 2)//Level 2
 	{
 		COORD c;
 		c.X = 0;
 		c.Y = 11;
-		writeToBuffer(c,"     **        ********   **             **   ********   **         *******",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **         *******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        ********    **           **    ********   **        **     **",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **        **     **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **           **         **     **         **               **",0x0F);
+		writeToBuffer(c,"     **        **          **     **    **         **               **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******       **       **      *******    **              **",0x0F);
+		writeToBuffer(c,"     **        *******     **     **    *******    **              **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******        **     **       *******    **           **",0x0F);
+		writeToBuffer(c,"     **        *******      **   **     *******    **           **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **              **   **        **         **         **",0x0F);
+		writeToBuffer(c,"     **        **           **   **     **         **         **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********         ** **         ********   *******   ********",0x0F);
+		writeToBuffer(c,"     *******   ********      ** **      ********   *******   ********",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********          ***          ********   *******   ********",0x0F);
+		writeToBuffer(c,"     *******   ********       ***       ********   *******   ********",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Watch out for red vases!",0x0C);
-		flushBufferToConsole();
-		system("pause");
+		c.Y += 2;
+		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
 	else if(printpauselevel == true && level == 3)//Level 3
 	{
 		COORD c;
 		c.X = 0;
 		c.Y = 11;
-		writeToBuffer(c,"     **        ********   **             **   ********   **         *******",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **         *******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        ********    **           **    ********   **        **     **",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **        **     **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **           **         **     **         **              **",0x0F);
+		writeToBuffer(c,"     **        **          **     **    **         **              **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******       **       **      *******    **        *******",0x0F);
+		writeToBuffer(c,"     **        *******     **     **    *******    **          *****",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******        **     **       *******    **        *******",0x0F);
+		writeToBuffer(c,"     **        *******      **   **     *******    **          *****",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **              **   **        **         **              **",0x0F);
+		writeToBuffer(c,"     **        **           **   **     **         **              **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********         ** **         ********   *******   **     **",0x0F);
+		writeToBuffer(c,"     *******   ********      ** **      ********   *******   **     **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********          ***          ********   *******    *******",0x0F);
+		writeToBuffer(c,"     *******   ********       ***       ********   *******    *******",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Wow! Bonus sacks -> 100 points!",0x0E);
-		flushBufferToConsole();
-		system("pause");
+		c.Y += 2;
+		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
 	else if(printpauselevel == true && level == 4)//Level 4
 	{
 		COORD c;
 		c.X = 0;
 		c.Y = 11;
-		writeToBuffer(c,"     **        ********   **             **   ********   **            **",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **            **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        ********    **           **    ********   **           * *",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **           * *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **           **         **     **         **          *  *",0x0F);
+		writeToBuffer(c,"     **        **          **     **    **         **          *  *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******       **       **      *******    **         *   *",0x0F);
+		writeToBuffer(c,"     **        *******     **     **    *******    **         *   *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******        **     **       *******    **        *    *",0x0F);
+		writeToBuffer(c,"     **        *******      **   **     *******    **        *    *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **              **   **        **         **        *******",0x0F);
+		writeToBuffer(c,"     **        **           **   **     **         **        *******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********         ** **         ********   *******        *",0x0F);
+		writeToBuffer(c,"     *******   ********      ** **      ********   *******        *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********          ***          ********   *******        *",0x0F);
+		writeToBuffer(c,"     *******   ********       ***       ********   *******        *",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Yeah! Health pack -> gain 1 lives!",0x0A);
-		flushBufferToConsole();
-		system("pause");
+		c.Y += 2;
+		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
 	else if(printpauselevel == true && level == 5)//Level 5
 	{
 		COORD c;
 		c.X = 0;
 		c.Y = 11;
-		writeToBuffer(c,"     **        ********   **             **   ********   **        *********",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **        *********",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        ********    **           **    ********   **        **",0x0F);
+		writeToBuffer(c,"     **        ********   **       **   ********   **        **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **           **         **     **         **        **",0x0F);
+		writeToBuffer(c,"     **        **          **     **    **         **        **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******       **       **      *******    **        **",0x0F);
+		writeToBuffer(c,"     **        *******     **     **    *******    **        **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        *******        **     **       *******    **        ********",0x0F);
+		writeToBuffer(c,"     **        *******      **   **     *******    **        ********",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     **        **              **   **        **         **              **",0x0F);
+		writeToBuffer(c,"     **        **           **   **     **         **              **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********         ** **         ********   *******   **     **",0x0F);
+		writeToBuffer(c,"     *******   ********      ** **      ********   *******   **     **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"     *******   ********          ***          ********   *******    *******",0x0F);
+		writeToBuffer(c,"     *******   ********       ***       ********   *******    *******",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Not bad! Congratulations for making this far, and now try to make it into to top ten",0x0B);
-		flushBufferToConsole();
-		system("pause");
+		c.Y += 2;
+		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
+
+	flushBufferToConsole();
 }
 
 void gameover()
