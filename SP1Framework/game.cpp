@@ -54,6 +54,8 @@ int x = 100; // this variable sets the amount of score that increases difficulty
 double difficulty = 0.0; // this variable increase the speed of the objects fall by reducing the time to update
 int lives = 3; // Amount of lives the player has
 int level = 1; //Current game level
+int levelchecker = 0;//check current level
+bool printpauselevel = false;//check whether to print out the level screen 
 
 void initMainMenu()
 {
@@ -72,6 +74,9 @@ void initGame()
 	difficulty = 0.0;
 	lives = 3; //Sets the amount of lives at the start. Default = 3
 	level = 1;
+	levelchecker = 0;
+	printpauselevel = false;
+
 	// Set precision for floating point output
 	charLocation.X = 47;
     charLocation.Y = 42;
@@ -115,23 +120,44 @@ void update(double dt)
 	// update only when elapsedTime is more than timeFall and the player has not lose
 	if ( elapsedTime > timeFall && lives > 0)    
 	{
-		spawning();   // spawn sacks and vase
-
-		sackaction(); // sacks action
-		
-		vaseaction(); //vase action
-
-		sackbaction(); //bonus sack action
-
-		healthaction(); //health pack action
-
-		// increase difficulty
-		if ( scores > x && difficulty < 0.5 && scores > 100)
+		if(printpauselevel == false)
 		{
-			x += 30;
-			difficulty += 0.1;// reduce time to update
+			spawning();   // spawn sacks and vase
+
+			sackaction(); // sacks action
+
+			vaseaction(); //vase action
+
+			sackbaction(); //bonus sack action
+
+			healthaction(); //health pack action
+
+
+			// increase difficulty
+			if ( scores > x && difficulty < 0.5)
+			{
+				x += 30;
+				difficulty += 0.1;// reduce time to update
+			}
+		}
+		else if (printpauselevel == true)
+		{
+			charLocation.X = 47;
+			charLocation.Y = 42;
+			for ( int a = 0; a < maxsack ; a++ )
+			{
+				vase[a].X = 0;
+				vase[a].Y = 0;
+				sack[a].X = 0;
+				sack[a].Y = 0;
+			}
+			sackb.X = 0;
+			sackb.Y = 0;
+			health.X = 0;
+			health.Y = 0;
 		}
 		timeFall += (1.5-difficulty); //control time to update
+		
 	}
 
 	// Updating the location of the character based on the key press
@@ -143,7 +169,7 @@ void update(double dt)
 			charLocation.X--; // move the character to the left
 		}
     }
-    if (keyPressed[K_RIGHT] && charLocation.X < 59)
+    if (keyPressed[K_RIGHT] && charLocation.X < 59 && printpauselevel == false)
     {
         Beep(1440, 30);
 		for ( int a = 0; a < 19; a++ )
@@ -153,14 +179,24 @@ void update(double dt)
     }
 	
 	//Update Level
-	if (scores >= 50)
+	if (scores >= 50 && scores < 100)
 		level = 2;
-	if (scores >= 100)
+	if (scores >= 100 && scores < 300)
 		level = 3;
-	if (scores >= 300)
+	if (scores >= 300 && scores < 350)
 		level = 4;
 	if (scores >= 350)
 		level = 5;
+
+	//check whether to print out the level screen
+	if(levelchecker != level)
+	{
+		++levelchecker;
+		printpauselevel = true;//print if true
+	}
+	else
+		printpauselevel = false;
+		
 
     // quits the game if player hits the escape key
     if (keyPressed[K_ESCAPE])
@@ -171,8 +207,10 @@ void render()
 {    
     // Clears the buffer with this colour attribute
     clearBuffer(0x0F);
-	
-    COORD c;
+
+	levelpausescreen();
+
+	COORD c;
 	//cout sack
 	if ( lives <= 0)
 	{
@@ -244,21 +282,21 @@ void render()
 		//Draw the location of the lives
 		ss.str("");
 		ss << (char)3 << "x" << lives;
-		c.X = (ConsoleSize.X/2)/2;
+		c.X = ConsoleSize.X - 15;
 		c.Y = 0;
 		writeToBuffer(c,ss.str(), 0xCA); 
 
 		//Displays score
 		ss.str("");
 		ss << "SCORE:"<< *highscore;
-		c.X = ConsoleSize.X/2;
+		c.X = ConsoleSize.X/2 - 5;
 		c.Y = 0;
 		writeToBuffer(c, ss.str(),0xDE);
 
 		//Level display
 		ss.str("");
 		ss << "LEVEL " << level;
-		c.X = (ConsoleSize.X/2)/2 + 4;
+		c.X = 12;
 		c.Y = 0;
 		writeToBuffer(c,ss.str(),0x5B);
 
@@ -427,6 +465,138 @@ void healthaction()
 		}
 }
 
+
+void levelpausescreen()
+{
+	//Level paused screen
+	if(printpauselevel == true && level == 1)//Level 1
+	{
+		COORD c;
+		c.X = 0;
+		c.Y = 11;
+		writeToBuffer(c,"     **        ********   **             **   ********   **         ***",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        ********    **           **    ********   **        ****",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **           **         **     **         **          **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******       **       **      *******    **          **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******        **     **       *******    **          **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **              **   **        **         **          **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********         ** **         ********   *******   ******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********          ***          ********   *******   ******",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"     Catch the rice sacks!",0x0F);
+		flushBufferToConsole();
+		system("pause");
+		printpauselevel = true;
+	}
+	else if(printpauselevel == true && level == 2)//Level 2
+	{
+		COORD c;
+		c.X = 0;
+		c.Y = 11;
+		writeToBuffer(c,"     **        ********   **             **   ********   **         *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        ********    **           **    ********   **        **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **           **         **     **         **               **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******       **       **      *******    **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******        **     **       *******    **           **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **              **   **        **         **         **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********         ** **         ********   *******   ********",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********          ***          ********   *******   ********",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"     Watch out for red vases!",0x0C);
+		flushBufferToConsole();
+		system("pause");
+	}
+	else if(printpauselevel == true && level == 3)//Level 3
+	{
+		COORD c;
+		c.X = 0;
+		c.Y = 11;
+		writeToBuffer(c,"     **        ********   **             **   ********   **         *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        ********    **           **    ********   **        **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **           **         **     **         **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******       **       **      *******    **        *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******        **     **       *******    **        *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **              **   **        **         **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********         ** **         ********   *******   **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********          ***          ********   *******    *******",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"     Wow! Bonus sacks -> 100 points!",0x0E);
+		flushBufferToConsole();
+		system("pause");
+	}
+	else if(printpauselevel == true && level == 4)//Level 4
+	{
+		COORD c;
+		c.X = 0;
+		c.Y = 11;
+		writeToBuffer(c,"     **        ********   **             **   ********   **            **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        ********    **           **    ********   **           * *",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **           **         **     **         **          *  *",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******       **       **      *******    **         *   *",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******        **     **       *******    **        *    *",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **              **   **        **         **        *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********         ** **         ********   *******        *",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********          ***          ********   *******        *",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"     Yeah! Health pack -> gain 1 lives!",0x0A);
+		flushBufferToConsole();
+		system("pause");
+	}
+	else if(printpauselevel == true && level == 5)//Level 5
+	{
+		COORD c;
+		c.X = 0;
+		c.Y = 11;
+		writeToBuffer(c,"     **        ********   **             **   ********   **        *********",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        ********    **           **    ********   **        **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **           **         **     **         **        **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******       **       **      *******    **        **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        *******        **     **       *******    **        ********",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     **        **              **   **        **         **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********         ** **         ********   *******   **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"     *******   ********          ***          ********   *******    *******",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"     Not bad! Congratulations for making this far, and now try to make it into to top ten",0x0B);
+		flushBufferToConsole();
+		system("pause");
+	}
+}
+
 void gameover()
 {
 	message.X = 18;
@@ -550,25 +720,6 @@ void gameover()
 	return;
 }
 
-void printSackB()
-{
-	int y = sackb.Y;
-	sackb.Y = y-6;
-	writeToBuffer(sackb," ___________",0x0E);
-	sackb.Y = y-5;
-	writeToBuffer(sackb," \\_________/",0x0E);
-	sackb.Y = y-4;
-	writeToBuffer(sackb," /         \\ ",0x0E);
-	sackb.Y = y-3;
-	writeToBuffer(sackb,"|          |",0x0E);
-	sackb.Y = y-2;
-	writeToBuffer(sackb,"|   RICE   |",0x0E);
-	sackb.Y = y-1;
-	writeToBuffer(sackb,"|          |",0x0E);
-	sackb.Y = y;
-	writeToBuffer(sackb," \\________/ ",0x0E);
-}
-
 void printSack(int a)
 {
 
@@ -610,6 +761,25 @@ void printBrokenSack(int a)
 
 	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xCE);
 	sack[a].X = x;
+}
+
+void printSackB()
+{
+	int y = sackb.Y;
+	sackb.Y = y-6;
+	writeToBuffer(sackb," ___________",0x0E);
+	sackb.Y = y-5;
+	writeToBuffer(sackb," \\_________/",0x0E);
+	sackb.Y = y-4;
+	writeToBuffer(sackb," /         \\ ",0x0E);
+	sackb.Y = y-3;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y-2;
+	writeToBuffer(sackb,"|   RICE   |",0x0E);
+	sackb.Y = y-1;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y;
+	writeToBuffer(sackb," \\________/ ",0x0E);
 }
 
 void printVase(int a)
