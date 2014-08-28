@@ -29,6 +29,12 @@ int sackbLocation[] = {9,28,47,66}; // store the X coordinate of location of whe
 int sackbDecider; // decides which sack to spawn, from 1 to 10
 int sackbLocationDecider; // decides where the sacks will be spawned
 
+//health
+COORD health;
+int healthLocation[] = {9,28,47,66};
+int healthDecider;
+int healthLocationDecider;
+
 //vases
 const size_t maxvase = 10; // number of vases
 COORD vase[maxvase]; // coordinate of vases
@@ -53,12 +59,12 @@ void initGame()
 {
 	// reset the vairiables when player start the game
 	g_quitGame = false; // set to false to enable the game to be playable
-    elapsedTime = 0.0;  
-	scores=0;
+    elapsedTime = 0.0;  //records the time elapsed after starting the program
+	scores=0; //the score of the player. Default value = 0
 	timeFall = 0.0;
-	x = 100;
+	x = 100; //This variable sets the score where the difficulty increases.
 	difficulty = 0.0;
-	lives = 3;
+	lives = 3; //Sets the amount of lives at the start. Default = 3
 	level = 1;
 	// Set precision for floating point output
 	charLocation.X = 47;
@@ -72,6 +78,8 @@ void initGame()
 	}
 	sackb.X = 0;
 	sackb.Y = 0;
+	health.X = 0;
+	health.Y = 0;
 }
 
 void shutdown()
@@ -106,7 +114,10 @@ void update(double dt)
 		
 		vaseaction(); //vase action
 
-		sackbaction();
+		sackbaction(); //bonus sack action
+
+		healthaction(); //health pack action
+
 		// increase difficulty
 		if ( scores > x && difficulty < 0.5 && scores > 100)
 		{
@@ -182,6 +193,12 @@ void render()
 				printSackB();
 			}
 
+			//print health pack
+			if (health.Y > 0 && health.Y < charLocation.Y)
+			{
+				printHealth();
+			}
+
 			//print vase
 			if (vase[a].Y > 0 && vase[a].Y < charLocation.Y)
 			{
@@ -247,7 +264,8 @@ void spawning()
 	vaseDecider = rand() % maxvase; // decide which vase to spawn
 	sackLocationDecider = rand() % 4 ; // decide where sacks will spawn
 	
-	sackbLocationDecider = rand() %4;
+	healthLocationDecider = rand() %4; //decides the health's spawn location
+	sackbLocationDecider = rand() %4; //decides the bonus sack's spawn location
 
 	if ( sack[sackDecider].X == 0 ) // only spawn if the sack is not present
 	{
@@ -255,15 +273,19 @@ void spawning()
 		sack[sackDecider].X = sackLocation[sackLocationDecider];
 	}
 	
-	if ( vaseLocationDecider != sackLocationDecider && vase[vaseDecider].X == 0 && scores >= 50)
+	if ( vaseLocationDecider != sackLocationDecider && vase[vaseDecider].X == 0 && scores >= 50) //spawns vases where sacks don't
 	{
 		Beep(1500, 100);
 		vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
 	}
-	if (sackbLocationDecider != sackLocationDecider && sackbLocationDecider != vaseLocationDecider && sackb.X == 0 && scores >= 100)
+	if (sackbLocationDecider != sackLocationDecider && vaseLocationDecider && sackb.X == 0 && scores >= 100) //spawns bonus sacks where the other two elements don't
 	{
 		Beep(1600,200);
 		sackb.X = sackbLocation[sackbLocationDecider];
+	}
+	if (healthLocationDecider != sackLocationDecider && vaseLocationDecider && sackbLocationDecider && sack[sackDecider].X != sackLocation[sackLocationDecider] && health.X == 0 && lives < 21 && scores >= 300) //spawns health where the other three elements don't
+	{
+		health.X = healthLocation[healthLocationDecider];
 	}
 }
 
@@ -360,6 +382,35 @@ void vaseaction()
 		}
 
 	}
+}
+
+void healthaction()
+{
+	// check if player missed the health
+		if (sackb.Y > charLocation.Y)
+		{
+			//health resets to the top
+			health.X = 0;
+			health.Y = 0;
+		}
+
+		// check if player catched the health
+		if (health.Y == charLocation.Y-2 && charLocation.X == health.X)          
+		{
+			// health resets to the top
+			health.X = 0;
+			health.Y = 0;
+			// earn lives
+			lives += 1;
+		}
+		// health dropping
+		if(health.Y < charLocation.Y && health.X != 0 )
+		{
+			for ( int a = 0; a < 10; ++a )
+			{
+				++health.Y;
+			}
+		}
 }
 
 void gameover()
@@ -575,4 +626,23 @@ void printBrokenVase(int a)
 			writeToBuffer(vase[a],"|  /\\     |",0x0C);
 			vase[a].Y = y;
 			writeToBuffer(vase[a],"\__/  \\/''''",0x0C);
+}
+
+void printHealth()
+{
+	int y = health.Y;
+	health.Y = y-6;
+	writeToBuffer(health," ___________",0x0A);
+	health.Y = y-5;
+	writeToBuffer(health," /        \\",0x0A);
+	health.Y = y-4;
+	writeToBuffer(health,"|          |",0x0A);
+	health.Y = y-3;
+	writeToBuffer(health,"|          |",0x0A);
+	health.Y = y-2;
+	writeToBuffer(health,"|   LIFE   |",0x0A);
+	health.Y = y-1;
+	writeToBuffer(health,"|          |",0x0A);
+	health.Y = y;
+	writeToBuffer(health," \\________/ ",0x0A);
 }
