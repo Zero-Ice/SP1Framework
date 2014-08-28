@@ -63,12 +63,14 @@ void spawning();            // spawn sacks and vase
 void sackaction();          // sacks action
 void sackbaction();			// bonus sacks action
 void vaseaction();          // vases action
+void healthaction();	// health pack action
 
 void gameover();            // print out gameover screen
 void printSack(int a);      // print out sack
-void printSackB();			 //prints a bonus sack
+void printSackB();			// prints a bonus sack
 void printVase(int a);      // print out vase
+void printHealth();			// print out health pack
 void printBrokenSack(int a);// print out broken sack
 void printBrokenVase(int a);// print out broken vase
 
-#endif // _GAME_H
+#endif //_GAME_H
