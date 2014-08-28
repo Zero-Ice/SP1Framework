@@ -58,14 +58,7 @@ void highscorepage()
 	{
 		input = 0;
 		choice = getche();
-		if(choice.size() != 1)//ask the player to press 5 to return
-		{
-			input = 0;
-			c.Y++;
-			writeToBuffer(c,"Please press 5 to return");
-			flushBufferToConsole();
-			continue;
-		}
+	
 		input = choice[0] - 48;
 		if(input == BACKTOMAINMENU)//Go back to main menu when the player press 5
 		{
@@ -74,11 +67,9 @@ void highscorepage()
 			mainmenu();
 			break;
 		}
-		else//ask the player to press 5 to return
+		else
 		{ 
-			c.Y++;
-			writeToBuffer(c,"Please press 5 to return");
-			flushBufferToConsole();
+			input = 0;
 		}
 	}
 }

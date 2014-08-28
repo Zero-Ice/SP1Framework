@@ -37,8 +37,7 @@ int instruction()
 		}
 		else//ask the player to press 5 to return
 		{ 
-			c.Y++;
-			writeToBuffer(c,"Please press 5 to return");
+			input = 0;
 			flushBufferToConsole();
 		}
 	}

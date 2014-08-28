@@ -43,15 +43,9 @@ int mainmenu()
 	while ( input == 0 )//ask the player to press 1-4
 	{
 		choice=getche();
-		if(choice.size() != 1)//ask the player to press 5 to return
-		{
-			c.Y++;
-			writeToBuffer(c,"Please enter a valid number",0x0F);
-			flushBufferToConsole();
-			continue;
-		}
+		
 		input = choice[0] - 48;
-		 if ( input > 0 && input < 5 )
+		if ( input > 0 && input < 5 )
 		{
 			switch ( input )
 			{
@@ -71,12 +65,10 @@ int mainmenu()
 				break;
 			}
 		}
-		else//ask the player to press 5 to return
+		else
 		{
 			input = 0;
-			c.Y++;
-			writeToBuffer(c,"Please enter a valid number",0x0F);
-			flushBufferToConsole();
+			
 		}
 	}
 	return 0;
