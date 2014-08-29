@@ -25,7 +25,7 @@ int instruction()
 	c.Y++;
 	writeToBuffer(c, "Try to catch bonus sacks that gives more points");
 	c.Y++;
-	writeToBuffer(c, "Press space while in game to pause" );
+	writeToBuffer(c, "Press p while in game to pause" );
 	c.Y += 3;
 	writeToBuffer(c,"Press 5 to return to main menu");
 	flushBufferToConsole();
