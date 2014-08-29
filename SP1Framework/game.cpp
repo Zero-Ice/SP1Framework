@@ -349,17 +349,17 @@ void spawning()
 		sack[sackDecider].X = sackLocation[sackLocationDecider];
 	}
 	
-	if ( vaseLocationDecider != sackLocationDecider && vase[vaseDecider].X == 0 && scores >= 50) //spawns vases where sacks don't
+	if ( vaseLocationDecider != sackLocationDecider && vase[vaseDecider].X == 0 && level >= 2) //spawns vases where sacks don't
 	{
 		Beep(1500, 100);
 		vase[vaseDecider].X = vaseLocation[vaseLocationDecider];
 	}
-	if (sackbLocationDecider != sackLocationDecider && vaseLocationDecider && sackb.X == 0 && scores >= 100) //spawns bonus sacks where the other two elements don't
+	if (sackbLocationDecider != sackLocationDecider && vaseLocationDecider && sackb.X == 0 && level >= 3) //spawns bonus sacks where the other two elements don't
 	{
 		Beep(1600,200);
 		sackb.X = sackbLocation[sackbLocationDecider];
 	}
-	if (healthLocationDecider != sackLocationDecider && vaseLocationDecider && sackbLocationDecider && sack[sackDecider].X != sackLocation[sackLocationDecider] && health.X == 0 && lives < 21 && scores >= 300) //spawns health where the other three elements don't
+	if (healthLocationDecider != sackLocationDecider && vaseLocationDecider && sackbLocationDecider && sack[sackDecider].X != sackLocation[sackLocationDecider] && health.X == 0 && lives < 21 && level >= 4) //spawns health where the other three elements don't
 	{
 		health.X = healthLocation[healthLocationDecider];
 	}
@@ -517,6 +517,8 @@ void levelpausescreen()
 		writeToBuffer(c,"     *******   ********       ***       ********   *******   ******",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Catch the rice sacks!",0x0F);
+		c.Y ++;
+		writeToBuffer(c,"     Get 50 points to proceed to the next level!",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
@@ -542,6 +544,10 @@ void levelpausescreen()
 		writeToBuffer(c,"     *******   ********       ***       ********   *******   ********",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Watch out for red vases!",0x0C);
+		c.Y++;
+		writeToBuffer(c,"     Speed increse!",0x0C);
+		c.Y ++;
+		writeToBuffer(c,"     Get another 50 points to proceed to the next level!",0x0C);
 		c.Y += 2;
 		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
@@ -566,7 +572,9 @@ void levelpausescreen()
 		c.Y++;
 		writeToBuffer(c,"     *******   ********       ***       ********   *******    *******",0x0F);
 		c.Y += 2;
-		writeToBuffer(c,"     Wow! Bonus sacks -> 100 points!",0x0E);
+		writeToBuffer(c,"     Wow! Bonus sacks -> 20 points!",0x0E);
+		c.Y ++;
+		writeToBuffer(c,"     Get another 100 points to proceed to the next level!",0x0E);
 		c.Y += 2;
 		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
@@ -592,6 +600,8 @@ void levelpausescreen()
 		writeToBuffer(c,"     *******   ********       ***       ********   *******        *",0x0F);
 		c.Y += 2;
 		writeToBuffer(c,"     Yeah! Health pack -> gain 1 lives!",0x0A);
+		c.Y ++;
+		writeToBuffer(c,"     Get another 50 points to proceed to the next level!",0x0A);
 		c.Y += 2;
 		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
@@ -616,7 +626,7 @@ void levelpausescreen()
 		c.Y++;
 		writeToBuffer(c,"     *******   ********       ***       ********   *******    *******",0x0F);
 		c.Y += 2;
-		writeToBuffer(c,"     Not bad! Congratulations for making this far, and now try to make it into to top ten",0x0B);
+		writeToBuffer(c,"     Congratulations for making this far, and now try to make it into to top ten",0x0B);
 		c.Y += 2;
 		writeToBuffer(c,"     Press space to continue",0x0D);
 	}
