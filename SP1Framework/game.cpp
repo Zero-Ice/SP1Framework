@@ -223,9 +223,26 @@ void render()
 
 	if(pause == true)
 	{
-		c.X = ConsoleSize.X/2;
+		c.X = ConsoleSize.X/2-3;
 		c.Y = ConsoleSize.Y/2;
 		writeToBuffer(c, "Paused", 0x0F);
+		c.X -= 9;
+		c.Y += 2;
+		writeToBuffer(c, "Press p again to resume.", 0x0F);
+		char pause=219;
+		c.X += 10;
+		c.Y -= 8;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y++;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y++;
+		writeToBuffer(c, pause, 0x0F);
+		c.X += 3;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y--;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y--;
+		writeToBuffer(c, pause, 0x0F);
 		flushBufferToConsole();
 
 	}
