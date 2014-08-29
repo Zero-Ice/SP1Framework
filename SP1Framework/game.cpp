@@ -69,7 +69,7 @@ void initGame()
 	// reset the vairiables when player start the game
 	g_quitGame = false; // set to false to enable the game to be playable
     elapsedTime = 0.0;  //records the time elapsed after starting the program
-	scores=100; //the score of the player. Default value = 0
+	scores=0; //the score of the player. Default value = 0
 	timeFall = 0.0;
 	x = 50; //This variable sets the score where the difficulty increases.
 	difficulty = 0.0;
