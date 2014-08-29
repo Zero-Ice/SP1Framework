@@ -665,7 +665,16 @@ void gameover()
 		if(player1.highscore > player[f].highscore)
 		{
 			message.Y ++;
-			writeToBuffer(message,"Congratulations, you had made it into the top ten.",0x0F);
+			writeToBuffer(message,"   ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
+			message.Y++;
+			writeToBuffer(message,"  / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __| ");
+			message.Y++;
+			writeToBuffer(message," | (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\ ");
+			message.Y++;
+			writeToBuffer(message,"  \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
+			message.Y++;
+
+			writeToBuffer(message,"You had made it into the top ten!",0x0F);
 			message.Y++;
 			writeToBuffer(message, "Please enter your name:",0x0F);
 			flushBufferToConsole();
