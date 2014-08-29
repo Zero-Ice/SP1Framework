@@ -69,7 +69,7 @@ void initGame()
 	// reset the vairiables when player start the game
 	g_quitGame = false; // set to false to enable the game to be playable
     elapsedTime = 0.0;  //records the time elapsed after starting the program
-	scores=0; //the score of the player. Default value = 0
+	scores=100; //the score of the player. Default value = 0
 	timeFall = 0.0;
 	x = 50; //This variable sets the score where the difficulty increases.
 	difficulty = 0.0;
@@ -685,13 +685,13 @@ void gameover()
 		{
 			message.X = 0;
 			message.Y ++;
-			writeToBuffer(message,"   ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
+			writeToBuffer(message,"       ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
 			message.Y++;
-			writeToBuffer(message,"  / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __| ");
+			writeToBuffer(message,"      / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __| ");
 			message.Y++;
-			writeToBuffer(message," | (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\ ");
+			writeToBuffer(message,"     | (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\ ");
 			message.Y++;
-			writeToBuffer(message,"  \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
+			writeToBuffer(message,"      \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
 			message.Y++;
 			message.X = 18;
 			writeToBuffer(message,"You had made it into the top ten!",0x0F);
