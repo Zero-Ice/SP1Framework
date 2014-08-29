@@ -683,6 +683,7 @@ void gameover()
 	{
 		if(player1.highscore > player[f].highscore)
 		{
+			message.X = 0;
 			message.Y ++;
 			writeToBuffer(message,"   ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
 			message.Y++;
@@ -692,7 +693,7 @@ void gameover()
 			message.Y++;
 			writeToBuffer(message,"  \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
 			message.Y++;
-
+			message.X = 18;
 			writeToBuffer(message,"You had made it into the top ten!",0x0F);
 			message.Y++;
 			writeToBuffer(message, "Please enter your name:",0x0F);
