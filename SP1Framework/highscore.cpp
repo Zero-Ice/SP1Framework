@@ -32,14 +32,15 @@ void highscorepage()
 	writeToBuffer(c,"::                                           ::" );
 	c.Y++;
 	writeToBuffer(c,":: Rank  Player     Score                    ::");
-	c.Y++;
+	
 	while (!Highscore.eof())//print out position, player's name and highscore one by one starting from first
 	{
+		c.Y++;
 		getline(Highscore, data);
 		ss.str("");
 		ss << ":: "<< data << "                      ::" ;
 		writeToBuffer(c, ss.str());
-		c.Y++;
+		
 	}
 	writeToBuffer(c,"::                                           ::" );
 	c.Y++;

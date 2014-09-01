@@ -191,19 +191,23 @@ void update(double dt)
 		// Updating the location of the character based on the key press
 		if (keyPressed[K_LEFT] && charLocation.X > 9)
 		{
-			Beep(1440, 30);
+			
 			for ( int a = 0; a < 19; a++ )
 			{
 				charLocation.X--; // move the character to the left
 			}
+			Beep(600, 100);
+			
 		}
 		if (keyPressed[K_RIGHT] && charLocation.X < 59 && printpauselevel == false)
 		{
-			Beep(1440, 30);
+			
 			for ( int a = 0; a < 19; a++ )
 			{
 				charLocation.X++; // move the character to the right
 			}
+			Beep(600, 100);
+			
 		}
 
 		

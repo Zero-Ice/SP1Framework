@@ -26,7 +26,7 @@ int instruction()
 	writeToBuffer(c, "Try to catch bonus sacks that gives more points");
 	c.Y++;
 	writeToBuffer(c, "Catching Health Kits gives you a life");
-	c..Y++;
+	c.Y++;
 	writeToBuffer(c, "Press p while in game to pause" );
 	c.Y += 3;
 	writeToBuffer(c,"Press 5 to return to main menu");
