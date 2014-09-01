@@ -286,13 +286,13 @@ void render()
 
 				}
 
-				// displays the framerate
-				ss.str("");
-				ss << std::fixed << std::setprecision(3);
-				ss << 1.0 / deltaTime << "fps";
-				c.X = ConsoleSize.X-9;
-				c.Y = 0;
-				writeToBuffer(c, ss.str());
+				//// displays the framerate
+				//ss.str("");
+				//ss << std::fixed << std::setprecision(3);
+				//ss << 1.0 / deltaTime << "fps";
+				//c.X = ConsoleSize.X-9;
+				//c.Y = 0;
+				//writeToBuffer(c, ss.str());
 
 				// displays the elapsed time
 				ss.str("");
@@ -309,21 +309,21 @@ void render()
 				ss << (char)3 << "x" << lives;
 				c.X = ConsoleSize.X - 15;
 				c.Y = 0;
-				writeToBuffer(c,ss.str(), 0xCA); 
+				writeToBuffer(c,ss.str(), 0xC); 
 
 				//Displays score
 				ss.str("");
 				ss << "SCORE:"<< *highscore;
 				c.X = ConsoleSize.X/2 - 5;
 				c.Y = 0;
-				writeToBuffer(c, ss.str(),0xDE);
+				writeToBuffer(c, ss.str(),0xD);
 
 				//Level display
 				ss.str("");
 				ss << "LEVEL " << level;
 				c.X = 12;
 				c.Y = 0;
-				writeToBuffer(c,ss.str(),0x5B);
+				writeToBuffer(c,ss.str(),0x5);
 			}
 		}
 	}
