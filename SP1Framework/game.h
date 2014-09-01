@@ -71,6 +71,7 @@ void levelpausescreen();     // print out paused level screen like LEVEL 2, etc
 void gameover();            // print out gameover screen
 void printSack(int a);      // print out sack
 void printSackB();			// prints a bonus sack
+void printBrokenSackB();    // Prints a broken bonus sack
 void printVase(int a);      // print out vase
 void printHealth();			// print out health pack
 void printBrokenSack(int a);// print out broken sack

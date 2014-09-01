@@ -37,10 +37,10 @@ int sackbDecider; // decides which sack to spawn, from 1 to 10
 int sackbLocationDecider; // decides where the sacks will be spawned
 
 //health
-COORD health;
-int healthLocation[] = {9,28,47,66};
-int healthDecider;
-int healthLocationDecider;
+COORD health; //coordinate of health
+int healthLocation[] = {9,28,47,66}; //stores the X coordinate of the location where the health packs will spawn
+int healthDecider; //decides which health pack to spawn
+int healthLocationDecider; //decides where the packs spawn
 
 //vases
 const size_t maxvase = 10; // number of vases
@@ -285,6 +285,12 @@ void render()
 						printSackB();
 					}
 
+					//print broken bonus sack
+					else if (sackb.Y > charLocation.Y)
+					{
+						printBrokenSackB();
+					}
+
 					//print health pack
 					if (health.Y > 0 && health.Y < charLocation.Y)
 					{
@@ -494,7 +500,7 @@ void healthaction()
 			health.Y = 0;
 		}
 
-		// check if player catched the health
+		// check if player caught the health
 		if (health.Y == charLocation.Y-2 && charLocation.X == health.X)          
 		{
 			// health resets to the top
@@ -859,6 +865,25 @@ void printSackB()
 	writeToBuffer(sackb,"|          |",0x0E);
 	sackb.Y = y;
 	writeToBuffer(sackb," \\________/ ",0x0E);
+}
+
+void printBrokenSackB()
+{
+	int y = sackb.Y;
+	sackb.Y = y-6;
+	writeToBuffer(sackb," ___________",0x0E);
+	sackb.Y = y-5;
+	writeToBuffer(sackb," \\_________/",0x0E);
+	sackb.Y = y-4;
+	writeToBuffer(sackb," /         \\ ",0x0E);
+	sackb.Y = y-3;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y-2;
+	writeToBuffer(sackb,"|   RICE   |",0x0E);
+	sackb.Y = y-1;
+	writeToBuffer(sackb," /........\\ ",0x0E);
+	sackb.Y = y;
+	writeToBuffer(sackb,".::'''..'::' ",0x0E);
 }
 
 void printVase(int a)
