@@ -223,9 +223,26 @@ void render()
 
 	if(pause == true)
 	{
-		c.X = ConsoleSize.X/2;
+		c.X = ConsoleSize.X/2-3;
 		c.Y = ConsoleSize.Y/2;
 		writeToBuffer(c, "Paused", 0x0F);
+		c.X -= 9;
+		c.Y += 2;
+		writeToBuffer(c, "Press p again to resume.", 0x0F);
+		char pause=219;
+		c.X += 10;
+		c.Y -= 8;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y++;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y++;
+		writeToBuffer(c, pause, 0x0F);
+		c.X += 3;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y--;
+		writeToBuffer(c, pause, 0x0F);
+		c.Y--;
+		writeToBuffer(c, pause, 0x0F);
 		flushBufferToConsole();
 
 	}
@@ -685,13 +702,13 @@ void gameover()
 		{
 			message.X = 0;
 			message.Y ++;
-			writeToBuffer(message,"   ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
+			writeToBuffer(message,"       ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
 			message.Y++;
-			writeToBuffer(message,"  / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __| ");
+			writeToBuffer(message,"      / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __| ");
 			message.Y++;
-			writeToBuffer(message," | (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\ ");
+			writeToBuffer(message,"     | (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\ ");
 			message.Y++;
-			writeToBuffer(message,"  \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
+			writeToBuffer(message,"      \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
 			message.Y++;
 			message.X = 18;
 			writeToBuffer(message,"You had made it into the top ten!",0x0F);
