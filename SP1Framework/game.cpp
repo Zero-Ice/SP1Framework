@@ -103,10 +103,8 @@ void shutdown()
     shutDownConsole();
 }
 
-void getInput()
+void getInput() // inputs from the player read by the console
 {    
-    keyPressed[K_UP] = isKeyPressed(VK_UP);
-    keyPressed[K_DOWN] = isKeyPressed(VK_DOWN);
     keyPressed[K_LEFT] = isKeyPressed(VK_LEFT);
     keyPressed[K_RIGHT] = isKeyPressed(VK_RIGHT);
 	keyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
@@ -116,7 +114,7 @@ void getInput()
 
 void update(double dt)
 {
-	if (keyPressed[K_P])//pausing
+	if (keyPressed[K_P]) //pause system. press p to pause
 	{
 		if(pause == false)
 			pause=true;
@@ -125,13 +123,13 @@ void update(double dt)
 	}
 
 	//Update Level
-	if (scores >= 50 && scores < 100)
+	if (scores >= 5 && scores < 10) // 5 - 100
 		level = 2;
-	if (scores >= 100 && scores < 300)
-		level = 3;
-	if (scores >= 300 && scores < 350)
+	if (scores >= 15 && scores < 20) // 100-300
+		level = 3; 
+	if (scores >= 25 && scores < 30) // 300-350
 		level = 4;
-	if (scores >= 350)
+	if (scores >= 35) //350
 		level = 5;
 
 	//check whether to print out the level screen
@@ -154,10 +152,10 @@ void update(double dt)
 		health.Y = 0;
 	}
 
-	if(keyPressed[K_SPACE])//press space to continue
+	if(keyPressed[K_SPACE]) //press space to continue to next level
 		printpauselevel = false;
 	
-	if(pause == false && printpauselevel == false)
+	if(pause == false && printpauselevel == false) // checks if game is not paused and game is not transitioning to next level
 	{
 		// get the delta time
 		elapsedTime += dt;
@@ -223,9 +221,9 @@ void render()
 	// Clears the buffer with this colour attribute
 	clearBuffer(0x0F);
 
-	COORD c;
+	COORD c; // coord c used to print messages during the game
 
-	if(pause == true)
+	if(pause == true) // prints messages when game is paused
 	{
 		c.X = ConsoleSize.X/2-3;
 		c.Y = ConsoleSize.Y/2;
@@ -250,7 +248,7 @@ void render()
 		flushBufferToConsole();
 
 	}
-	else if(pause == false)
+	else if(pause == false) // game will run if not paused
 	{
 		if(printpauselevel == true)
 			levelpausescreen();
@@ -354,15 +352,15 @@ void render()
 
 void spawning()
 {
-	srand(time(NULL));
-	
+	srand(time(NULL)); // seed for pseudo generation
+	// random generators for spawning locations
 	vaseLocationDecider = rand() % 4; // decide where vase will spawn
 	sackDecider = rand() % maxsack; // decide which sack to spawn
 	vaseDecider = rand() % maxvase; // decide which vase to spawn
 	sackLocationDecider = rand() % 4 ; // decide where sacks will spawn
 	
-	healthLocationDecider = rand() %4; //decides the health's spawn location
-	sackbLocationDecider = rand() %4; //decides the bonus sack's spawn location
+	healthLocationDecider = rand() % 4; //decides the health's spawn location
+	sackbLocationDecider = rand() % 4; //decides the bonus sack's spawn location
 
 	if ( sack[sackDecider].X == 0 ) // only spawn if the sack is not present
 	{
@@ -388,7 +386,7 @@ void spawning()
 
 void sackaction()
 {
-	
+	// movement of normal sack
 	for( int sackNo = 0; sackNo < maxsack; ++sackNo )
 	{
 		// check if player missed the sacks
@@ -424,35 +422,37 @@ void sackaction()
 
 void sackbaction()
 {
-		// check if player missed the sacks
-		if (sackb.Y > charLocation.Y)
-		{
-			// sack resets to the top
-			sackb.X = 0;
-			sackb.Y = 0;
-		}
+	// movement of bonus sack
+	// check if player missed the sacks
+	if (sackb.Y > charLocation.Y)
+	{
+		// sack resets to the top
+		sackb.X = 0;
+		sackb.Y = 0;
+	}
 
-		// check if player catched the sacks
-		if ( sackb.Y == charLocation.Y-2 && charLocation.X == sackb.X)          
+	// check if player catched the sacks
+	if ( sackb.Y == charLocation.Y-2 && charLocation.X == sackb.X)          
+	{
+		// sack resets to the top
+		sackb.X = 0;
+		sackb.Y = 0;
+		// earn score for catching the sack
+		scores += 20;
+	}
+	// sacks dropping
+	if(sackb.Y < charLocation.Y && sackb.X != 0 )
+	{
+		for ( int a = 0; a < 10; ++a )
 		{
-			// sack resets to the top
-			sackb.X = 0;
-			sackb.Y = 0;
-			// earn score for catching the sack
-			scores += 20;
+			++sackb.Y;
 		}
-		// sacks dropping
-		if(sackb.Y < charLocation.Y && sackb.X != 0 )
-		{
-			for ( int a = 0; a < 10; ++a )
-			{
-				++sackb.Y;
-			}
-		}
+	}
 }
 
 void vaseaction()
 {
+	// movement of vase
 	for (int vaseNo=0; vaseNo<maxvase; ++vaseNo)
 	{
 		// check if player catched the vase
@@ -485,6 +485,7 @@ void vaseaction()
 
 void healthaction()
 {
+	// Movement of health packs
 	// check if player missed the health
 		if (sackb.Y > charLocation.Y)
 		{
@@ -663,6 +664,7 @@ void levelpausescreen()
 
 void gameover()
 {
+	// this will print when player loses the game
 	message.X = 18;
 	message.Y = 5;
 	writeToBuffer(message,"   ___   _   __  __ ___ _____   _____ ___ ");
@@ -696,7 +698,7 @@ void gameover()
 
 
 
-	//make an struct to store current player infomations
+	// if player beat a highscore
 	Highscorers player1;
 	player1.highscore = *highscore;
 	int f;
@@ -719,9 +721,10 @@ void gameover()
 			message.Y++;
 			writeToBuffer(message, "Please enter your name:",0x0F);
 			flushBufferToConsole();
-			while (player1.name == "\0")
+			while (player1.name == "\0") // storing player name in text file
 			{
 				gotoXY(message);
+				player1.name = "";
 				std::cin >> player1.name;
 				if ((player1.name).size() > 10)
 				{
@@ -742,7 +745,7 @@ void gameover()
 			break;
 		}
 	}
-	if( f == 9 )
+	if( f == 9 ) // if player did not beat highscore
 	{
 		message.Y ++;
 		writeToBuffer(message,"Sorry, you did not make it into the top ten.",0x0F);
@@ -796,7 +799,7 @@ void gameover()
 
 void printSack(int a)
 {
-
+	// prints sack
 	int y = sack[a].Y;
 	sack[a].Y = y-6;
 	writeToBuffer(sack[a]," ___________",0x0F);
@@ -816,6 +819,7 @@ void printSack(int a)
 
 void printBrokenSack(int a)
 {
+	// prints a broken sack
 	int x = sack[a].X;
 	int y = sack[a].Y;
 	sack[a].Y = y-6;
@@ -839,6 +843,7 @@ void printBrokenSack(int a)
 
 void printSackB()
 {
+	// prints bonus sack
 	int y = sackb.Y;
 	sackb.Y = y-6;
 	writeToBuffer(sackb," ___________",0x0E);
@@ -858,46 +863,49 @@ void printSackB()
 
 void printVase(int a)
 {
+	// prints vase
 	int y = vase[a].Y;
-			vase[a].Y = y-6;
-			
-			writeToBuffer(vase[a],"   _...._   ",0xC);
-			vase[a].Y = y-5;
-			writeToBuffer(vase[a],"  ';-.-';'  ",0xC);
-			vase[a].Y = y-4;
-			writeToBuffer(vase[a],"    }=={    ",0xC);
-			vase[a].Y = y-3;
-			writeToBuffer(vase[a],"  .'    '.  ",0xC);
-			vase[a].Y = y-2;
-			writeToBuffer(vase[a]," /        \\ ",0xC);
-			vase[a].Y = y-1;
-			writeToBuffer(vase[a],"|          |",0xC);
-			vase[a].Y = y;
-			writeToBuffer(vase[a],"\\__________/",0xC);
+	vase[a].Y = y-6;
+
+	writeToBuffer(vase[a],"   _...._   ",0xC);
+	vase[a].Y = y-5;
+	writeToBuffer(vase[a],"  ';-.-';'  ",0xC);
+	vase[a].Y = y-4;
+	writeToBuffer(vase[a],"    }=={    ",0xC);
+	vase[a].Y = y-3;
+	writeToBuffer(vase[a],"  .'    '.  ",0xC);
+	vase[a].Y = y-2;
+	writeToBuffer(vase[a]," /        \\ ",0xC);
+	vase[a].Y = y-1;
+	writeToBuffer(vase[a],"|          |",0xC);
+	vase[a].Y = y;
+	writeToBuffer(vase[a],"\\__________/",0xC);
 }
 
 void printBrokenVase(int a)
 {
+	// prints broken vase
 	vase[a].X;
-			int y = vase[a].Y;
-			vase[a].Y = y-6;
-			writeToBuffer(vase[a],"   _...._   ",0x0C);
-			vase[a].Y = y-5;
-			writeToBuffer(vase[a],"  ';-.-';'  ",0x0C);
-			vase[a].Y = y-4;
-			writeToBuffer(vase[a],"    }=={    ",0x0C);
-			vase[a].Y = y-3;
-			writeToBuffer(vase[a],"  .'    '.  ",0x0C);
-			vase[a].Y = y-2;
-			writeToBuffer(vase[a]," /        \\ ",0x0C);
-			vase[a].Y = y-1;
-			writeToBuffer(vase[a],"|  /\\     |",0x0C);
-			vase[a].Y = y;
-			writeToBuffer(vase[a],"\__/  \\/''''",0x0C);
+	int y = vase[a].Y;
+	vase[a].Y = y-6;
+	writeToBuffer(vase[a],"   _...._   ",0x0C);
+	vase[a].Y = y-5;
+	writeToBuffer(vase[a],"  ';-.-';'  ",0x0C);
+	vase[a].Y = y-4;
+	writeToBuffer(vase[a],"    }=={    ",0x0C);
+	vase[a].Y = y-3;
+	writeToBuffer(vase[a],"  .'    '.  ",0x0C);
+	vase[a].Y = y-2;
+	writeToBuffer(vase[a]," /        \\ ",0x0C);
+	vase[a].Y = y-1;
+	writeToBuffer(vase[a],"|  /\\     |",0x0C);
+	vase[a].Y = y;
+	writeToBuffer(vase[a],"\__/  \\/''''",0x0C);
 }
 
 void printHealth()
 {
+	// prints Health kit
 	int y = health.Y;
 	health.Y = y-6;
 	writeToBuffer(health," ___________",0x0A);
