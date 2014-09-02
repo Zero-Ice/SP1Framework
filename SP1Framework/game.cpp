@@ -759,10 +759,17 @@ void gameover()
 				gotoXY(message);
 				player1.name = "";
 				std::getline(std::cin,player1.name);
-				if ((player1.name).size() > 10)
+				int space=0;
+				for(int g=0;g < player1.name.size(); ++g)
+				{
+					if(player1.name[g] == ' ')
+						++space;
+				}
+				if ((player1.name).size() > 10 || space > 0)
 				{
 					message.Y++;
-					writeToBuffer(message,"Please enter a name with 10 characters or less:",0x0F);
+					message.X = ConsoleSize.X/2-30;
+					writeToBuffer(message,"Please enter a name with 10 characters or less without spaces.",0x0F);
 					flushBufferToConsole();
 					player1.name = "\0";
 				}
