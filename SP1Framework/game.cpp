@@ -513,150 +513,6 @@ void healthaction()
 		}
 }
 
-void printSack(int a)
-{
-	// prints sack
-	int y = sack[a].Y;
-	sack[a].Y = y-6;
-	writeToBuffer(sack[a]," ___________",0x0F);
-	sack[a].Y = y-5;
-	writeToBuffer(sack[a]," \\_________/",0x0F);
-	sack[a].Y = y-4;
-	writeToBuffer(sack[a]," /         \\ ",0x0F);
-	sack[a].Y = y-3;
-	writeToBuffer(sack[a],"|          |",0x0F);
-	sack[a].Y = y-2;
-	writeToBuffer(sack[a],"|   RICE   |",0x0F);
-	sack[a].Y = y-1;
-	writeToBuffer(sack[a],"|          |",0x0F);
-	sack[a].Y = y;
-	writeToBuffer(sack[a]," \\________/ ",0x0F);
-}
-
-void printBrokenSack(int a)
-{
-	// prints a broken sack
-	int x = sack[a].X;
-	int y = sack[a].Y;
-	sack[a].Y = y-6;
-	writeToBuffer(sack[a]," ___________",0xC);
-	sack[a].Y = y-5;
-	writeToBuffer(sack[a]," \\_________/",0xC);
-	sack[a].Y = y-4;
-	writeToBuffer(sack[a]," /         \\ ",0xC);
-	sack[a].Y = y-3;
-	writeToBuffer(sack[a],"|          |",0xC);
-	sack[a].Y = y-2;
-	writeToBuffer(sack[a],"|   RICE   |",0xC);
-	sack[a].Y = y-1;
-	sack[a].X = x-4;
-	writeToBuffer(sack[a]," ../          \...",0xC);
-	sack[a].Y = y;
-
-	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xC);
-	sack[a].X = x;
-}
-
-void printSackB()
-{
-	// prints bonus sack
-	int y = sackb.Y;
-	sackb.Y = y-6;
-	writeToBuffer(sackb," ___________",0x0E);
-	sackb.Y = y-5;
-	writeToBuffer(sackb," \\_________/",0x0E);
-	sackb.Y = y-4;
-	writeToBuffer(sackb," /         \\ ",0x0E);
-	sackb.Y = y-3;
-	writeToBuffer(sackb,"|          |",0x0E);
-	sackb.Y = y-2;
-	writeToBuffer(sackb,"|   RICE   |",0x0E);
-	sackb.Y = y-1;
-	writeToBuffer(sackb,"|          |",0x0E);
-	sackb.Y = y;
-	writeToBuffer(sackb," \\________/ ",0x0E);
-}
-
-void printBrokenSackB()
-{
-	int y = sackb.Y;
-	sackb.Y = y-6;
-	writeToBuffer(sackb," ___________",0x0E);
-	sackb.Y = y-5;
-	writeToBuffer(sackb," \\_________/",0x0E);
-	sackb.Y = y-4;
-	writeToBuffer(sackb," /         \\ ",0x0E);
-	sackb.Y = y-3;
-	writeToBuffer(sackb,"|          |",0x0E);
-	sackb.Y = y-2;
-	writeToBuffer(sackb,"|   RICE   |",0x0E);
-	sackb.Y = y-1;
-	writeToBuffer(sackb," /........\\ ",0x0E);
-	sackb.Y = y;
-	writeToBuffer(sackb,".::'''..'::' ",0x0E);
-}
-
-void printVase(int a)
-{
-	// prints vase
-	int y = vase[a].Y;
-	vase[a].Y = y-6;
-
-	writeToBuffer(vase[a],"   _...._   ",0xC);
-	vase[a].Y = y-5;
-	writeToBuffer(vase[a],"  ';-.-';'  ",0xC);
-	vase[a].Y = y-4;
-	writeToBuffer(vase[a],"    }=={    ",0xC);
-	vase[a].Y = y-3;
-	writeToBuffer(vase[a],"  .'    '.  ",0xC);
-	vase[a].Y = y-2;
-	writeToBuffer(vase[a]," /        \\ ",0xC);
-	vase[a].Y = y-1;
-	writeToBuffer(vase[a],"|          |",0xC);
-	vase[a].Y = y;
-	writeToBuffer(vase[a],"\\__________/",0xC);
-}
-
-void printBrokenVase(int a)
-{
-	// prints broken vase
-	vase[a].X;
-	int y = vase[a].Y;
-	vase[a].Y = y-6;
-	writeToBuffer(vase[a],"   _...._   ",0x0C);
-	vase[a].Y = y-5;
-	writeToBuffer(vase[a],"  ';-.-';'  ",0x0C);
-	vase[a].Y = y-4;
-	writeToBuffer(vase[a],"    }=={    ",0x0C);
-	vase[a].Y = y-3;
-	writeToBuffer(vase[a],"  .'    '.  ",0x0C);
-	vase[a].Y = y-2;
-	writeToBuffer(vase[a]," /        \\ ",0x0C);
-	vase[a].Y = y-1;
-	writeToBuffer(vase[a],"|  /\\     |",0x0C);
-	vase[a].Y = y;
-	writeToBuffer(vase[a],"\__/  \\/''''",0x0C);
-}
-
-void printHealth()
-{
-	// prints Health kit
-	int y = health.Y;
-	health.Y = y-6;
-	writeToBuffer(health," ___________",0x0A);
-	health.Y = y-5;
-	writeToBuffer(health," /        \\",0x0A);
-	health.Y = y-4;
-	writeToBuffer(health,"|          |",0x0A);
-	health.Y = y-3;
-	writeToBuffer(health,"|          |",0x0A);
-	health.Y = y-2;
-	writeToBuffer(health,"|   LIFE   |",0x0A);
-	health.Y = y-1;
-	writeToBuffer(health,"|          |",0x0A);
-	health.Y = y;
-	writeToBuffer(health," \\________/ ",0x0A);
-}
 
 void levelpausescreen()
 {
@@ -943,4 +799,149 @@ void gameover()
 	system("pause");
 	g_quitGame = true; // exit the loop and back to main menu  
 	return;
+}
+
+void printSack(int a)
+{
+	// prints sack
+	int y = sack[a].Y;
+	sack[a].Y = y-6;
+	writeToBuffer(sack[a]," ___________",0x0F);
+	sack[a].Y = y-5;
+	writeToBuffer(sack[a]," \\_________/",0x0F);
+	sack[a].Y = y-4;
+	writeToBuffer(sack[a]," /         \\ ",0x0F);
+	sack[a].Y = y-3;
+	writeToBuffer(sack[a],"|          |",0x0F);
+	sack[a].Y = y-2;
+	writeToBuffer(sack[a],"|   RICE   |",0x0F);
+	sack[a].Y = y-1;
+	writeToBuffer(sack[a],"|          |",0x0F);
+	sack[a].Y = y;
+	writeToBuffer(sack[a]," \\________/ ",0x0F);
+}
+
+void printBrokenSack(int a)
+{
+	// prints a broken sack
+	int x = sack[a].X;
+	int y = sack[a].Y;
+	sack[a].Y = y-6;
+	writeToBuffer(sack[a]," ___________",0xC);
+	sack[a].Y = y-5;
+	writeToBuffer(sack[a]," \\_________/",0xC);
+	sack[a].Y = y-4;
+	writeToBuffer(sack[a]," /         \\ ",0xC);
+	sack[a].Y = y-3;
+	writeToBuffer(sack[a],"|          |",0xC);
+	sack[a].Y = y-2;
+	writeToBuffer(sack[a],"|   RICE   |",0xC);
+	sack[a].Y = y-1;
+	sack[a].X = x-4;
+	writeToBuffer(sack[a]," ../          \...",0xC);
+	sack[a].Y = y;
+
+	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xC);
+	sack[a].X = x;
+}
+
+void printSackB()
+{
+	// prints bonus sack
+	int y = sackb.Y;
+	sackb.Y = y-6;
+	writeToBuffer(sackb," ___________",0x0E);
+	sackb.Y = y-5;
+	writeToBuffer(sackb," \\_________/",0x0E);
+	sackb.Y = y-4;
+	writeToBuffer(sackb," /         \\ ",0x0E);
+	sackb.Y = y-3;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y-2;
+	writeToBuffer(sackb,"|   RICE   |",0x0E);
+	sackb.Y = y-1;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y;
+	writeToBuffer(sackb," \\________/ ",0x0E);
+}
+
+void printBrokenSackB()
+{
+	int y = sackb.Y;
+	sackb.Y = y-6;
+	writeToBuffer(sackb," ___________",0x0E);
+	sackb.Y = y-5;
+	writeToBuffer(sackb," \\_________/",0x0E);
+	sackb.Y = y-4;
+	writeToBuffer(sackb," /         \\ ",0x0E);
+	sackb.Y = y-3;
+	writeToBuffer(sackb,"|          |",0x0E);
+	sackb.Y = y-2;
+	writeToBuffer(sackb,"|   RICE   |",0x0E);
+	sackb.Y = y-1;
+	writeToBuffer(sackb," /........\\ ",0x0E);
+	sackb.Y = y;
+	writeToBuffer(sackb,".::'''..'::' ",0x0E);
+}
+
+void printVase(int a)
+{
+	// prints vase
+	int y = vase[a].Y;
+	vase[a].Y = y-6;
+
+	writeToBuffer(vase[a],"   _...._   ",0xC);
+	vase[a].Y = y-5;
+	writeToBuffer(vase[a],"  ';-.-';'  ",0xC);
+	vase[a].Y = y-4;
+	writeToBuffer(vase[a],"    }=={    ",0xC);
+	vase[a].Y = y-3;
+	writeToBuffer(vase[a],"  .'    '.  ",0xC);
+	vase[a].Y = y-2;
+	writeToBuffer(vase[a]," /        \\ ",0xC);
+	vase[a].Y = y-1;
+	writeToBuffer(vase[a],"|          |",0xC);
+	vase[a].Y = y;
+	writeToBuffer(vase[a],"\\__________/",0xC);
+}
+
+void printBrokenVase(int a)
+{
+	// prints broken vase
+	vase[a].X;
+	int y = vase[a].Y;
+	vase[a].Y = y-6;
+	writeToBuffer(vase[a],"   _...._   ",0x0C);
+	vase[a].Y = y-5;
+	writeToBuffer(vase[a],"  ';-.-';'  ",0x0C);
+	vase[a].Y = y-4;
+	writeToBuffer(vase[a],"    }=={    ",0x0C);
+	vase[a].Y = y-3;
+	writeToBuffer(vase[a],"  .'    '.  ",0x0C);
+	vase[a].Y = y-2;
+	writeToBuffer(vase[a]," /        \\ ",0x0C);
+	vase[a].Y = y-1;
+	writeToBuffer(vase[a],"|  /\\     |",0x0C);
+	vase[a].Y = y;
+	writeToBuffer(vase[a],"\__/  \\/''''",0x0C);
+}
+
+void printHealth()
+{
+	// prints Health kit
+	int y = health.Y;
+	health.Y = y-6;
+	writeToBuffer(health," ___________",0x0A);
+	health.Y = y-5;
+	writeToBuffer(health," /        \\",0x0A);
+	health.Y = y-4;
+	writeToBuffer(health,"|          |",0x0A);
+	health.Y = y-3;
+	writeToBuffer(health,"|          |",0x0A);
+	health.Y = y-2;
+	writeToBuffer(health,"|   LIFE   |",0x0A);
+	health.Y = y-1;
+	writeToBuffer(health,"|          |",0x0A);
+	health.Y = y;
+	writeToBuffer(health," \\________/ ",0x0A);
 }
