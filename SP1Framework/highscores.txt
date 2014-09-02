@@ -1,11 +1,10 @@
-1     wow        2
-2     gg         1
-3     Player1    0
-4     Player2    0
-5     Player3    0
-6     Player4    0
-7     Player5    0
-8     Player6    0
-9     Player7    0
-10    Player8    0
-
+1     211        89
+2     n          9
+3     hi         6
+4     0          3
+5     wow        2
+6     a          2
+7     gg         1
+8     Player1    0
+9     Player2    0
+10    Player3    0

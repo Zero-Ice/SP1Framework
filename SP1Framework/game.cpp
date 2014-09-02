@@ -2,6 +2,10 @@
 //
 //
 #include "game.h"
+#include <Windows.h>
+#include <MMSystem.h>
+#include "sound.h"
+
 
 std::ostringstream ss;
 // Console size, width by height
@@ -12,6 +16,7 @@ double deltaTime;
 double timeFall = 0.0;
 bool keyPressed[K_COUNT];
 bool pause = false;
+Sound snd;
 
 const WORD colors[] =   {
 	                        0xA, 0xB, 0xC, 0xD, 0xE, 0xF,
@@ -93,6 +98,11 @@ void initGame()
 	sackb.Y = 0;
 	health.X = 0;
 	health.Y = 0;
+	snd.loadWave("sackbreaking", "sackbreaking.wav");
+    snd.loadWave("vasesmashing", "vasesmashing.wav");
+	snd.loadWave("gameover", "gameover.wav");
+	snd.loadWave("bonuscollect", "bonuscollect.wav");
+	
 }
 
 void shutdown()
@@ -277,6 +287,7 @@ void render()
 					else if (sack[a].Y > charLocation.Y)
 					{
 						printBrokenSack(a);
+						
 					}
 
 					//print bonus sack
@@ -403,6 +414,7 @@ void sackaction()
 			sack[sackNo].Y = 0;
 			//losing lives
 			lives--;
+			snd.playSound("sackbreaking");
 		}
 
 		// check if player catched the sacks
@@ -435,6 +447,7 @@ void sackbaction()
 		// sack resets to the top
 		sackb.X = 0;
 		sackb.Y = 0;
+		snd.playSound("sackbreaking");
 	}
 
 	// check if player catched the sacks
@@ -445,6 +458,7 @@ void sackbaction()
 		sackb.Y = 0;
 		// earn score for catching the sack
 		scores += 20;
+		snd.playSound("bonuscollect");
 	}
 	// sacks dropping
 	if(sackb.Y < charLocation.Y && sackb.X != 0 )
@@ -469,6 +483,7 @@ void vaseaction()
 			vase[vaseNo].Y = 0;
 			//lose 1 life when vase is catched
 			lives--; 
+			snd.playSound("vasesmashing");
 		}
 		// check if player missed the vase
 		if ( vase[vaseNo].Y > charLocation.Y )
@@ -476,6 +491,7 @@ void vaseaction()
 			// vase resets to the top
 			vase[vaseNo].X = 0;  
 			vase[vaseNo].Y = 0;
+			snd.playSound("vasesmashing");
 		}
 		// vase dropping
 		if(vase[vaseNo].Y < charLocation.Y && vase[vaseNo].X != 0 )
@@ -483,6 +499,7 @@ void vaseaction()
 			for ( int a = 0; a < ((charLocation.Y-2)/4); ++a )
 			{
 				++vase[vaseNo].Y;
+				
 			}
 		}
 
@@ -498,6 +515,7 @@ void healthaction()
 			//health resets to the top
 			health.X = 0;
 			health.Y = 0;
+			snd.playSound("sackbreaking");
 		}
 
 		// check if player caught the health
@@ -508,6 +526,7 @@ void healthaction()
 			health.Y = 0;
 			// earn lives
 			lives += 1;
+			snd.playSound("bonuscollect");
 		}
 		// health dropping
 		if(health.Y < charLocation.Y && health.X != 0 )
@@ -671,6 +690,7 @@ void levelpausescreen()
 void gameover()
 {
 	// this will print when player loses the game
+	snd.playSound("gameover");
 	message.X = 18;
 	message.Y = 5;
 	writeToBuffer(message,"   ___   _   __  __ ___ _____   _____ ___ ");
@@ -845,6 +865,7 @@ void printBrokenSack(int a)
 
 	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xC);
 	sack[a].X = x;
+	
 }
 
 void printSackB()
@@ -865,6 +886,7 @@ void printSackB()
 	writeToBuffer(sackb,"|          |",0x0E);
 	sackb.Y = y;
 	writeToBuffer(sackb," \\________/ ",0x0E);
+
 }
 
 void printBrokenSackB()

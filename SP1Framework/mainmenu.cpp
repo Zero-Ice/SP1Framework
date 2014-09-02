@@ -40,6 +40,7 @@ int mainmenu()
 	writeToBuffer(c,"                           Press[4] to exit",0x0F);
 	flushBufferToConsole();
 
+		
 	while ( input == 0 )//ask the player to press 1-4
 	{
 		choice=getch();
