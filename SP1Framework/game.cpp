@@ -249,9 +249,15 @@ void render()
 
 		else if(printpauselevel == false)
 		{
-			//cout sack
+			//print GAMEOVER
 			if ( lives <= 0)
 			{
+				c.X = ConsoleSize.X/2-11;
+				c.Y = ConsoleSize.Y/2;
+				writeToBuffer(c, "press ENTER to continue", 0x0D);
+				flushBufferToConsole();
+				std::cin.clear();
+				std::cin.ignore(INT_MAX,'\n');
 				gameover();
 			}
 			else if (lives > 0)
@@ -665,6 +671,7 @@ void levelpausescreen()
 void gameover()
 {
 	// this will print when player loses the game
+	clearBuffer(0x0F);
 	message.X = 18;
 	message.Y = 5;
 	writeToBuffer(message,"   ___   _   __  __ ___ _____   _____ ___ ");
@@ -728,7 +735,7 @@ void gameover()
 			{
 				gotoXY(message);
 				player1.name = "";
-				std::cin >> player1.name;
+				std::getline(std::cin,player1.name);
 				if ((player1.name).size() > 10)
 				{
 					message.Y++;
@@ -838,9 +845,8 @@ void printBrokenSack(int a)
 	writeToBuffer(sack[a],"|   RICE   |",0xC);
 	sack[a].Y = y-1;
 	sack[a].X = x-4;
-	writeToBuffer(sack[a]," ../          \...",0xC);
+	writeToBuffer(sack[a]," ../          \\...",0xC);
 	sack[a].Y = y;
-
 	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xC);
 	sack[a].X = x;
 }
@@ -867,6 +873,7 @@ void printSackB()
 
 void printBrokenSackB()
 {
+	int x = sackb.X;
 	int y = sackb.Y;
 	sackb.Y = y-6;
 	writeToBuffer(sackb," ___________",0x0E);
@@ -879,9 +886,11 @@ void printBrokenSackB()
 	sackb.Y = y-2;
 	writeToBuffer(sackb,"|   RICE   |",0x0E);
 	sackb.Y = y-1;
-	writeToBuffer(sackb," /........\\ ",0x0E);
+	sackb.X = x-4;
+	writeToBuffer(sackb," ../           \\... ",0x0E);
 	sackb.Y = y;
-	writeToBuffer(sackb,".::'''..'::' ",0x0E);
+	writeToBuffer(sackb,".:''.'.'.'.'.'.'':: ",0x0E);
+	sackb.X = x;
 }
 
 void printVase(int a)
@@ -931,7 +940,7 @@ void printHealth()
 	// prints Health kit
 	int y = health.Y;
 	health.Y = y-6;
-	writeToBuffer(health," ___________",0x0A);
+	writeToBuffer(health,"  ________",0x0A);
 	health.Y = y-5;
 	writeToBuffer(health," /        \\",0x0A);
 	health.Y = y-4;
