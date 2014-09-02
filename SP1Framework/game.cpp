@@ -759,17 +759,16 @@ void gameover()
 				gotoXY(message);
 				player1.name = "";
 				std::getline(std::cin,player1.name);
-				int space=0;
 				for(int g=0;g < player1.name.size(); ++g)
 				{
 					if(player1.name[g] == ' ')
-						++space;
+						player1.name[g] = '_';
 				}
-				if ((player1.name).size() > 10 || space > 0)
+				if (player1.name.size() > 10)
 				{
 					message.Y++;
-					message.X = ConsoleSize.X/2-30;
-					writeToBuffer(message,"Please enter a name with 10 characters or less without spaces.",0x0F);
+					message.X = ConsoleSize.X/2-23;
+					writeToBuffer(message,"Please enter a name with 10 characters or less.",0x0F);
 					flushBufferToConsole();
 					player1.name = "\0";
 				}
@@ -826,6 +825,11 @@ void gameover()
 	{
 		message.Y++;
 		getline(UpdatedHighscore, data);
+		for(int a = 0; a < data.size(); ++a)
+		{
+			if(data[a] == '_')
+				data[a]=' ';
+		}
 		ss.str("");
 		ss << data ;
 		writeToBuffer(message, ss.str());

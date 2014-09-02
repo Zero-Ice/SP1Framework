@@ -35,6 +35,11 @@ void highscorepage()
 	{
 		c.Y++;
 		getline(Highscore, data);
+		for(int a = 0; a < data.size(); ++a)
+		{
+			if(data[a] == '_')
+				data[a]=' ';
+		}
 		ss.str("");
 		ss << ":: "<< data;
 		writeToBuffer(c, ss.str());
