@@ -323,8 +323,8 @@ void render()
 				ss.str("");
 				ss << elapsedTime << "secs";
 				c.X = 0;
-				c.Y = 0;
-				writeToBuffer(c, ss.str(), 0x0F);
+				c.Y = 1;
+				writeToBuffer(c, ss.str(), 0x0D);
 
 				// Draw the location of the character
 				writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
@@ -332,7 +332,7 @@ void render()
 				//Draw the location of the lives
 				ss.str("");
 				ss << (char)3 << "x" << lives;
-				c.X = ConsoleSize.X - 15;
+				c.X = ConsoleSize.X - 4;
 				c.Y = 0;
 				writeToBuffer(c,ss.str(), 0xC); 
 
@@ -341,14 +341,14 @@ void render()
 				ss << "SCORE:"<< *highscore;
 				c.X = ConsoleSize.X/2 - 5;
 				c.Y = 0;
-				writeToBuffer(c, ss.str(),0xD);
+				writeToBuffer(c, ss.str(),0xE);
 
 				//Level display
 				ss.str("");
 				ss << "LEVEL " << level;
-				c.X = 12;
+				c.X = 0;
 				c.Y = 0;
-				writeToBuffer(c,ss.str(),0x5);
+				writeToBuffer(c,ss.str(),0xB);
 			}
 		}
 	}
@@ -736,6 +736,7 @@ void gameover()
 				{
 					message.Y++;
 					writeToBuffer(message,"Please enter a name with 10 characters or less:",0x0F);
+					flushBufferToConsole();
 					player1.name = "\0";
 				}
 			}
