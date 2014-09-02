@@ -12,9 +12,7 @@ void highscorepage()
 	
 	COORD c;
 	c.X = 15;
-
-
-	c.Y = 8;//43
+	c.Y = 8;
 	writeToBuffer(c, "= = = = = = = = = = = = = = = = = = = = = = = =" );
 	c.Y++;
 	writeToBuffer(c, "=: = = = = = = = = = = = = = = = = = = = = = :=" );
@@ -38,10 +36,19 @@ void highscorepage()
 		c.Y++;
 		getline(Highscore, data);
 		ss.str("");
-		ss << ":: "<< data << "                      ::" ;
+		ss << ":: "<< data;
 		writeToBuffer(c, ss.str());
 		
 	}
+	c.Y = 16;
+	for ( int a = 0; a < 10; a++ )
+	{
+		c.X = 60;
+		c.Y++;
+		writeToBuffer(c, "::");
+	}
+	c.X = 15;
+	
 	writeToBuffer(c,"::                                           ::" );
 	c.Y++;
 	writeToBuffer(c,"::                                           ::" );

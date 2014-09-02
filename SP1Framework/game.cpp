@@ -146,7 +146,8 @@ void update(double dt)
 	if(levelchecker != level)
 	{
 		++levelchecker;
-		printpauselevel = true;//print if true
+		difficulty += 0.2;
+		printpauselevel = true; //print if true
 		charLocation.X = 47;
 		charLocation.Y = 42;
 		for ( int a = 0; a < maxsack ; a++ )
@@ -184,13 +185,6 @@ void update(double dt)
 
 			healthaction(); //health pack action
 
-
-			// increase difficulty
-			if ( scores > x && difficulty < 0.5)
-			{
-				x += 50;
-				difficulty += 0.1;// reduce time to update
-			}
 
 			timeFall += (1.5-difficulty); //control time to update
 
@@ -265,9 +259,15 @@ void render()
 
 		else if(printpauselevel == false)
 		{
-			//cout sack
+			//print GAMEOVER
 			if ( lives <= 0)
 			{
+				c.X = ConsoleSize.X/2-11;
+				c.Y = ConsoleSize.Y/2;
+				writeToBuffer(c, "press ENTER to continue", 0x0D);
+				flushBufferToConsole();
+				std::cin.clear();
+				std::cin.ignore(INT_MAX,'\n');
 				gameover();
 			}
 			else if (lives > 0)
@@ -334,8 +334,8 @@ void render()
 				ss.str("");
 				ss << elapsedTime << "secs";
 				c.X = 0;
-				c.Y = 0;
-				writeToBuffer(c, ss.str(), 0x0F);
+				c.Y = 1;
+				writeToBuffer(c, ss.str(), 0x0D);
 
 				// Draw the location of the character
 				writeToBuffer(charLocation, "\\___________/", colors[colourIndicator]);
@@ -343,7 +343,7 @@ void render()
 				//Draw the location of the lives
 				ss.str("");
 				ss << (char)3 << "x" << lives;
-				c.X = ConsoleSize.X - 15;
+				c.X = ConsoleSize.X - 4;
 				c.Y = 0;
 				writeToBuffer(c,ss.str(), 0xC); 
 
@@ -352,14 +352,14 @@ void render()
 				ss << "SCORE:"<< *highscore;
 				c.X = ConsoleSize.X/2 - 5;
 				c.Y = 0;
-				writeToBuffer(c, ss.str(),0xD);
+				writeToBuffer(c, ss.str(),0xE);
 
 				//Level display
 				ss.str("");
 				ss << "LEVEL " << level;
-				c.X = 12;
+				c.X = 0;
 				c.Y = 0;
-				writeToBuffer(c,ss.str(),0x5);
+				writeToBuffer(c,ss.str(),0xB);
 			}
 		}
 	}
@@ -690,7 +690,11 @@ void levelpausescreen()
 void gameover()
 {
 	// this will print when player loses the game
+
 	snd.playSound("gameover");
+
+	clearBuffer(0x0F);
+
 	message.X = 18;
 	message.Y = 5;
 	writeToBuffer(message,"   ___   _   __  __ ___ _____   _____ ___ ");
@@ -703,6 +707,7 @@ void gameover()
 
 	
 	message.Y += 2;
+	message.X = 35;
 	ss.str("");
 	ss << "YOUR SCORE:" << *highscore;
 	writeToBuffer(message,ss.str());//show player's score
@@ -742,20 +747,23 @@ void gameover()
 			message.Y++;
 			writeToBuffer(message,"      \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
 			message.Y++;
-			message.X = 18;
+			message.X = 25;
 			writeToBuffer(message,"You had made it into the top ten!",0x0F);
 			message.Y++;
+			message.X += 7;
 			writeToBuffer(message, "Please enter your name:",0x0F);
 			flushBufferToConsole();
+			message.Y++;
 			while (player1.name == "\0") // storing player name in text file
 			{
 				gotoXY(message);
 				player1.name = "";
-				std::cin >> player1.name;
+				std::getline(std::cin,player1.name);
 				if ((player1.name).size() > 10)
 				{
 					message.Y++;
 					writeToBuffer(message,"Please enter a name with 10 characters or less:",0x0F);
+					flushBufferToConsole();
 					player1.name = "\0";
 				}
 			}
@@ -860,9 +868,8 @@ void printBrokenSack(int a)
 	writeToBuffer(sack[a],"|   RICE   |",0xC);
 	sack[a].Y = y-1;
 	sack[a].X = x-4;
-	writeToBuffer(sack[a]," ../          \...",0xC);
+	writeToBuffer(sack[a]," ../          \\...",0xC);
 	sack[a].Y = y;
-
 	writeToBuffer(sack[a],".:''.'.'.'.'.'.'':: ",0xC);
 	sack[a].X = x;
 	
@@ -891,6 +898,7 @@ void printSackB()
 
 void printBrokenSackB()
 {
+	int x = sackb.X;
 	int y = sackb.Y;
 	sackb.Y = y-6;
 	writeToBuffer(sackb," ___________",0x0E);
@@ -903,9 +911,11 @@ void printBrokenSackB()
 	sackb.Y = y-2;
 	writeToBuffer(sackb,"|   RICE   |",0x0E);
 	sackb.Y = y-1;
-	writeToBuffer(sackb," /........\\ ",0x0E);
+	sackb.X = x-4;
+	writeToBuffer(sackb," ../           \\... ",0x0E);
 	sackb.Y = y;
-	writeToBuffer(sackb,".::'''..'::' ",0x0E);
+	writeToBuffer(sackb,".:''.'.'.'.'.'.'':: ",0x0E);
+	sackb.X = x;
 }
 
 void printVase(int a)
@@ -955,7 +965,7 @@ void printHealth()
 	// prints Health kit
 	int y = health.Y;
 	health.Y = y-6;
-	writeToBuffer(health," ___________",0x0A);
+	writeToBuffer(health,"  ________",0x0A);
 	health.Y = y-5;
 	writeToBuffer(health," /        \\",0x0A);
 	health.Y = y-4;
