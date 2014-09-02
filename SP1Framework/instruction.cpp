@@ -16,8 +16,10 @@ int instruction()
 	writeToBuffer(c," |___|_|\\_|___/ |_| |_|_\\\\___/ \\___| |_| |___\\___/|_|\\_|___/");
 
 
-    c.Y++;
-	writeToBuffer(c,"Use LEFT and RIGHT arrow keys to move character to catch the rice sacks.");
+    c.Y += 2;
+	writeToBuffer(c, "How to play: " );
+	c.Y += 2;
+	writeToBuffer(c,"Move left and right to catch the rice sacks.");
     c.Y++;
 	writeToBuffer(c,"Catch as many rice sacks as you can, if the rice sack hits the floor you lose a life");
 	c.Y++;
@@ -26,10 +28,28 @@ int instruction()
 	writeToBuffer(c, "Try to catch bonus sacks that gives more points");
 	c.Y++;
 	writeToBuffer(c, "Catching Health Kits gives you a life");
+	c.Y += 2;
+	writeToBuffer(c, "Controls: ");
+	c.Y += 2;
+	writeToBuffer(c, "Move left - Left arrow key" );
+	c.Y++;
+	writeToBuffer(c, "Move right - Right arrow key");
 	c.Y++;
 	writeToBuffer(c, "Press p while in game to pause" );
-	c.Y += 3;
-	writeToBuffer(c,"Press 5 to return to main menu");
+	c.Y++;
+	writeToBuffer(c, "Press escape key to quit game" );
+	c.Y += 5;
+
+	writeToBuffer(c, "                       ___   _                 _                  ");
+	c.Y++;
+	writeToBuffer(c, "  _ __ _ _ ___ ______ | __| | |_ ___   _ _ ___| |_ _  _ _ _ _ _   ");
+	c.Y++;
+	writeToBuffer(c, " | '_ \\ '_/ -_|_-<_-< |__ \\ |  _/ _ \\ | '_/ -_)  _| || | '_| ' \\  ");
+	c.Y++;
+	writeToBuffer(c, " | .__/_| \\___/__/__/ |___/  \\__\\___/ |_| \\___|\\__|\\_,_|_| |_||_| ");
+	c.Y++;
+	writeToBuffer(c, " |_|                                                              ");
+	
 	flushBufferToConsole();
 	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu
 	{

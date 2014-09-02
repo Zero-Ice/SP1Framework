@@ -11,7 +11,7 @@ void highscorepage()
 	Highscore.open ("highscores.txt");
 	
 	COORD c;
-	c.X = 15;
+	c.X = 18;
 	c.Y = 8;
 	writeToBuffer(c, "= = = = = = = = = = = = = = = = = = = = = = = =" );
 	c.Y++;
@@ -43,11 +43,11 @@ void highscorepage()
 	c.Y = 16;
 	for ( int a = 0; a < 10; a++ )
 	{
-		c.X = 60;
+		c.X = 63;
 		c.Y++;
 		writeToBuffer(c, "::");
 	}
-	c.X = 15;
+	c.X = 18;
 	
 	writeToBuffer(c,"::                                           ::" );
 	c.Y++;
@@ -59,8 +59,17 @@ void highscorepage()
 	flushBufferToConsole();
 	int input = 0;
 	std::string choice;
+	c.Y+= 5;
+	c.X = 10;
+	writeToBuffer(c, "                       ___   _                 _                  ");
 	c.Y++;
-	writeToBuffer(c,"Press 5 to return to main menu");
+	writeToBuffer(c, "  _ __ _ _ ___ ______ | __| | |_ ___   _ _ ___| |_ _  _ _ _ _ _   ");
+	c.Y++;
+	writeToBuffer(c, " | '_ \\ '_/ -_|_-<_-< |__ \\ |  _/ _ \\ | '_/ -_)  _| || | '_| ' \\  ");
+	c.Y++;
+	writeToBuffer(c, " | .__/_| \\___/__/__/ |___/  \\__\\___/ |_| \\___|\\__|\\_,_|_| |_||_| ");
+	c.Y++;
+	writeToBuffer(c, " |_|                                                              ");
 	flushBufferToConsole();
 	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu
 	{

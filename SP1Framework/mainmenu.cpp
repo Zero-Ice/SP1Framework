@@ -13,7 +13,7 @@ int mainmenu()
 	//5 - link back to main menu
 	COORD c;
 	c.X = 0;
-	c.Y = 15;
+	c.Y = 5;
     writeToBuffer(c,"            ***********      ***     *******    ***********  ___________",0x0F);
 	c.Y++;
 	writeToBuffer(c,"            ***      ***     ***    *********   ***********  \\_________/",0x0F);
@@ -31,13 +31,53 @@ int mainmenu()
 	writeToBuffer(c,"            ***        ***   ***     *******    ***********  \\_________/",0x0F);
 
 	c.Y += 2;
-	writeToBuffer(c,"                             Press[1] to start ",0x0F);
+	c.X = 10;
+	writeToBuffer(c,"  ___ ___ ___ ___ ___  ");
 	c.Y++;
-	writeToBuffer(c,"                             Press[2] for instructions",0x0F);
+	writeToBuffer(c," | _ \\ _ \\ __/ __/ __| ");
 	c.Y++;
-	writeToBuffer(c,"                             Press[3] for scoreboard",0x0F);
+	writeToBuffer(c," |  _/   / _|\\__ \\__ \\ ");
 	c.Y++;
-	writeToBuffer(c,"                             Press[4] to exit",0x0F);
+	writeToBuffer(c," |_| |_|_\\___|___/___/ ");
+	c.Y++;
+	writeToBuffer(c,"  _   _              _            ");
+	c.Y++;
+	writeToBuffer(c," / | | |_ ___   _ __| |__ _ _  _  ");
+	c.Y++;
+	writeToBuffer(c," | | |  _/ _ \\ | '_ \\ / _` | || | ");
+	c.Y++;
+	writeToBuffer(c," |_|  \\__\\___/ | .__/_\\__,_|\\_, | ");
+	c.Y++;
+	writeToBuffer(c,"               |_|          |__/  ");
+	c.Y++;
+	writeToBuffer(c,"  ___    __           _         _               _   _              ");
+	c.Y++;
+	writeToBuffer(c," |_  )  / _|___ _ _  (_)_ _  __| |_ _ _ _  _ __| |_(_)___ _ _  ___ ");
+	c.Y++;
+	writeToBuffer(c,"  / /  |  _/ _ \\ '_| | | ' \\(_-<  _| '_| || / _|  _| / _ \\ ' \\(_-< ");
+	c.Y++;
+	writeToBuffer(c," /___| |_| \\___/_|   |_|_||_/__/\\__|_|  \\_,_\\__|\\__|_\\___/_||_/__/ ");
+	c.Y++;
+	writeToBuffer(c,"  ____   __           _    _      _                           ");
+	c.Y++;
+	writeToBuffer(c," |__ /  / _|___ _ _  | |_ (_)__ _| |_  ___ __ ___ _ _ ___ ___ ");
+	c.Y++;
+	writeToBuffer(c,"  |_ \\ |  _/ _ \\ '_| | ' \\| / _` | ' \\(_-</ _/ _ \\ '_/ -_|_-< ");
+	c.Y++;
+	writeToBuffer(c," |___/ |_| \\___/_|   |_||_|_\\__, |_||_/__/\\__\\___/_| \\___/__/ ");
+	c.Y++;
+	writeToBuffer(c,"                            |___/                             ");
+	c.Y++;
+	writeToBuffer(c,"  _ _    _                 _ _    ");
+	c.Y++;
+	writeToBuffer(c," | | |  | |_ ___   _____ _(_) |_  ");
+	c.Y++;
+	writeToBuffer(c," |_  _| |  _/ _ \\ / -_) \\ / |  _| ");
+	c.Y++;
+	writeToBuffer(c,"   |_|   \\__\\___/ \\___/_\\_\\_|\\__| ");
+	c.Y++;
+
+
 	flushBufferToConsole();
 
 		
