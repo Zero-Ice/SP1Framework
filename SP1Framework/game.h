@@ -67,7 +67,7 @@ void sackbaction();			// bonus sacks action
 void vaseaction();          // vases action
 void healthaction();	    // health pack action
 
-void levelpausescreen();     // print out paused level screen like LEVEL 2, etc
+void levelscreen();     // print out paused level screen like LEVEL 2, etc
 void gameover();            // print out gameover screen
 void printSack(int a);      // print out sack
 void printSackB();			// prints a bonus sack

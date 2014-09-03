@@ -11,9 +11,9 @@ std::ostringstream ss;
 // Console size, width by height
 COORD ConsoleSize = {85, 55};
 
-double elapsedTime;
+double elapsedTime; // Time eapsed
 double deltaTime;
-double timeFall = 0.0;
+double timeFall = 0.0;// Time to update
 bool keyPressed[K_COUNT];
 bool pause = false;
 Sound snd;
@@ -56,12 +56,11 @@ int vaseLocationDecider; // decides where the vase will be spawned
 
 int scores=0; // score of player
 int* highscore = &scores; // pointer to point at score of the player
-int x = 50; // this variable sets the amount of score that increases difficulty, eg. difficulty increases after 100 score. 
 double difficulty = 0.0; // this variable increase the speed of the objects fall by reducing the time to update
 int lives = 3; // Amount of lives the player has
 int level = 1; //Current game level
 int levelchecker = 0;//check whether has the level increses
-bool printpauselevel = true;//check whether to print out the level screen 
+bool printlevelscreen = true;//check whether to print out the level screen 
 
 void initMainMenu()
 {
@@ -75,13 +74,12 @@ void initGame()
 	g_quitGame = false; // set to false to enable the game to be playable
     elapsedTime = 0.0;  //records the time elapsed after starting the program
 	scores=0; //the score of the player. Default value = 0
-	timeFall = 0.0;
-	x = 50; //This variable sets the score where the difficulty increases.
-	difficulty = 0.0;
+	timeFall = 0.0;// Sets time fall to 0
+	difficulty = 0.0;//Sets reduce speed to 0
 	lives = 3; //Sets the amount of lives at the start. Default = 3
 	level = 1; //Sets level to level 1
 	levelchecker = 0;//Sets level checker to 0 so that it print out level 1 screen
-	printpauselevel = true;
+	printlevelscreen = true;
 
 	// Set precision for floating point output
 	charLocation.X = 47;
@@ -133,21 +131,21 @@ void update(double dt)
 	}
 
 	//Update Level
-	if (scores >= 5 && scores < 10) // 5 - 100
+	if (scores >= 5 && scores < 10) // score(50 - 100)
 		level = 2;
-	if (scores >= 15 && scores < 20) // 100-300
+	if (scores >= 15 && scores < 20) // score(100 - 300)
 		level = 3; 
-	if (scores >= 25 && scores < 30) // 300-350
+	if (scores >= 25 && scores < 30) // score(300 - 350)
 		level = 4;
-	if (scores >= 35) //350
+	if (scores >= 35) // score(> 350) 
 		level = 5;
 
 	//check whether to print out the level screen
 	if(levelchecker != level)
 	{
 		++levelchecker;
-		difficulty += 0.2;
-		printpauselevel = true; //print if true
+		difficulty += 0.2;//reduce time to update
+		printlevelscreen = true; //print if true
 		charLocation.X = 47;
 		charLocation.Y = 42;
 		for ( int a = 0; a < maxsack ; a++ )
@@ -164,9 +162,9 @@ void update(double dt)
 	}
 
 	if(keyPressed[K_SPACE]) //press space to continue to next level
-		printpauselevel = false;
+		printlevelscreen = false;
 	
-	if(pause == false && printpauselevel == false) // checks if game is not paused and game is not transitioning to next level
+	if(pause == false && printlevelscreen == false) // checks if game is not paused and game is not transitioning to next level
 	{
 		// get the delta time
 		elapsedTime += dt;
@@ -201,7 +199,7 @@ void update(double dt)
 			Beep(600, 100);
 			
 		}
-		if (keyPressed[K_RIGHT] && charLocation.X < 59 && printpauselevel == false)
+		if (keyPressed[K_RIGHT] && charLocation.X < 59 && printlevelscreen == false)
 		{
 			
 			for ( int a = 0; a < 19; a++ )
@@ -254,10 +252,10 @@ void render()
 	}
 	else if(pause == false) // game will run if not paused
 	{
-		if(printpauselevel == true)
-			levelpausescreen();
+		if(printlevelscreen == true)
+			levelscreen();
 
-		else if(printpauselevel == false)
+		else if(printlevelscreen == false)
 		{
 			//print GAMEOVER
 			if ( lives <= 0)
@@ -539,149 +537,142 @@ void healthaction()
 }
 
 
-void levelpausescreen()
+void levelscreen()
 {
-	//Level paused screen
-	if(printpauselevel == true && level == 1)//Level 1
+	COORD c;
+	c.X = 10;
+	c.Y = 11;
+	//Level screen
+	if(printlevelscreen == true && level == 1)//Level 1
 	{
-		COORD c;
-		c.X = 0;
-		c.Y = 11;
-		writeToBuffer(c,"          **        ********   **       **   ********   **         ***",0x0F);//+5
+		writeToBuffer(c,"**        ********   **       **   ********   **         ***",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        ********   **       **   ********   **        ****",0x0F);
+		writeToBuffer(c,"**        ********   **       **   ********   **        ****",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        **          **     **    **         **          **",0x0F);
+		writeToBuffer(c,"**        **          **     **    **         **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        *******     **     **    *******    **          **",0x0F);
+		writeToBuffer(c,"**        *******     **     **    *******    **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        *******      **   **     *******    **          **",0x0F);
+		writeToBuffer(c,"**        *******      **   **     *******    **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        **           **   **     **         **          **",0x0F);
+		writeToBuffer(c,"**        **           **   **     **         **          **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          *******   ********      ** **      ********   *******   ******",0x0F);
+		writeToBuffer(c,"*******   ********      ** **      ********   *******   ******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          *******   ********       ***       ********   *******   ******",0x0F);//62/2 =31  after v + 2
+		writeToBuffer(c,"*******   ********       ***       ********   *******   ******",0x0F);
 		c.Y += 2;
-		writeToBuffer(c,"                              Catch the rice sacks!",0x0F);
+		writeToBuffer(c,"                    Catch the rice sacks!",0x0F);
+		c.Y++;
+		writeToBuffer(c,"                Speed increses every level!",0x0C);
 		c.Y += 2;
-		writeToBuffer(c,"                   CURRENT SCORE: 0           NEXT LEVEL: 50",0x07);
+		writeToBuffer(c,"         CURRENT SCORE: 0           NEXT LEVEL: 50",0x07);
 		c.Y += 2;
-		writeToBuffer(c,"                     Press p any time in the game to pause.",0x0D);
+		writeToBuffer(c,"           Press p any time in the game to pause.",0x0D);
 		c.Y ++;
-		writeToBuffer(c,"                     Press ESC any time in the game to quit.",0x0D);
+		writeToBuffer(c,"           Press ESC any time in the game to quit.",0x0D);
 		c.Y ++;
-		writeToBuffer(c,"                             Press space to continue",0x0D);
+		writeToBuffer(c,"                   Press space to continue",0x0D);
 	}
-	else if(printpauselevel == true && level == 2)//Level 2
+	else if(printlevelscreen == true && level == 2)//Level 2
+	{
+		writeToBuffer(c,"**        ********   **       **   ********   **         *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        ********   **       **   ********   **        **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        **          **     **    **         **               **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        *******     **     **    *******    **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        *******      **   **     *******    **           **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        **           **   **     **         **         **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"*******   ********      ** **      ********   *******   ********",0x0F);
+		c.Y++;
+		writeToBuffer(c,"*******   ********       ***       ********   *******   ********",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"                  Watch out for red vases!",0x0C);
+		c.Y += 2;
+		writeToBuffer(c,"        CURRENT SCORE: 50          NEXT LEVEL: 100",0x07);
+		c.Y += 2;
+		writeToBuffer(c,"                  Press space to continue",0x0D);
+	}
+	else if(printlevelscreen == true && level == 3)//Level 3
+	{
+		writeToBuffer(c,"**        ********   **       **   ********   **         *******",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        ********   **       **   ********   **        **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        **          **     **    **         **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        *******     **     **    *******    **          *****",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        *******      **   **     *******    **          *****",0x0F);
+		c.Y++;
+		writeToBuffer(c,"**        **           **   **     **         **              **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"*******   ********      ** **      ********   *******   **     **",0x0F);
+		c.Y++;
+		writeToBuffer(c,"*******   ********       ***       ********   *******    *******",0x0F);
+		c.Y += 2;
+		writeToBuffer(c,"               Wow! Bonus sacks -> 20 points!",0x0E);
+		c.Y += 2;
+		writeToBuffer(c,"        CURRENT SCORE: 100          NEXT LEVEL: 300",0x07);
+		c.Y += 2;
+		writeToBuffer(c,"                  Press space to continue",0x0D);
+	}
+	else if(printlevelscreen == true && level == 4)//Level 4
 	{
 		COORD c;
 		c.X = 0;
 		c.Y = 11;
-		writeToBuffer(c,"          **        ********   **       **   ********   **         *******",0x0F);
+		writeToBuffer(c,"**        ********   **       **   ********   **            **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        ********   **       **   ********   **        **     **",0x0F);
+		writeToBuffer(c,"**        ********   **       **   ********   **           * *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        **          **     **    **         **               **",0x0F);
+		writeToBuffer(c,"**        **          **     **    **         **          *  *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        *******     **     **    *******    **              **",0x0F);
+		writeToBuffer(c,"**        *******     **     **    *******    **         *   *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        *******      **   **     *******    **           **",0x0F);
+		writeToBuffer(c,"**        *******      **   **     *******    **        *    *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        **           **   **     **         **         **",0x0F);
+		writeToBuffer(c,"**        **           **   **     **         **        *******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          *******   ********      ** **      ********   *******   ********",0x0F);
+		writeToBuffer(c,"*******   ********      ** **      ********   *******        *",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          *******   ********       ***       ********   *******   ********",0x0F);
+		writeToBuffer(c,"*******   ********       ***       ********   *******        *",0x0F);
 		c.Y += 2;
-		writeToBuffer(c,"                            Watch out for red vases!",0x0C);
-		c.Y++;
-		writeToBuffer(c,"                                 Speed increse!",0x0C);
+		writeToBuffer(c,"            Yeah! Health pack -> gain 1 lives!",0x0A);
 		c.Y += 2;
-		writeToBuffer(c,"                  CURRENT SCORE: 50          NEXT LEVEL: 100",0x07);
+		writeToBuffer(c,"        CURRENT SCORE: 50          NEXT LEVEL: 100",0x07);
 		c.Y += 2;
-		writeToBuffer(c,"                            Press space to continue",0x0D);
+		writeToBuffer(c,"                  Press space to continue",0x0D);
 	}
-	else if(printpauselevel == true && level == 3)//Level 3
+	else if(printlevelscreen == true && level == 5)//Level 5
 	{
-		COORD c;
-		c.X = 0;
-		c.Y = 11;
-		writeToBuffer(c,"          **        ********   **       **   ********   **         *******",0x0F);
+		writeToBuffer(c,"**        ********   **       **   ********   **        ********",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        ********   **       **   ********   **        **     **",0x0F);
+		writeToBuffer(c,"**        ********   **       **   ********   **        **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        **          **     **    **         **              **",0x0F);
+		writeToBuffer(c,"**        **          **     **    **         **        **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        *******     **     **    *******    **          *****",0x0F);
+		writeToBuffer(c,"**        *******     **     **    *******    **        **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        *******      **   **     *******    **          *****",0x0F);
+		writeToBuffer(c,"**        *******      **   **     *******    **        *******",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          **        **           **   **     **         **              **",0x0F);
+		writeToBuffer(c,"**        **           **   **     **         **             **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          *******   ********      ** **      ********   *******   **     **",0x0F);
+		writeToBuffer(c,"*******   ********      ** **      ********   *******   **    **",0x0F);
 		c.Y++;
-		writeToBuffer(c,"          *******   ********       ***       ********   *******    *******",0x0F);
+		writeToBuffer(c,"*******   ********       ***       ********   *******    ******",0x0F);
 		c.Y += 2;
-		writeToBuffer(c,"                         Wow! Bonus sacks -> 20 points!",0x0E);
+		c.X -= 5;
+		writeToBuffer(c,"Congratulations for making this far and now try to make it into to top ten",0x0B);
 		c.Y += 2;
-		writeToBuffer(c,"                  CURRENT SCORE: 100          NEXT LEVEL: 300",0x07);
+		c.X += 5;
+		writeToBuffer(c,"          CURRENT SCORE: 350           MAX LEVEL",0x07);
 		c.Y += 2;
-		writeToBuffer(c,"                            Press space to continue",0x0D);
-	}
-	else if(printpauselevel == true && level == 4)//Level 4
-	{
-		COORD c;
-		c.X = 0;
-		c.Y = 11;
-		writeToBuffer(c,"          **        ********   **       **   ********   **            **",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        ********   **       **   ********   **           * *",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        **          **     **    **         **          *  *",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        *******     **     **    *******    **         *   *",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        *******      **   **     *******    **        *    *",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        **           **   **     **         **        *******",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          *******   ********      ** **      ********   *******        *",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          *******   ********       ***       ********   *******        *",0x0F);
-		c.Y += 2;
-		writeToBuffer(c,"                      Yeah! Health pack -> gain 1 lives!",0x0A);
-		c.Y += 2;
-		writeToBuffer(c,"                  CURRENT SCORE: 50          NEXT LEVEL: 100",0x07);
-		c.Y += 2;
-		writeToBuffer(c,"                            Press space to continue",0x0D);
-	}
-	else if(printpauselevel == true && level == 5)//Level 5
-	{
-		COORD c;
-		c.X = 0;
-		c.Y = 11;
-		writeToBuffer(c,"          **        ********   **       **   ********   **        ********",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        ********   **       **   ********   **        **",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        **          **     **    **         **        **",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        *******     **     **    *******    **        **",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        *******      **   **     *******    **        *******",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          **        **           **   **     **         **             **",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          *******   ********      ** **      ********   *******   **    **",0x0F);
-		c.Y++;
-		writeToBuffer(c,"          *******   ********       ***       ********   *******    ******",0x0F);
-		c.Y += 2;
-		writeToBuffer(c,"     Congratulations for making this far and now try to make it into to top ten",0x0B);
-		c.Y += 2;
-		writeToBuffer(c,"                    CURRENT SCORE: 350           MAX LEVEL",0x07);
-		c.Y += 2;
-		writeToBuffer(c,"                            Press space to continue",0x0D);
+		writeToBuffer(c,"                  Press space to continue",0x0D);
 	}
 
 	flushBufferToConsole();
