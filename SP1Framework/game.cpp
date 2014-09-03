@@ -19,9 +19,9 @@ bool pause = false;
 Sound snd;
 
 const WORD colors[] =   {
-	                        0xA, 0xB, 0xC, 0xD, 0xE, 0xF,
-	                        0x1, 0x2, 0x3, 0x4, 0x5, 0x6
-	                        };
+	                        0xA, 0xB, 0xC, 0xD, 0xE, 0xF
+	                        
+	                    };
 	
 int colourIndicator;
 // Game specific variables here
@@ -425,7 +425,7 @@ void sackaction()
 			sack[sackNo].Y = 0;
 			// earn score for catching the sack
 			++scores;
-			colourIndicator = rand() % 12;
+			colourIndicator = rand() % 6;
 		}
 		// sacks dropping
 		if(sack[sackNo].Y < charLocation.Y && sack[sackNo].X != 0 )
