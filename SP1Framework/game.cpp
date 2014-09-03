@@ -131,13 +131,13 @@ void update(double dt)
 	}
 
 	//Update Level
-	if (scores >= 5 && scores < 10) // score(50 - 100)
+	if (scores >= 5 && scores < 10) // 50 - 100
 		level = 2;
-	if (scores >= 15 && scores < 20) // score(100 - 300)
+	if (scores >= 15 && scores < 20) // 100-300
 		level = 3; 
-	if (scores >= 25 && scores < 30) // score(300 - 350)
+	if (scores >= 50 && scores < 70) // 300-350
 		level = 4;
-	if (scores >= 35) // score(> 350) 
+	if (scores >= 70) //350
 		level = 5;
 
 	//check whether to print out the level screen
