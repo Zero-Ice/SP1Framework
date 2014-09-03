@@ -65,7 +65,7 @@ bool printlevelscreen = true;//check whether to print out the level screen
 void initMainMenu()
 {
 	// Set precision for floating point output
-    initConsole(ConsoleSize, "SP1 Framework");
+    initConsole(ConsoleSize, "RICE");
 }
 
 void initGame()
