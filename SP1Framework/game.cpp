@@ -60,7 +60,7 @@ int x = 50; // this variable sets the amount of score that increases difficulty,
 double difficulty = 0.0; // this variable increase the speed of the objects fall by reducing the time to update
 int lives = 3; // Amount of lives the player has
 int level = 1; //Current game level
-int levelchecker = 1;//check current level
+int levelchecker = 0;//check whether has the level increses
 bool printpauselevel = true;//check whether to print out the level screen 
 
 void initMainMenu()
@@ -79,8 +79,8 @@ void initGame()
 	x = 50; //This variable sets the score where the difficulty increases.
 	difficulty = 0.0;
 	lives = 3; //Sets the amount of lives at the start. Default = 3
-	level = 1;
-	levelchecker = 0;
+	level = 1; //Sets level to level 1
+	levelchecker = 0;//Sets level checker to 0 so that it print out level 1 screen
 	printpauselevel = true;
 
 	// Set precision for floating point output
@@ -695,15 +695,15 @@ void gameover()
 
 	clearBuffer(0x0F);
 
-	message.X = 18;
+	message.X = 20;
 	message.Y = 5;
-	writeToBuffer(message,"   ___   _   __  __ ___ _____   _____ ___ ");
+	writeToBuffer(message,"  ___   _   __  __ ___ _____   _____ ___");
 	message.Y++;
-	writeToBuffer(message,"  / __| /_\\ |  \\/  | __/ _ \\ \\ / / __| _ \\ ");
+	writeToBuffer(message," / __| /_\\ |  \\/  | __/ _ \\ \\ / / __| _ \\");
 	message.Y++;
-	writeToBuffer(message," | (_ |/ _ \\| |\\/| | _| (_) \\ V /| _||   / ");
+	writeToBuffer(message,"| (_ |/ _ \\| |\\/| | _| (_) \\ V /| _||   /");
 	message.Y++;
-	writeToBuffer(message,"  \\___/_/ \\_\\_|  |_|___\\___/ \\_/ |___|_|_\\ ");
+	writeToBuffer(message," \\___/_/ \\_\\_|  |_|___\\___/ \\_/ |___|_|_\\");
 
 	
 	message.Y += 2;
@@ -737,20 +737,20 @@ void gameover()
 	{
 		if(player1.highscore > player[f].highscore)
 		{
-			message.X = 0;
+			message.X = 5;
 			message.Y ++;
-			writeToBuffer(message,"       ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___  ");
+			writeToBuffer(message,"  ___ ___  _  _  ___ ___    _ _____ _   _ _      _ _____ ___ ___  _  _ ___");
 			message.Y++;
-			writeToBuffer(message,"      / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __| ");
+			writeToBuffer(message," / __/ _ \\| \\| |/ __| _ \\  /_\\_   _| | | | |    /_\\_   _|_ _/ _ \\| \\| / __|");
 			message.Y++;
-			writeToBuffer(message,"     | (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\ ");
+			writeToBuffer(message,"| (_| (_) | .` | (_ |   / / _ \\| | | |_| | |__ / _ \\| |  | | (_) | .` \\__ \\");
 			message.Y++;
-			writeToBuffer(message,"      \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/ ");
+			writeToBuffer(message," \\___\\___/|_|\\_|\\___|_|_\\/_/ \\_\\_|  \\___/|____/_/ \\_\\_| |___\\___/|_|\\_|___/");
 			message.Y++;
 			message.X = 25;
 			writeToBuffer(message,"You had made it into the top ten!",0x0F);
 			message.Y++;
-			message.X += 7;
+			message.X += 5;
 			writeToBuffer(message, "Please enter your name:",0x0F);
 			flushBufferToConsole();
 			message.Y++;
@@ -787,6 +787,7 @@ void gameover()
 	}
 	if( f == 9 ) // if player did not beat highscore
 	{
+		message.X = 19;
 		message.Y ++;
 		writeToBuffer(message,"Sorry, you did not make it into the top ten.",0x0F);
 		flushBufferToConsole();
@@ -818,9 +819,17 @@ void gameover()
 
 	//print out updated highscores from text file
 	std::ifstream UpdatedHighscore("highscores.txt");
+	message.X = 25;
+	message.Y = 20;
+	writeToBuffer(message,"= = = = = = = = = = = = = = = =",0x0F);
 	message.Y++;
-	writeToBuffer(message,"Rank  Player     Score",0x0F);
+	writeToBuffer(message,"=: = = = = = = = = = = = = = :=",0x0F);
 	message.Y++;
+	writeToBuffer(message,"::                           ::",0x0F);
+	message.Y++;
+	writeToBuffer(message,"::   Rank  Player     Score  ::",0x0F);
+	message.Y++;
+	writeToBuffer(message,"::                           ::",0x0F);
 	while (!UpdatedHighscore.eof())//print out position, player's name and highscore one by one starting from first
 	{
 		message.Y++;
@@ -831,10 +840,25 @@ void gameover()
 				data[a]=' ';
 		}
 		ss.str("");
-		ss << data ;
+		ss << "::   "<< data;
 		writeToBuffer(message, ss.str());
 	}
+	message.X = 54;
+	message.Y = 24;
+	for ( int a = 0; a < 10; a++ )
+	{
+		message.Y++;
+		writeToBuffer(message, "::");
+	}
 	UpdatedHighscore.close();
+
+	message.X = 25;
+	message.Y++;
+	writeToBuffer(message,"::                           ::",0x0F);
+	message.Y++;
+	writeToBuffer(message,"=: = = = = = = = = = = = = = :=",0x0F);
+	message.Y++;
+	writeToBuffer(message,"= = = = = = = = = = = = = = = =",0x0F);
 
 	flushBufferToConsole();
 	system("pause");

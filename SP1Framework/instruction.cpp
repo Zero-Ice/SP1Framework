@@ -5,18 +5,19 @@ int instruction()
 	std::string choice;
 	int input = 0;
 	COORD c;
-	c.X = 0;
+	c.X = 10;
 	c.Y = 1;
-	writeToBuffer(c,"  ___ _  _ ___ _____ ___ _   _  ___ _____ ___ ___  _  _ ___ ");
+	writeToBuffer(c," ___ _  _ ___ _____ ___ _   _  ___ _____ ___ ___  _  _ ___ ");
 	c.Y++;
-	writeToBuffer(c," |_ _| \\| / __|_   _| _ \\ | | |/ __|_   _|_ _/ _ \\| \\| / __|");
+	writeToBuffer(c,"|_ _| \\| / __|_   _| _ \\ | | |/ __|_   _|_ _/ _ \\| \\| / __|");
 	c.Y++;
-	writeToBuffer(c,"  | || .` \\__ \\ | | |   / |_| | (__  | |  | | (_) | .` \\__ \\ ");
+	writeToBuffer(c," | || .` \\__ \\ | | |   / |_| | (__  | |  | | (_) | .` \\__ \\ ");
 	c.Y++;
-	writeToBuffer(c," |___|_|\\_|___/ |_| |_|_\\\\___/ \\___| |_| |___\\___/|_|\\_|___/");
+	writeToBuffer(c,"|___|_|\\_|___/ |_| |_|_\\\\___/ \\___| |_| |___\\___/|_|\\_|___/");
 
-
-    c.Y += 2;
+	
+	c.X = 1;
+    c.Y += 3;
 	writeToBuffer(c, "How to play: " );
 	c.Y += 2;
 	writeToBuffer(c,"Move left and right to catch the rice sacks.");
@@ -28,7 +29,7 @@ int instruction()
 	writeToBuffer(c, "Try to catch bonus sacks that gives more points");
 	c.Y++;
 	writeToBuffer(c, "Catching Health Kits gives you a life");
-	c.Y += 2;
+	c.Y += 3;
 	writeToBuffer(c, "Controls: ");
 	c.Y += 2;
 	writeToBuffer(c, "Move left - Left arrow key" );
@@ -39,16 +40,17 @@ int instruction()
 	c.Y++;
 	writeToBuffer(c, "Press escape key to quit game" );
 	c.Y += 5;
-
-	writeToBuffer(c, "                       ___   _                 _                  ");
+	
+	c.X = 10;
+	writeToBuffer(c, "                      ___   _                 _                  ");
 	c.Y++;
-	writeToBuffer(c, "  _ __ _ _ ___ ______ | __| | |_ ___   _ _ ___| |_ _  _ _ _ _ _   ");
+	writeToBuffer(c, " _ __ _ _ ___ ______ | __| | |_ ___   _ _ ___| |_ _  _ _ _ _ _   ");
 	c.Y++;
-	writeToBuffer(c, " | '_ \\ '_/ -_|_-<_-< |__ \\ |  _/ _ \\ | '_/ -_)  _| || | '_| ' \\  ");
+	writeToBuffer(c, "| '_ \\ '_/ -_|_-<_-< |__ \\ |  _/ _ \\ | '_/ -_)  _| || | '_| ' \\  ");
 	c.Y++;
-	writeToBuffer(c, " | .__/_| \\___/__/__/ |___/  \\__\\___/ |_| \\___|\\__|\\_,_|_| |_||_| ");
+	writeToBuffer(c, "| .__/_| \\___/__/__/ |___/  \\__\\___/ |_| \\___|\\__|\\_,_|_| |_||_| ");
 	c.Y++;
-	writeToBuffer(c, " |_|                                                              ");
+	writeToBuffer(c, "|_|                                                              ");
 	
 	flushBufferToConsole();
 	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu

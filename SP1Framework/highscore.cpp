@@ -29,10 +29,14 @@ void highscorepage()
 	c.Y++;
 	writeToBuffer(c,"::                                           ::" );
 	c.Y++;
-	writeToBuffer(c,":: Rank  Player     Score                    ::");
+	writeToBuffer(c,"::          Rank  Player     Score           ::");
+	c.Y++;
+	writeToBuffer(c,"::                                           ::" );
+
 	
 	while (!Highscore.eof())//print out position, player's name and highscore one by one starting from first
 	{
+		c.X = 18;
 		c.Y++;
 		getline(Highscore, data);
 		for(int a = 0; a < data.size(); ++a)
@@ -41,11 +45,11 @@ void highscorepage()
 				data[a]=' ';
 		}
 		ss.str("");
-		ss << ":: "<< data;
+		ss << "::          "<< data;
 		writeToBuffer(c, ss.str());
 		
 	}
-	c.Y = 16;
+	c.Y = 17;
 	for ( int a = 0; a < 10; a++ )
 	{
 		c.X = 63;
@@ -54,6 +58,7 @@ void highscorepage()
 	}
 	c.X = 18;
 	
+	c.Y++;
 	writeToBuffer(c,"::                                           ::" );
 	c.Y++;
 	writeToBuffer(c,"::                                           ::" );
@@ -66,15 +71,15 @@ void highscorepage()
 	std::string choice;
 	c.Y+= 5;
 	c.X = 10;
-	writeToBuffer(c, "                       ___   _                 _                  ");
+	writeToBuffer(c, "                      ___   _                 _                  ");
 	c.Y++;
-	writeToBuffer(c, "  _ __ _ _ ___ ______ | __| | |_ ___   _ _ ___| |_ _  _ _ _ _ _   ");
+	writeToBuffer(c, " _ __ _ _ ___ ______ | __| | |_ ___   _ _ ___| |_ _  _ _ _ _ _   ");
 	c.Y++;
-	writeToBuffer(c, " | '_ \\ '_/ -_|_-<_-< |__ \\ |  _/ _ \\ | '_/ -_)  _| || | '_| ' \\  ");
+	writeToBuffer(c, "| '_ \\ '_/ -_|_-<_-< |__ \\ |  _/ _ \\ | '_/ -_)  _| || | '_| ' \\  ");
 	c.Y++;
-	writeToBuffer(c, " | .__/_| \\___/__/__/ |___/  \\__\\___/ |_| \\___|\\__|\\_,_|_| |_||_| ");
+	writeToBuffer(c, "| .__/_| \\___/__/__/ |___/  \\__\\___/ |_| \\___|\\__|\\_,_|_| |_||_| ");
 	c.Y++;
-	writeToBuffer(c, " |_|                                                              ");
+	writeToBuffer(c, "|_|                                                              ");
 	flushBufferToConsole();
 	while ( input != BACKTOMAINMENU )//ask the player to press 5 to return to main menu
 	{
